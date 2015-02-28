@@ -1,8 +1,11 @@
 package com.austinv11.collectiveframework;
 
+import com.austinv11.collectiveframework.language.TranslationManager;
+import com.austinv11.collectiveframework.language.translation.YandexProvider;
 import com.austinv11.collectiveframework.proxy.CommonProxy;
 import com.austinv11.collectiveframework.reference.Reference;
 import com.austinv11.collectiveframework.utils.ConfigurationHandler;
+import com.austinv11.collectiveframework.utils.Logger;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -26,11 +29,12 @@ public class CollectiveFramework {
 	public void preInit(FMLPreInitializationEvent event) {
 		ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 		NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.NETWORK_NAME);
+		TranslationManager.registerTranslationProvider(new YandexProvider());
 	}
 	
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
-		
+		Logger.info(TranslationManager.usableToMCLangCodes("en"));
 	}
 	
 	@Mod.EventHandler
