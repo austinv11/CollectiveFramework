@@ -144,8 +144,8 @@ public class TranslationManager {
 		return loc.getLanguage();
 	}
 	
-	public static String usableToMCLangCodes(String code) {
-		Locale locale = Locale.forLanguageTag(code);
-		return locale.getLanguage().toLowerCase()+"_"+locale.getCountry().toUpperCase();
-	}
+//	public static String usableToMCLangCodes(String code) {
+//		Locale locale = Locale.forLanguageTag(code);
+//		return locale.getLanguage().toLowerCase()+"_"+locale.getCountry().toUpperCase();
+//	}
 }

@@ -5,7 +5,6 @@ import com.austinv11.collectiveframework.language.translation.YandexProvider;
 import com.austinv11.collectiveframework.proxy.CommonProxy;
 import com.austinv11.collectiveframework.reference.Reference;
 import com.austinv11.collectiveframework.utils.ConfigurationHandler;
-import com.austinv11.collectiveframework.utils.Logger;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -34,7 +33,7 @@ public class CollectiveFramework {
 	
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
-		Logger.info(TranslationManager.usableToMCLangCodes("en"));
+		
 	}
 	
 	@Mod.EventHandler
