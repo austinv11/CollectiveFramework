@@ -1,8 +1,9 @@
 package com.austinv11.collectiveframework.multithreading;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import com.austinv11.collectiveframework.reference.Config;
+
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Runnable class to ease the management of threads
@@ -10,26 +11,26 @@ import java.util.List;
 public abstract class SimpleRunnable implements Runnable {
 	
 	//Key of true = the thread is being used, vice versa
-	private volatile static HashMap<Boolean,List<SimpleThread>> threadMap = new HashMap<Boolean,List<SimpleThread>>();
+	private volatile static ConcurrentHashMap<Boolean,CopyOnWriteArrayList<SimpleThread>> threadMap = new ConcurrentHashMap<Boolean,CopyOnWriteArrayList<SimpleThread>>();
 	
 	private volatile boolean isCleaned = false;
 	private volatile int thread = -1;
 	
 	static {
-		threadMap.put(true, new ArrayList<SimpleThread>());
-		threadMap.put(false, new ArrayList<SimpleThread>());
+		threadMap.put(true, new CopyOnWriteArrayList<SimpleThread>());
+		threadMap.put(false, new CopyOnWriteArrayList<SimpleThread>());
 	}
 	
 	/**
 	 * Disables this thread from running
-	 * @param clean Whether to clean the thread running - This will prevent this runnable from being able to run
+	 * @param clean Whether to clean the thread running - This will prevent this runnable from being able to run, only cleans if enabled in the config
 	 * @throws IllegalThreadStateException
 	 */
 	public synchronized final void disable(boolean clean) throws IllegalThreadStateException {
 		if (isCleaned)
 			throw new IllegalThreadStateException("Thread "+this.getName()+" is cleaned already!");
 		getThread().isActive = false;
-		if (clean) {
+		if (clean && Config.restrictThreadUsage) {
 			isCleaned = true;
 			threadMap.get(false).add(getThread());
 			threadMap.get(true).remove(thread);
@@ -89,10 +90,14 @@ public abstract class SimpleRunnable implements Runnable {
 		return getThread().isActive;
 	}
 	
+	/**
+	 * Gets the internal thread running the runnable
+	 * @return The thread {@link com.austinv11.collectiveframework.multithreading.SimpleThread}
+	 */
 	private synchronized final SimpleThread getThread() {
 		if (this.thread == -1) { //Assign a thread
 			if (threadMap.get(false).size() < 1) {
-				SimpleThread thread = new SimpleThread(this);
+				SimpleThread thread = new SimpleThread(this, this.getName());
 				threadMap.get(true).add(thread);
 				this.thread = threadMap.get(true).indexOf(thread);
 				return getThread();
