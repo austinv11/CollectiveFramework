@@ -12,6 +12,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.common.MinecraftForge;
 
 @Mod(modid= Reference.MOD_ID,name = Reference.MOD_NAME,version = Reference.VERSION/*, guiFactory = Reference.GUI_FACTORY_CLASS*/)
 public class CollectiveFramework {
@@ -29,6 +30,7 @@ public class CollectiveFramework {
 		ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 		NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.NETWORK_NAME);
 		TranslationManager.registerTranslationProvider(new YandexProvider());
+		registerEvents();
 	}
 	
 	@Mod.EventHandler
@@ -39,5 +41,9 @@ public class CollectiveFramework {
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		
+	}
+	
+	private void registerEvents() {
+		MinecraftForge.EVENT_BUS.register(new TranslationManager());
 	}
 }

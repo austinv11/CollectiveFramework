@@ -1,5 +1,6 @@
 package com.austinv11.collectiveframework.utils;
 
+import com.austinv11.collectiveframework.reference.Config;
 import com.austinv11.collectiveframework.reference.Reference;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -28,7 +29,8 @@ public class ConfigurationHandler {
 	private static void loadConfiguration(){
 		try{//Load & read properties
 			config.load();
-			
+			Config.translateItems = config.get("translation", "translateItems", false, "Setting this to true will attempt to translate item names which are not localized").getBoolean(false);
+			Config.translateChat = config.get("translate", "translateChat", false, "Setting this to true will attempt to translate chat messages").getBoolean(false);
 		}catch (Exception e){//Log exception
 			Logger.warn("Config exception!");
 			Logger.warn(e.getStackTrace());

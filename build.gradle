@@ -26,6 +26,7 @@ minecraft {
     version = "1.7.10-10.13.2.1291"
     runDir = "eclipse"
     replace("@VERSION@",project.version)
+    mappings = "stable_12"//Updating mcp
 }
 
 dependencies {
