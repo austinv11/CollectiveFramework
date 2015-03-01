@@ -15,6 +15,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,6 +28,9 @@ public class TranslationManager {
 	
 	//The cost of using free APIs
 	private static final List<String> unusableProviders = new ArrayList<String>();
+	
+	//Helps reduce queries
+	private static final HashMap<String, String> translationCache = new HashMap<String,String>();
 	
 	private static Field fallback;
 	
@@ -47,11 +51,13 @@ public class TranslationManager {
 	 * @throws IOException
 	 * @throws QueryLimitException
 	 */
-	public static String translate(String text, String toLang) throws TranslationException, IOException, QueryLimitException {
+	public static String translate(String text, String toLang) throws TranslationException, IOException {
 		if (StatCollector.canTranslate(text)) {
 			return StatCollector.translateToLocal(text);
 		}
 		String toTranslate = StatCollector.translateToFallback(text);
+		if (translationCache.containsKey(toTranslate))
+			return translationCache.get(toTranslate);
 		ITranslationProvider provider;
 		int i = 0;
 		while (unusableProviders.contains(translators.get(i).getProviderName()) || !translators.get(i).canDetectLanguage()) {
@@ -60,7 +66,14 @@ public class TranslationManager {
 				throw new TranslationException(TranslationException.ErrorTypes.NO_VALID_PROVIDERS);
 		}
 		provider = translators.get(i);
-		return provider.translate(toTranslate, toLang);
+		try {
+			String translation = provider.translate(toTranslate, toLang);
+			translationCache.put(toTranslate, translation);
+			return translation;
+		} catch (QueryLimitException e) {
+			unusableProviders.add(provider.getProviderName());
+			return translate(text, toLang);
+		}
 	}
 	
 	/**
@@ -73,11 +86,13 @@ public class TranslationManager {
 	 * @throws IOException
 	 * @throws QueryLimitException
 	 */
-	public static String translate(String text, String fromLang, String toLang) throws TranslationException, IOException, QueryLimitException {
+	public static String translate(String text, String fromLang, String toLang) throws TranslationException, IOException {
 		if (StatCollector.canTranslate(text)) {
 			return StatCollector.translateToLocal(text);
 		}
 		String toTranslate = StatCollector.translateToFallback(text);
+		if (translationCache.containsKey(toTranslate))
+			return translationCache.get(toTranslate);
 		ITranslationProvider provider;
 		int i = 0;
 		while (unusableProviders.contains(translators.get(i).getProviderName())) {
@@ -86,7 +101,14 @@ public class TranslationManager {
 				throw new TranslationException(TranslationException.ErrorTypes.NO_VALID_PROVIDERS);
 		}
 		provider = translators.get(i);
-		return provider.translate(toTranslate, fromLang, toLang);
+		try {
+			String translation = provider.translate(toTranslate, fromLang, toLang);
+			translationCache.put(toTranslate, translation);
+			return translation;
+		} catch (QueryLimitException e) {
+			unusableProviders.add(provider.getProviderName());
+			return translate(text, fromLang, toLang);
+		}
 	}
 	
 	/**
@@ -98,7 +120,7 @@ public class TranslationManager {
 	 * @throws QueryLimitException
 	 * @throws IOException
 	 */
-	public static String translateToLocal(String text, String fromLang) throws TranslationException, QueryLimitException, IOException {
+	public static String translateToLocal(String text, String fromLang) throws TranslationException, IOException {
 		return translate(text, fromLang, langToUsable());
 	}
 	
@@ -110,7 +132,7 @@ public class TranslationManager {
 	 * @throws QueryLimitException
 	 * @throws IOException
 	 */
-	public static String translateToLocal(String text) throws TranslationException, QueryLimitException, IOException {
+	public static String translateToLocal(String text) throws TranslationException, IOException {
 		return translate(text, langToUsable());
 	}
 	
@@ -122,7 +144,7 @@ public class TranslationManager {
 	 * @throws IOException
 	 * @throws QueryLimitException
 	 */
-	public static String detectLanguage(String text) throws TranslationException, IOException, QueryLimitException {
+	public static String detectLanguage(String text) throws TranslationException, IOException {
 		ITranslationProvider provider;
 		int i = 0;
 		while (unusableProviders.contains(translators.get(i).getProviderName())) {
@@ -131,7 +153,12 @@ public class TranslationManager {
 				throw new TranslationException(TranslationException.ErrorTypes.NO_VALID_PROVIDERS);
 		}
 		provider = translators.get(i);
-		return provider.detectLangauge(text);
+		try {
+			return provider.detectLangauge(text);
+		} catch (QueryLimitException e) {
+			unusableProviders.add(provider.getProviderName());
+			return detectLanguage(text);
+		}
 	}
 	
 	/**

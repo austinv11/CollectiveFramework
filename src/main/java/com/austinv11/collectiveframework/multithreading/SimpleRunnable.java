@@ -84,7 +84,7 @@ public abstract class SimpleRunnable implements Runnable {
 	
 	/**
 	 * Gets whether the runnable is running
-	 * @returnIsEnabled
+	 * @return IsEnabled
 	 */
 	public synchronized boolean isEnabled() {
 		return getThread().isActive;
