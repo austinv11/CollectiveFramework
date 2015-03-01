@@ -1,5 +1,8 @@
 package com.austinv11.collectiveframework;
 
+import com.austinv11.collectiveframework.dependencies.DependencyManager;
+import com.austinv11.collectiveframework.dependencies.download.BinaryProvider;
+import com.austinv11.collectiveframework.dependencies.download.PlainTextProvider;
 import com.austinv11.collectiveframework.language.TranslationManager;
 import com.austinv11.collectiveframework.language.translation.YandexProvider;
 import com.austinv11.collectiveframework.proxy.CommonProxy;
@@ -30,6 +33,8 @@ public class CollectiveFramework {
 		ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 		NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.NETWORK_NAME);
 		TranslationManager.registerTranslationProvider(new YandexProvider());
+		DependencyManager.registerDownloadProvider(new PlainTextProvider());
+		DependencyManager.registerDownloadProvider(new BinaryProvider());
 		registerEvents();
 	}
 	

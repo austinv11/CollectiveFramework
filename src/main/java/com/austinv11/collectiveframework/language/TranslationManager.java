@@ -4,7 +4,6 @@ import com.austinv11.collectiveframework.language.translation.ITranslationProvid
 import com.austinv11.collectiveframework.language.translation.QueryLimitException;
 import com.austinv11.collectiveframework.language.translation.TranslationException;
 import com.austinv11.collectiveframework.reference.Config;
-import com.austinv11.collectiveframework.utils.Logger;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
@@ -24,10 +23,10 @@ import java.util.Locale;
  */
 public class TranslationManager {
 	
-	private static List<ITranslationProvider> translators = new ArrayList<ITranslationProvider>();
+	private static final List<ITranslationProvider> translators = new ArrayList<ITranslationProvider>();
 	
 	//The cost of using free APIs
-	private static List<String> unusableProviders = new ArrayList<String>();
+	private static final List<String> unusableProviders = new ArrayList<String>();
 	
 	private static Field fallback;
 	
@@ -161,7 +160,6 @@ public class TranslationManager {
 				if (!StatCollector.canTranslate(event.itemStack.getUnlocalizedName()) && getFallback().isKeyTranslated(event.itemStack.getUnlocalizedName()))
 					if (StatCollector.translateToFallback(event.itemStack.getUnlocalizedName()).equals(event.itemStack.getDisplayName())) {
 						String toTranslate = event.itemStack.getDisplayName();
-						Logger.info("GO!");
 						event.itemStack.setStackDisplayName(translateToLocal(toTranslate, "en"));
 					}
 			} catch (Exception e) {
@@ -175,7 +173,6 @@ public class TranslationManager {
 		if (Config.translateChat)
 			if (!event.isCanceled())
 				try {
-					Logger.info("Go!");
 					String message = getFallback().isKeyTranslated(event.message.getUnformattedText()) ? StatCollector.translateToFallback(event.message.getUnformattedText()) :event.message.getUnformattedText();
 					event.message = new ChatComponentText(translateToLocal(message, "en"));
 				} catch (Exception e) {
