@@ -49,7 +49,6 @@ public class TranslationManager {
 	 * @return The translated text
 	 * @throws TranslationException
 	 * @throws IOException
-	 * @throws QueryLimitException
 	 */
 	public static String translate(String text, String toLang) throws TranslationException, IOException {
 		if (StatCollector.canTranslate(text)) {
@@ -84,7 +83,6 @@ public class TranslationManager {
 	 * @return The translated text
 	 * @throws TranslationException
 	 * @throws IOException
-	 * @throws QueryLimitException
 	 */
 	public static String translate(String text, String fromLang, String toLang) throws TranslationException, IOException {
 		if (StatCollector.canTranslate(text)) {
@@ -117,7 +115,6 @@ public class TranslationManager {
 	 * @param fromLang Language of the string to translate
 	 * @return The translated string
 	 * @throws TranslationException
-	 * @throws QueryLimitException
 	 * @throws IOException
 	 */
 	public static String translateToLocal(String text, String fromLang) throws TranslationException, IOException {
@@ -129,7 +126,6 @@ public class TranslationManager {
 	 * @param text String to translate
 	 * @return The translated string
 	 * @throws TranslationException
-	 * @throws QueryLimitException
 	 * @throws IOException
 	 */
 	public static String translateToLocal(String text) throws TranslationException, IOException {
@@ -142,7 +138,6 @@ public class TranslationManager {
 	 * @return Language code
 	 * @throws TranslationException
 	 * @throws IOException
-	 * @throws QueryLimitException
 	 */
 	public static String detectLanguage(String text) throws TranslationException, IOException {
 		ITranslationProvider provider;
