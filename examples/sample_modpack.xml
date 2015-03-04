@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<modpack overwrite="false"><!-- whether to overwrite existing files -->
+    <!-- Represents a mod hosted on curse -->
+    <cursemod id="Peripherals++"> <!-- The id is arbitrary, just make sure it's different from the other mods -->
+        <slug>226687-peripherals</slug><!-- Find it here: http://puu.sh/gilNp/237a698c0a.png -->
+        <!-- The rest is optional -->
+        <mcversion>1.7.10</mcversion> <!-- Will default to the current mc version -->
+        <releasetype>release</releasetype> <!-- Either release, beta or alpha; defaults to release -->
+        <id>2228897</id> <!-- Used to specify a specific file, if not provided, it will default to the latest with the matching releasetype,
+         find the id here: http://puu.sh/gim8S/954087f743.png -->
+        <name>Peripherals++-1.2.1.jar</name> <!-- The name for the file when saved onto the disk, defaults to the name of the file on curse -->
+    </cursemod>
+    <!-- Represents a mod not on curse (you must follow the mod's licence to use this) -->
+    <mod id="Some Mod"> <!-- The id is arbitrary, just make sure it's different from the other mods -->
+        <link>downloadsite.com</link> <!-- The DIRECT DOWNLOAD link -->
+        <name>SomeMod.jar</name> <!-- The name for the file when saved onto the disk -->
+    </mod>
+    <!-- Represents a mod which requires an adfly link or similar -->
+    <adflymod id="Some Adfly Mod"> <!-- The id is arbitrary, just make sure it's different from the other mods -->
+        <link>adf.ly/something</link> <!-- Link to the adfly site or similar -->
+        <name>SomeName.jar</name> <!-- OPTIONAL: If specified, the mod file downloaded will be renamed -->
+    </adflymod>
+    <!-- Represents any other required plaintext resource or file -->
+    <plainfile id="Some Config"> <!-- The id is arbitrary, just make sure it's different from the other mods/files -->
+        <link>anotherdownloadsite.com</link> <!-- The DIRECT DOWNLOAD link -->
+        <path>/config/config.cfg</path> <!-- Where to save the file to, relative to the .minecraft folder -->
+    </plainfile>
+    <!-- Represents any other required binary resource or file -->
+    <binaryfile id="Some File"> <!-- The id is arbitrary, just make sure it's different from the other mods/files -->
+        <link>anotherdownloadsite.com</link> <!-- The DIRECT DOWNLOAD link -->
+        <path>/saves/somefile.pdf</path> <!-- Where to save the file to, relative to the .minecraft folder -->
+    </binaryfile>
+</modpack>

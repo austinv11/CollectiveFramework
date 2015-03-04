@@ -17,8 +17,8 @@ public class PlainTextProvider implements IDownloadProvider {
 			String download = StringUtils.stringFromList(WebUtils.readURL(url));
 			FileWriter writer = new FileWriter(downloadPath);
 			writer.write(download);
-			writer.close();
 			writer.flush();
+			writer.close();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
