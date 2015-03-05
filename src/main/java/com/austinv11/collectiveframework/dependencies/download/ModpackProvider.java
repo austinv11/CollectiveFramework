@@ -180,6 +180,20 @@ public class ModpackProvider  {
 				mods.add(new OtherFile(name, link, fileName, FileType.BINARY));
 			}
 		}
+		
+		//Zip files
+		NodeList zipNodeList = doc.getElementsByTagName("zipfile");
+		Logger.info(zipNodeList.getLength()+" Other zip file(s) found!");
+		for (int i = 0; i < zipNodeList.getLength(); i++) {
+			Node node = zipNodeList.item(i);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				Element element = (Element) node;
+				String name = element.getAttribute("id");
+				String link = element.getElementsByTagName("link").item(0).getTextContent();
+				String fileName = element.getElementsByTagName("path").item(0).getTextContent();
+				mods.add(new ZipFile(name, link, fileName));
+			}
+		}
 		return mods;
 	}
 	
@@ -204,8 +218,7 @@ public class ModpackProvider  {
 			changelog.createNewFile();
 		}
 		DateFormat format = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
-		FileUtils.safeWrite(changelog, getVersion());
-		FileUtils.safeWrite(changelog, format.format(new Date()));
+		FileUtils.safeWrite(changelog, format.format(new Date())+"\n"+getVersion());
 	}
 	
 	protected static String formatPath(String path) {
@@ -229,6 +242,52 @@ public class ModpackProvider  {
 	}
 	
 	/**
+	 * An object representing a zip file
+	 */
+	public static class ZipFile implements IModpackFile {
+		
+		public String name;
+		public String url;
+		public String fileName;
+		
+		public ZipFile(String name, String url, String fileName) {
+			this.name = name;
+			this.url = url;
+			this.fileName = ModpackProvider.formatPath(fileName);
+		}
+		
+		@Override
+		public boolean install() {
+			File temp = new File(getPath()+File.separator+"temp.zop");
+			boolean result = new BinaryProvider().downloadFile(url, temp.getPath());
+			if (!result)
+				return false;
+			try {
+				FileUtils.unzip(temp, new File(getPath()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			temp.delete();
+			return true;
+		}
+		
+		@Override
+		public String getType() {
+			return "zip";
+		}
+		
+		@Override
+		public String getPath() {
+			return this.fileName;
+		}
+		
+		@Override
+		public String getName() {
+			return name;
+		}
+	}
+	
+	/**
 	 * An object representing a non-mod file
 	 */
 	public static class OtherFile implements IModpackFile {
@@ -236,7 +295,6 @@ public class ModpackProvider  {
 		public String name;
 		public String url;
 		public String fileName;
-		public String path;
 		public FileType type;
 		
 		public OtherFile(String name, String url, String fileName, FileType type) {

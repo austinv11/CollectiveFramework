@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <modpack overwrite="false" version="1.0.0"><!-- Overwrite: Whether to overwrite existing files 
-Version: The version of the pack, if the version changes between launches and overwrite is not provided, overwrite will default to true-->
+Version: The version of the pack, if the version changes between launches and overwrite is not provided, overwrite will default to true -->
     <!-- Represents a mod hosted on curse -->
     <cursemod id="Peripherals++"> <!-- The id is arbitrary, just make sure it's different from the other mods -->
         <slug>226687-peripherals</slug><!-- Find it here: http://puu.sh/gilNp/237a698c0a.png -->
@@ -31,4 +31,9 @@ Version: The version of the pack, if the version changes between launches and ov
         <link>anotherdownloadsite.com</link> <!-- The DIRECT DOWNLOAD link -->
         <path>/saves/somefile.pdf</path> <!-- Where to save the file to, relative to the .minecraft folder -->
     </binaryfile>
+    <!-- Represents a zip file that will be unzipped -->
+    <zipfile id="Some zips"> <!-- The id is arbitrary, just make sure it's different from the other mods/files -->
+        <link>dl.dropbox.com/someting</link> <!-- The DIRECT DOWNLOAD link -->
+        <path>/files</path> <!-- The path where the zip file will be unzipped in -->
+    </zipfile>
 </modpack>

@@ -40,8 +40,8 @@ public class BinaryProvider implements IDownloadProvider {
 	}
 	
 	private static boolean isRedirected( Map<String,List<String>> header ) {
-		for(String hv : header.get(null)) {
-			if(hv.contains( " 301 " ) || hv.contains( " 302 " )) 
+		for (String hv : header.get(null)) {
+			if (hv.contains(" 301 ") || hv.contains(" 302 "))
 				return true;
 		}
 		return false;
