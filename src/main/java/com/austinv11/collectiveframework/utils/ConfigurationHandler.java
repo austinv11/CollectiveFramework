@@ -1,5 +1,6 @@
 package com.austinv11.collectiveframework.utils;
 
+import com.austinv11.collectiveframework.logging.Logger;
 import com.austinv11.collectiveframework.reference.Config;
 import com.austinv11.collectiveframework.reference.Reference;
 import cpw.mods.fml.client.event.ConfigChangedEvent;

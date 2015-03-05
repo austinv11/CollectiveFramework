@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<modpack overwrite="false"><!-- whether to overwrite existing files -->
+<modpack overwrite="false" version="1.0.0"><!-- Overwrite: Whether to overwrite existing files 
+Version: The version of the pack, if the version changes between launches and overwrite is not provided, overwrite will default to true-->
     <!-- Represents a mod hosted on curse -->
     <cursemod id="Peripherals++"> <!-- The id is arbitrary, just make sure it's different from the other mods -->
         <slug>226687-peripherals</slug><!-- Find it here: http://puu.sh/gilNp/237a698c0a.png -->

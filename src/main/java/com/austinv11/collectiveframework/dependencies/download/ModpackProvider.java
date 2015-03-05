@@ -1,6 +1,7 @@
 package com.austinv11.collectiveframework.dependencies.download;
 
-import com.austinv11.collectiveframework.utils.Logger;
+import com.austinv11.collectiveframework.logging.Logger;
+import com.austinv11.collectiveframework.utils.FileUtils;
 import com.austinv11.collectiveframework.utils.StringUtils;
 import com.austinv11.collectiveframework.utils.WebUtils;
 import com.google.gson.Gson;
@@ -20,7 +21,10 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +34,26 @@ import java.util.Map;
 public class ModpackProvider  {
 	
 	//Firefox UA Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0
+	
+	private static String lastVersion;
+	
+	private String version;
+	
+	static {
+		File changelog = new File("Modpack.log");
+		if (!changelog.exists()) {
+			lastVersion = "NULL";
+		} else {
+			try {
+				List<String> log = FileUtils.readAll(changelog);
+				lastVersion = log.get(1);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
 	
 	/**
 	 * Determines whether to overwrite based on a modpack.xml
@@ -44,7 +68,24 @@ public class ModpackProvider  {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(xmlFile);
 		doc.getDocumentElement().normalize();
-		return doc.getDocumentElement().hasAttribute("overwrite") && Boolean.parseBoolean(doc.getDocumentElement().getAttribute("overwrite"));
+		return (doc.getDocumentElement().hasAttribute("overwrite") && Boolean.parseBoolean(doc.getDocumentElement().getAttribute("overwrite")))
+				|| (doc.getDocumentElement().hasAttribute("version") && !doc.getDocumentElement().hasAttribute("overwrite") && !getLastVersion().equals(doc.getDocumentElement().getAttribute("version")));
+	}
+	
+	/**
+	 * Gets the last used version of the modpack
+	 * @return The version
+	 */
+	public String getLastVersion() {
+		return lastVersion;
+	}
+	
+	/**
+	 * Gets the current modpack version
+	 * @return The version
+	 */
+	public String getVersion() {
+		return version;
 	}
 	
 	/**
@@ -61,6 +102,11 @@ public class ModpackProvider  {
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse(xmlFile);
 		doc.getDocumentElement().normalize();
+		
+		if (doc.getDocumentElement().hasAttribute("version"))
+			version = doc.getDocumentElement().getAttribute("version");
+		else 
+		version = "NULL";
 		
 		//Curse mods
 		NodeList curseNodeList = doc.getElementsByTagName("cursemod");
@@ -142,7 +188,7 @@ public class ModpackProvider  {
 	 * @param mods Mods to install
 	 * @param overwrite Whether to override existing files under the same filename
 	 */
-	public void installMods(List<IModpackFile> mods, boolean overwrite) {
+	public void installMods(List<IModpackFile> mods, boolean overwrite) throws IOException {
 		for (IModpackFile mod : mods) {
 			Logger.info("Installing "+mod.getType()+" '"+mod.getName()+"'...");
 			if (new File(formatPath(mod.getPath())).exists() && !overwrite)
@@ -153,6 +199,13 @@ public class ModpackProvider  {
 			else
 				Logger.warn("Failed to install "+mod.getType()+" '"+mod.getName()+"'!");
 		}
+		File changelog = new File("Modpack.log");
+		if (!changelog.exists()) {
+			changelog.createNewFile();
+		}
+		DateFormat format = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+		FileUtils.safeWrite(changelog, getVersion());
+		FileUtils.safeWrite(changelog, format.format(new Date()));
 	}
 	
 	protected static String formatPath(String path) {
