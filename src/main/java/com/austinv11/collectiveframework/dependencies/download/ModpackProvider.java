@@ -183,7 +183,7 @@ public class ModpackProvider  {
 		
 		//Zip files
 		NodeList zipNodeList = doc.getElementsByTagName("zipfile");
-		Logger.info(zipNodeList.getLength()+" Other zip file(s) found!");
+		Logger.info(zipNodeList.getLength()+" Zip file(s) found!");
 		for (int i = 0; i < zipNodeList.getLength(); i++) {
 			Node node = zipNodeList.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -258,7 +258,7 @@ public class ModpackProvider  {
 		
 		@Override
 		public boolean install() {
-			File temp = new File(getPath()+File.separator+"temp.zop");
+			File temp = new File(getPath()+File.separator+"temp.zip");
 			boolean result = new BinaryProvider().downloadFile(url, temp.getPath());
 			if (!result)
 				return false;
