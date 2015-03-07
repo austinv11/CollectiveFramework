@@ -45,12 +45,11 @@ public final class Book extends Item {
 		itemIcon = iconRegister.registerIcon(icon.toString());
 	}
 	
-	public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) { //For opening a gui
-		if (world.isRemote) { //The book opens clientside only
-			player.openGui(CollectiveFramework.instance, Reference.Guis.BOOK.ordinal(), world, x ,y, z);
-			return true;
-		}
-		return false;
+	@Override
+	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+		if (world.isRemote)
+			player.openGui(CollectiveFramework.instance, Reference.Guis.BOOK.ordinal(), world, (int)player.posX, (int)player.posY, (int)player.posZ);
+		return super.onItemRightClick(stack, world, player);
 	}
 	
 	/**

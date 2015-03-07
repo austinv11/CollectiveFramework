@@ -1,4 +1,4 @@
-package com.austinv11.collectiveframework.books.elements;
+package com.austinv11.collectiveframework.books.elements.api;
 
 import com.austinv11.collectiveframework.books.client.gui.GuiBook;
 import cpw.mods.fml.relauncher.Side;
@@ -22,6 +22,7 @@ public class BookEvent {
 	
 	/**
 	 * Does the same thing as {@link cpw.mods.fml.common.eventhandler.SubscribeEvent} except for these custom events
+	 * You also do not need to register the class to any event bus
 	 */
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(java.lang.annotation.ElementType.METHOD)

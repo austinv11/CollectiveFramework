@@ -1,4 +1,4 @@
-package com.austinv11.collectiveframework.books.elements;
+package com.austinv11.collectiveframework.books.elements.api;
 
 import com.austinv11.collectiveframework.books.client.gui.GuiBook;
 import cpw.mods.fml.relauncher.Side;

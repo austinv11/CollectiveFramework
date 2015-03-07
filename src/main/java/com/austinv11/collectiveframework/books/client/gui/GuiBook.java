@@ -2,10 +2,10 @@ package com.austinv11.collectiveframework.books.client.gui;
 
 import com.austinv11.collectiveframework.books.Book;
 import com.austinv11.collectiveframework.books.BookFactory;
-import com.austinv11.collectiveframework.books.elements.BookEvent;
-import com.austinv11.collectiveframework.books.elements.ElementType;
-import com.austinv11.collectiveframework.books.elements.IElement;
-import com.austinv11.collectiveframework.books.elements.Page;
+import com.austinv11.collectiveframework.books.elements.api.BookEvent;
+import com.austinv11.collectiveframework.books.elements.api.ElementType;
+import com.austinv11.collectiveframework.books.elements.api.IElement;
+import com.austinv11.collectiveframework.books.elements.api.Page;
 import com.austinv11.collectiveframework.utils.ReflectionUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -124,6 +124,7 @@ public class GuiBook extends GuiScreen {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float renderPartialTicks) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		drawDefaultBackground();
 		getCurrentPage().draw(this);
 		for (IElement e : pageElements.get(getCurrentPageNumber()))
 			e.draw(this);

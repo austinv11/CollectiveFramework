@@ -1,6 +1,6 @@
 package com.austinv11.collectiveframework.books;
 
-import com.austinv11.collectiveframework.books.elements.IElement;
+import com.austinv11.collectiveframework.books.elements.api.IElement;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.ResourceLocation;
 
@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * Factory for instantiating a Book {@link com.austinv11.collectiveframework.books.Book}
+ * Remember, you still need to register it with the {@link cpw.mods.fml.common.registry.GameRegistry}
  */
 public class BookFactory {
 	

@@ -1,4 +1,4 @@
-package com.austinv11.collectiveframework.books.elements;
+package com.austinv11.collectiveframework.books.elements.api;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
