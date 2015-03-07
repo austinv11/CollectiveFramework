@@ -1,6 +1,7 @@
 package com.austinv11.collectiveframework;
 
 import com.austinv11.collectiveframework.dependencies.download.ModpackProvider;
+import com.austinv11.collectiveframework.logging.Logger;
 import cpw.mods.fml.relauncher.IFMLCallHook;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
@@ -40,7 +41,10 @@ public class CollectiveFrameworkPlugin implements IFMLLoadingPlugin, IFMLCallHoo
 		ModpackProvider provider = new ModpackProvider();
 		File xml = new File("modpack.xml");
 		if (xml.exists()) {
+			Logger.info("modpack.xml found! Installing modpack...");
+			Logger.warn("Do NOT stop the client if it hangs!");
 			provider.installMods(provider.parseModpackXML(xml), provider.doOverwrite(xml));
+			Logger.info("Modpack installed! Restarting Minecraft is recommended (though not required)");
 		}
 		return null;
 	}

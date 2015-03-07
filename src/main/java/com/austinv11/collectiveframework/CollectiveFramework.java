@@ -1,5 +1,8 @@
 package com.austinv11.collectiveframework;
 
+import com.austinv11.collectiveframework.books.Book;
+import com.austinv11.collectiveframework.books.BookFactory;
+import com.austinv11.collectiveframework.client.gui.GuiHandler;
 import com.austinv11.collectiveframework.dependencies.DependencyManager;
 import com.austinv11.collectiveframework.dependencies.download.BinaryProvider;
 import com.austinv11.collectiveframework.dependencies.download.PlainTextProvider;
@@ -15,6 +18,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraftforge.common.MinecraftForge;
 
 @Mod(modid= Reference.MOD_ID,name = Reference.MOD_NAME,version = Reference.VERSION/*, guiFactory = Reference.GUI_FACTORY_CLASS*/)
@@ -40,12 +44,13 @@ public class CollectiveFramework {
 	
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
-		
+		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
 	}
 	
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		
+		for (Book book : BookFactory.bookRegistry.keySet())
+			GameRegistry.registerItem(book, book.getName());
 	}
 	
 	private void registerEvents() {
