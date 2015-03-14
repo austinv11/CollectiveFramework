@@ -201,6 +201,14 @@ public class ThreeDimensionalVector {
 		return rotateZ(new ThreeDimensionalVector(0, 0, 0), angle);
 	}
 	
+	/**
+	 * Converts this vector from a 3D plane to a 2D plane
+	 * @return The converted vector
+	 */
+	public TwoDimensionalVector to2D() {
+		return new TwoDimensionalVector(x, y);
+	}
+	
 	@Override
 	public boolean equals(Object other) {
 		if (other instanceof ThreeDimensionalVector)

@@ -12,11 +12,7 @@ public class Textbox implements IElement {
 	
 	private Object[] listeners;
 	
-	public Textbox(String string) {
-		
-	}
 	
-	public Textbox(String string)
 	
 	@Override
 	public void draw(GuiBook bookScreen) {
