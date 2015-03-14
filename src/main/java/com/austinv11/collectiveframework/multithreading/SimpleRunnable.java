@@ -1,6 +1,6 @@
 package com.austinv11.collectiveframework.multithreading;
 
-import com.austinv11.collectiveframework.reference.Config;
+import com.austinv11.collectiveframework.minecraft.reference.Config;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;

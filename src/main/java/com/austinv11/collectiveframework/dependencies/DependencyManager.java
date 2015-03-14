@@ -1,14 +1,12 @@
 package com.austinv11.collectiveframework.dependencies;
 
-import com.austinv11.collectiveframework.dependencies.download.FileType;
-import com.austinv11.collectiveframework.dependencies.download.IDownloadProvider;
-import com.austinv11.collectiveframework.dependencies.download.NoProviderFoundException;
+import com.austinv11.collectiveframework.dependencies.download.*;
 import com.austinv11.collectiveframework.multithreading.SimpleRunnable;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModClassLoader;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -25,6 +23,11 @@ public class DependencyManager {
 	
 	private static volatile int numOfDownloaders = 0;
 	
+	static {
+		registerDownloadProvider(new PlainTextProvider());
+		registerDownloadProvider(new BinaryProvider());
+	}
+	
 	/**
 	 * Register a download provider, note: the earlier the registration, the higher priority it has
 	 * @param provider The download provider
@@ -39,7 +42,7 @@ public class DependencyManager {
 	 * @throws MalformedURLException
 	 */
 	public static void loadLibrary(File file) throws MalformedURLException {
-		((ModClassLoader)Loader.instance().getModClassLoader()).addFile(file);
+		URLClassLoader loader = new URLClassLoader(new URL[]{file.toURI().toURL()}, DependencyManager.class.getClassLoader());
 	}
 	
 	/**
