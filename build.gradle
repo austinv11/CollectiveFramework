@@ -26,7 +26,13 @@ minecraft {
     version = "1.7.10-10.13.2.1291"
     runDir = "eclipse"
     replace("@VERSION@",project.version)
-    mappings = "stable_12"//Updating mcp
+    // the mappings can be changed at any time, and must be in the following format.
+    // snapshot_YYYYMMDD   snapshot are built nightly.
+    // stable_#            stables are built at the discretion of the MCP team.
+    // Use non-default mappings at your own risk. they may not allways work.
+    // simply re-run your setup task after changing the mappings to update your workspace.
+    //  mappings = "snapshot_nodoc_20150223"
+    mappings = "stable_12"
 }
 
 dependencies {
@@ -70,3 +76,17 @@ jar {
         attributes 'FMLAT': 'cf_at.cfg'
     }
 }
+
+// add source jar
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'source'
+}
+
+// deobf jars
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'deobf'
+}
+
+build.dependsOn sourceJar, deobfJar
