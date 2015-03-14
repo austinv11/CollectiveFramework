@@ -63,4 +63,9 @@ public class SimpleThread extends Thread {
 	public boolean equals(Object other) {
 		return other instanceof SimpleThread && getName().equals(((SimpleThread) other).getName());
 	}
+	
+	@Override
+	public String toString() {
+		return "SimpleThread(Name: "+getName()+" Is Active: "+isActive+")";
+	}
 }

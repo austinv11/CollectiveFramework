@@ -215,4 +215,9 @@ public class ThreeDimensionalVector {
 			return ((ThreeDimensionalVector) other).x == x && ((ThreeDimensionalVector) other).y == y && ((ThreeDimensionalVector) other).z == z;
 		return false;
 	}
+	
+	@Override
+	public String toString() {
+		return "ThreeDimensionalVector(X:"+x+" Y:"+y+" Z:"+z+")";
+	}
 }

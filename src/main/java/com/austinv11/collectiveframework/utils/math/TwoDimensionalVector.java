@@ -152,4 +152,9 @@ public class TwoDimensionalVector {
 			return ((TwoDimensionalVector) other).x == x && ((TwoDimensionalVector) other).y == y;
 		return false;
 	}
+	
+	@Override
+	public String toString() {
+		return "TwoDimensionalVector(X:"+x+" Y:"+y+")";
+	}
 }

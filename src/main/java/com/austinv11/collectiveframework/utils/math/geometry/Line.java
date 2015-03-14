@@ -203,4 +203,9 @@ public class Line {
 			return ((Line) other).start.equals(start) && ((Line) other).end.equals(end);
 		return false;
 	}
+	
+	@Override
+	public String toString() {
+		return "Line(X1:"+getStartX()+" Y1:"+getStartY()+" Z1:"+getStartZ()+"X2:"+getEndX()+" Y2:"+getEndY()+" Z2:"+getEndZ()+")";
+	}
 }

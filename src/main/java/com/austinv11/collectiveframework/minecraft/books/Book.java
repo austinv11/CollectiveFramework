@@ -72,4 +72,9 @@ public final class Book extends Item {
 	public boolean equals(Object other) {
 		return other instanceof Book && ((Book) other).id == this.id;
 	}
+	
+	@Override
+	public String toString() {
+		return "Book(Name:"+getName()+" ID:"+id+")";
+	}
 }

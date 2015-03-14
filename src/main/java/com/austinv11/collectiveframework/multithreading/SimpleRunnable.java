@@ -120,4 +120,16 @@ public abstract class SimpleRunnable implements Runnable {
 		}
 		return null; //This should never be reached
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof SimpleRunnable)
+			return ((SimpleRunnable) other).thread == thread && ((SimpleRunnable) other).getName().equals(getName());
+		return false;
+	}
+	
+	@Override
+	public String toString() {
+		return "SimpleRunnable(Name: "+getName()+" ID:"+thread+" Is Cleaned: "+isCleaned+")";
+	}
 }
