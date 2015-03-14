@@ -8,8 +8,8 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import java.io.File;
 import java.util.Map;
 
-@IFMLLoadingPlugin.SortingIndex(Integer.MIN_VALUE)
-public class CollectiveFrameworkPlugin implements IFMLLoadingPlugin, IFMLCallHook {
+@IFMLLoadingPlugin.SortingIndex(Integer.MIN_VALUE) //Want mods installed as early as possible
+public class CollectiveFrameworkModpackManagerPlugin implements IFMLLoadingPlugin, IFMLCallHook {
 	
 	@Override
 	public String[] getASMTransformerClass() {
