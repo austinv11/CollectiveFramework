@@ -64,6 +64,7 @@ public enum Colors {
 	
 	/**
 	 * Replaces '&' with the real color character in a string (if it returns a valid color)
+	 * Used to simplify coremodding essentials color codes into the default FontRenderer
 	 * @param string The string
 	 * @return The modified string
 	 */
