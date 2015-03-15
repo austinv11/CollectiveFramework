@@ -1,7 +1,5 @@
 package com.austinv11.collectiveframework.multithreading;
 
-import com.austinv11.collectiveframework.minecraft.reference.Config;
-
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -9,6 +7,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Runnable class to ease the management of threads
  */
 public abstract class SimpleRunnable implements Runnable {
+	
+	public volatile static boolean RESTRICT_THREAD_USAGE = true; 
 	
 	//Key of true = the thread is being used, vice versa
 	private volatile static ConcurrentHashMap<Boolean,CopyOnWriteArrayList<SimpleThread>> threadMap = new ConcurrentHashMap<Boolean,CopyOnWriteArrayList<SimpleThread>>();
@@ -30,7 +30,7 @@ public abstract class SimpleRunnable implements Runnable {
 		if (isCleaned)
 			throw new IllegalThreadStateException("Thread "+this.getName()+" is cleaned already!");
 		getThread().isActive = false;
-		if (clean && Config.restrictThreadUsage) {
+		if (clean && RESTRICT_THREAD_USAGE) {
 			isCleaned = true;
 			threadMap.get(false).add(getThread());
 			threadMap.get(true).remove(thread);

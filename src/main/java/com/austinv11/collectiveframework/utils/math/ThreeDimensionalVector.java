@@ -4,7 +4,7 @@ package com.austinv11.collectiveframework.utils.math;
  * Class for manipulating and holding coords on a 3D plane
  * Remember, in Minecraft the y and z axises are switched
  */
-public class ThreeDimensionalVector {
+public class ThreeDimensionalVector implements Comparable {
 	
 	public double x,y,z;
 	
@@ -219,5 +219,18 @@ public class ThreeDimensionalVector {
 	@Override
 	public String toString() {
 		return "ThreeDimensionalVector(X:"+x+" Y:"+y+" Z:"+z+")";
+	}
+	
+	@Override
+	public int compareTo(Object o) {
+		ThreeDimensionalVector vector = (ThreeDimensionalVector) o;
+		if (vector.equals(this))
+			return 0;
+		if (vector.x == x) {
+			if (vector.z == z)
+				return vector.y > y ? -1 : 1;
+			return vector.z > z ? -1 : 1;
+		}
+		return vector.x > x ? -1 : 1;
 	}
 }

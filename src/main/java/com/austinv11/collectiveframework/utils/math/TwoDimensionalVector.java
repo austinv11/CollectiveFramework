@@ -3,7 +3,7 @@ package com.austinv11.collectiveframework.utils.math;
 /**
  * Class for manipulating and holding coords on a 2D plane
  */
-public class TwoDimensionalVector {
+public class TwoDimensionalVector implements Comparable {
 	
 	public double x,y;
 	
@@ -156,5 +156,15 @@ public class TwoDimensionalVector {
 	@Override
 	public String toString() {
 		return "TwoDimensionalVector(X:"+x+" Y:"+y+")";
+	}
+	
+	@Override
+	public int compareTo(Object o) {
+		TwoDimensionalVector vector = (TwoDimensionalVector) o;
+		if (vector.equals(this))
+			return 0;
+		if (vector.x == x)
+			return vector.y > y ? -1 : 1;
+		return vector.x > x ? -1 : 1;
 	}
 }

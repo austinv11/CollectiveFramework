@@ -19,7 +19,7 @@ public class Line {
 	 * @param endCoord End coord of the line
 	 */
 	public Line(TwoDimensionalVector startCoord, TwoDimensionalVector endCoord) {
-		this(new ThreeDimensionalVector(startCoord.x, startCoord.y, 0), new ThreeDimensionalVector(endCoord.x, endCoord.y, 0));
+		this(startCoord.to3D(), endCoord.to3D());
 	}
 	
 	/**
@@ -78,6 +78,38 @@ public class Line {
 	 */
 	public double getEndZ() {
 		return end.z;
+	}
+	
+	/**
+	 * Gets the 2D starting point for the line
+	 * @return The point
+	 */
+	public TwoDimensionalVector get2DStart() {
+		return start.to2D();
+	}
+	
+	/**
+	 * Gets the 2D ending point for the line
+	 * @return The point
+	 */
+	public TwoDimensionalVector get2DEnd() {
+		return end.to2D();
+	}
+	
+	/**
+	 * Gets the 3D starting point for the line
+	 * @return The point
+	 */
+	public ThreeDimensionalVector get3DStart() {
+		return start;
+	}
+	
+	/**
+	 * Gets the 3D ending point for the line
+	 * @return The point
+	 */
+	public ThreeDimensionalVector get3DEnd() {
+		return end;
 	}
 	
 	/**
@@ -195,6 +227,14 @@ public class Line {
 			array[1] = start;
 		}
 		return array;
+	}
+	
+	/**
+	 * Gets the length of the line
+	 * @return The length
+	 */
+	public double getLength() {
+		return start.distanceTo(end);
 	}
 	
 	@Override
