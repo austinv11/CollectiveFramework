@@ -237,6 +237,42 @@ public class Line {
 		return start.distanceTo(end);
 	}
 	
+	/**
+	 * Creates a new line as a copy of this line but with the set start coord
+	 * @param coord The new start coord
+	 * @return The new, modified line
+	 */
+	public Line setStart(TwoDimensionalVector coord) {
+		return setStart(coord.to3D());
+	}
+	
+	/**
+	 * Creates a new line as a copy of this line but with the set start coord
+	 * @param coord The new start coord
+	 * @return The new, modified line
+	 */
+	public Line setStart(ThreeDimensionalVector coord) {
+		return new Line(coord, end);
+	}
+	
+	/**
+	 * Creates a new line as a copy of this line but with the set end coord
+	 * @param coord The new end coord
+	 * @return The new, modified line
+	 */
+	public Line setEnd(TwoDimensionalVector coord) {
+		return setEnd(coord.to3D());
+	}
+	
+	/**
+	 * Creates a new line as a copy of this line but with the set end coord
+	 * @param coord The new end coord
+	 * @return The new, modified line
+	 */
+	public Line setEnd(ThreeDimensionalVector coord) {
+		return new Line(coord, end);
+	}
+	
 	@Override
 	public boolean equals(Object other) {
 		if (other instanceof Line)

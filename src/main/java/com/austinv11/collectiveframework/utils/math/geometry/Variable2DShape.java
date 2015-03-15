@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Class which represents a 2D shape with an indefinate amount of sides (until instantiation)
+ * Class which represents a 2D shape with an indefinite amount of sides (until instantiation)
  */
 public class Variable2DShape {
 	
@@ -125,6 +125,53 @@ public class Variable2DShape {
 		double slope1 = sides[0].get2DSlope();
 		double slope2 = sides[1].get2DSlope();
 		return (float) Math.atan(Math.abs((slope1-slope2)/(1+(slope1*slope2))));
+	}
+	
+	/**
+	 * Gets the lines representing the sides of the shape
+	 * @return The sides
+	 */
+	public Line[] getSides() {
+		return sides;
+	}
+	
+	/**
+	 * Calculates the approximate center of the polygon
+	 * @return The center coordinates
+	 */
+	public TwoDimensionalVector getCentroid() {
+		TwoDimensionalVector[] vertices = getVertices();
+		double centerX = 0;
+		double centerY = 0;
+		for (TwoDimensionalVector vertex : vertices) {
+			centerX += vertex.x;
+			centerY += vertex.y;
+		}
+		centerX /= getNumberOfSides();
+		centerY /= getNumberOfSides();
+		return new TwoDimensionalVector(centerX, centerY);
+	}
+	
+	/**
+	 * Translates the whole shape to make a new shape with a matching centroid
+	 * @param centroid New centroid
+	 * @return Modified shape
+	 */
+	public Variable2DShape setCentroid(TwoDimensionalVector centroid) {
+		TwoDimensionalVector oldCentroid = getCentroid();
+		double xDiff = centroid.x - oldCentroid.x;
+		double yDiff = centroid.y - oldCentroid.y;
+		TwoDimensionalVector toAdd = new TwoDimensionalVector(xDiff, yDiff);
+		TwoDimensionalVector[] vertices = getVertices();
+		List<TwoDimensionalVector> newVertices = new ArrayList<TwoDimensionalVector>();
+		for (TwoDimensionalVector vertex : vertices)
+			newVertices.add(vertex.add(toAdd));
+		try {
+			return new Variable2DShape(newVertices.toArray(new TwoDimensionalVector[vertices.length]));
+		} catch (IncompatibleDimensionsException e) {
+			e.printStackTrace();
+		}
+		return null; //This should never be reached
 	}
 	
 	@Override
