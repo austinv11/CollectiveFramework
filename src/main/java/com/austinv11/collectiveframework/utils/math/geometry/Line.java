@@ -114,13 +114,18 @@ public class Line {
 	
 	/**
 	 * Gets the 2D slope for the line
-	 * @return The slope
+	 * @return The slope or NaN if it is undefined
 	 */
 	public double get2DSlope() {
+		if (end.x - start.x == 0)
+			return Double.NaN;
 		return (end.y - start.y)/(end.x - start.x);
 	}
 	
 	private TwoDimensionalVector find2DPoint(double x, double slope) {
+		if (Double.isNaN(slope)) {
+			return new TwoDimensionalVector(x, start.y > end.y ? end.y : start.y);
+		}
 		double yInt = start.y - (start.x * slope);
 		return new TwoDimensionalVector(x, (x * slope) + yInt);
 	}
@@ -128,7 +133,7 @@ public class Line {
 	/**
 	 * Plugs in the given x coordinate to the line to calculate a 2D point from its equation
 	 * @param x The x coordinate
-	 * @return The calculated coordinate
+	 * @return The calculated coordinate. NOTE: y will be the minimum y-value of the line if the slope of the line is undefined
 	 */
 	public TwoDimensionalVector find2DPoint(double x) {
 		return find2DPoint(x, get2DSlope());
@@ -140,6 +145,8 @@ public class Line {
 	 * @return If it's on the line
 	 */
 	public boolean isPointValid(TwoDimensionalVector coord) {
+		if (Double.isNaN(get2DSlope()))
+			return ((coord.y <= start.y && coord.y >= end.y) || (coord.y >= start.y && coord.y <= end.y));
 		return ((coord.x <= start.x && coord.x >= end.x) || (coord.x >= start.x && coord.x <= end.x)) && //If point is within bounds of the line
 				(find2DPoint(coord.x).y == coord.y); //If the point follows the rules of the line
 	}
@@ -155,9 +162,19 @@ public class Line {
 		int x = start.getRoundedX();
 		if (isPointValid(new TwoDimensionalVector(start.getRoundedX(), start.getRoundedY())))
 			vectors.add(new TwoDimensionalVector(start.getRoundedX(), start.getRoundedY()));
-		while (!(x > end.getRoundedX())) {
-			x++;
-			vectors.add(find2DPoint(x));
+		if (Double.isNaN(get2DSlope())) {
+			if (isPointValid(new TwoDimensionalVector(x, start.y))) {
+				int startY = isPointValid(new TwoDimensionalVector(x, start.getRoundedY())) ? start.getRoundedY() : (int)Math.ceil(start.y);
+				for (int y = startY; y <= end.getRoundedY(); y++) {
+					if (isPointValid(new TwoDimensionalVector(x, y)))
+						vectors.add(new TwoDimensionalVector(x, y));
+				}
+			}
+		} else {
+			while (!(x > end.getRoundedX())) {
+				x++;
+				vectors.add(find2DPoint(x));
+			}
 		}
 		return vectors;
 	}
@@ -175,6 +192,8 @@ public class Line {
 	}
 	
 	private double get2DSlopeForZ() {
+		if (end.x - start.x == 0)
+			return Double.NaN;
 		return (end.z - start.z)/(end.x - start.x);
 	}
 	
@@ -210,9 +229,22 @@ public class Line {
 		int x = start.getRoundedX();
 		if (isPointValid(new ThreeDimensionalVector(start.getRoundedX(), start.getRoundedY(), start.getRoundedZ())))
 			vectors.add(new ThreeDimensionalVector(start.getRoundedX(), start.getRoundedY(), start.getRoundedZ()));
-		while (!(x > end.getRoundedX())) {
-			x++;
-			vectors.add(find3DPoint(x));
+		if (Double.isNaN(get2DSlope()) || Double.isNaN(get2DSlopeForZ())) {
+			if (isPointValid(new ThreeDimensionalVector(x, start.y, start.z))) {
+				int startY = isPointValid(new ThreeDimensionalVector(x, start.getRoundedY(), start.z)) ? start.getRoundedY() : (int)Math.ceil(start.y);
+				for (int y = startY; y <= end.getRoundedY(); y++) {
+					int startZ = isPointValid(new ThreeDimensionalVector(x, y, start.getRoundedZ())) ? start.getRoundedZ() : (int)Math.ceil(start.z);
+					for (int z = startZ; z <= end.getRoundedZ(); z++) {
+						if (isPointValid(new ThreeDimensionalVector(x, y, z)))
+							vectors.add(new ThreeDimensionalVector(x, y, z));
+					}
+				}
+			}
+		} else {
+			while (!(x > end.getRoundedX())) {
+				x++;
+				vectors.add(find3DPoint(x));
+			}
 		}
 		return vectors;
 	}

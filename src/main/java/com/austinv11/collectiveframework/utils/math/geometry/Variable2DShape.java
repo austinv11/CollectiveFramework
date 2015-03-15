@@ -122,8 +122,8 @@ public class Variable2DShape {
 		Line[] sides = findSidesWithPoint(vertex);
 		if (sides.length != 2)
 			throw new IncompatibleDimensionsException(vertex.toString()+" is not a valid vertex!");
-		double slope1 = sides[0].get2DSlope();
-		double slope2 = sides[1].get2DSlope();
+		double slope1 = Double.isNaN(sides[0].get2DSlope()) ? Double.MAX_VALUE : sides[0].get2DSlope();
+		double slope2 = Double.isNaN(sides[1].get2DSlope()) ? Double.MAX_VALUE : sides[1].get2DSlope();
 		return (float) Math.atan(Math.abs((slope1-slope2)/(1+(slope1*slope2))));
 	}
 	
