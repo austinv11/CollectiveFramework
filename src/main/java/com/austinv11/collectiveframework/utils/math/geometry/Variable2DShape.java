@@ -174,6 +174,34 @@ public class Variable2DShape {
 		return null; //This should never be reached
 	}
 	
+	/**
+	 * Rotates the shape around a point
+	 * @param point The point to rotate around
+	 * @param angle The angle to rotate by
+	 * @return The new shape
+	 */
+	public Variable2DShape rotate(TwoDimensionalVector point, double angle) {
+		TwoDimensionalVector[] vertices = getVertices();
+		List<TwoDimensionalVector> newVertices = new ArrayList<TwoDimensionalVector>();
+		for (TwoDimensionalVector vertex : vertices)
+			newVertices.add(vertex.rotate(point, angle));
+		try {
+			return new Variable2DShape(newVertices.toArray(new TwoDimensionalVector[vertices.length]));
+		} catch (IncompatibleDimensionsException e) {
+			e.printStackTrace();
+		}
+		return null; //This should never be reached
+	}
+	
+	/**
+	 * Rotates the shape about its centroid
+	 * @param angle The angle to rotate by
+	 * @return The new shape
+	 */
+	public Variable2DShape rotate(double angle) {
+		return rotate(getCentroid(), angle);
+	}
+	
 	@Override
 	public boolean equals(Object other) {
 		if (other instanceof Variable2DShape)

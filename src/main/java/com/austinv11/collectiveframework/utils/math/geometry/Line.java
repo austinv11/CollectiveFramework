@@ -305,6 +305,90 @@ public class Line {
 		return new Line(coord, end);
 	}
 	
+	/**
+	 * Rotates the line around a point
+	 * @param point The point to rotate around
+	 * @param angle The angle to rotate by
+	 * @return The new line
+	 */
+	public Line rotate2D(TwoDimensionalVector point, double angle) {
+		TwoDimensionalVector newStart = start.to2D().rotate(point, angle);
+		TwoDimensionalVector newEnd = end.to2D().rotate(point, angle);
+		return new Line(newStart, newEnd);
+	}
+	
+	/**
+	 * Rotates the line about the origin
+	 * @param angle The angle to rotate by
+	 * @return The new line
+	 */
+	public Line rotate2D(double angle) {
+		return rotate2D(new TwoDimensionalVector(0,0), angle);
+	}
+	
+	/**
+	 * Rotates the line across the x-axis around a point
+	 * @param point The point to rotate around
+	 * @param angle The angle to rotate by
+	 * @return The new line
+	 */
+	public Line rotate3DX(ThreeDimensionalVector point, double angle) {
+		ThreeDimensionalVector newStart = start.rotateX(point, angle);
+		ThreeDimensionalVector newEnd = end.rotateX(point, angle);
+		return new Line(newStart, newEnd);
+	}
+	
+	/**
+	 * Rotates the line across the x-axis about the origin
+	 * @param angle The angle to rotate by
+	 * @return The new line
+	 */
+	public Line rotate3DX(double angle) {
+		return rotate3DX(new ThreeDimensionalVector(0, 0, 0), angle);
+	}
+	
+	/**
+	 * Rotates the line across the y-axis around a point
+	 * @param point The point to rotate around
+	 * @param angle The angle to rotate by
+	 * @return The new line
+	 */
+	public Line rotate3DY(ThreeDimensionalVector point, double angle) {
+		ThreeDimensionalVector newStart = start.rotateY(point, angle);
+		ThreeDimensionalVector newEnd = end.rotateY(point, angle);
+		return new Line(newStart, newEnd);
+	}
+	
+	/**
+	 * Rotates the line across the y-axis about the origin
+	 * @param angle The angle to rotate by
+	 * @return The new line
+	 */
+	public Line rotate3DY(double angle) {
+		return rotate3DY(new ThreeDimensionalVector(0, 0, 0), angle);
+	}
+	
+	/**
+	 * Rotates the line across the z-axis around a point
+	 * @param point The point to rotate around
+	 * @param angle The angle to rotate by
+	 * @return The new line
+	 */
+	public Line rotate3DZ(ThreeDimensionalVector point, double angle) {
+		ThreeDimensionalVector newStart = start.rotateZ(point, angle);
+		ThreeDimensionalVector newEnd = end.rotateZ(point, angle);
+		return new Line(newStart, newEnd);
+	}
+	
+	/**
+	 * Rotates the line across the z-axis about the origin
+	 * @param angle The angle to rotate by
+	 * @return The new line
+	 */
+	public Line rotate3DZ(double angle) {
+		return rotate3DZ(new ThreeDimensionalVector(0, 0, 0), angle);
+	}
+	
 	@Override
 	public boolean equals(Object other) {
 		if (other instanceof Line)
