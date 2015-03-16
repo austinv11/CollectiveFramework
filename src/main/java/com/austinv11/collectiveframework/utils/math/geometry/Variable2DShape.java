@@ -1,6 +1,7 @@
 package com.austinv11.collectiveframework.utils.math.geometry;
 
 import com.austinv11.collectiveframework.utils.ArrayUtils;
+import com.austinv11.collectiveframework.utils.math.MathUtils;
 import com.austinv11.collectiveframework.utils.math.TwoDimensionalVector;
 
 import java.util.ArrayList;
@@ -200,6 +201,70 @@ public class Variable2DShape {
 	 */
 	public Variable2DShape rotate(double angle) {
 		return rotate(getCentroid(), angle);
+	}
+	
+	/**
+	 * Checks if the provided point is on the shape's perimeter
+	 * @param coord The point
+	 * @return If the point is on the perimeter
+	 */
+	public boolean isPointOnPerimeter(TwoDimensionalVector coord) {
+		for (Line l : sides)
+			if (l.isPointValid(coord))
+				return true;
+		return false;
+	}
+	
+	/**
+	 * Checks if a point is inside the shape. 
+	 * DO NOT TRUST THIS- it is not always accurate, it is only 100% accurate with rectangles
+	 * @param coord The point
+	 * @return If the point is in the shape
+	 */
+	@Deprecated
+	public boolean isPointValid(TwoDimensionalVector coord) { //FIXME
+		if (isPointOnPerimeter(coord))
+			return true;
+		TwoDimensionalVector[] vertices = getVertices();
+		double[] xVals = new double[vertices.length];
+		double[] yVals = new double[vertices.length];
+		for (int i = 0; i < vertices.length; i++) {
+			xVals[i] = vertices[i].x;
+			yVals[i] = vertices[i].y;
+		}
+		double minX, maxX, minY, maxY;
+		minX = MathUtils.getMin(xVals);
+		maxX = MathUtils.getMax(xVals);
+		minY = MathUtils.getMin(yVals);
+		maxY = MathUtils.getMax(yVals);
+		return MathUtils.isBetween(minX, maxX, coord.x, true) && MathUtils.isBetween(minY, maxY, coord.y, true);
+	}
+	
+	/**
+	 * Gets all the points in the shape (with whole number coords)
+	 * WARNING- Deprecated because it uses isPointValid
+	 * @return The points
+	 */
+	@Deprecated
+	public TwoDimensionalVector[] getAllPoints() {
+		List<TwoDimensionalVector> points = new ArrayList<TwoDimensionalVector>();
+		TwoDimensionalVector[] vertices = getVertices();
+		double[] xVals = new double[vertices.length];
+		double[] yVals = new double[vertices.length];
+		for (int i = 0; i < vertices.length; i++) {
+			xVals[i] = vertices[i].x;
+			yVals[i] = vertices[i].y;
+		}
+		double minX, maxX, minY, maxY;
+		minX = MathUtils.getMin(xVals);
+		maxX = MathUtils.getMax(xVals);
+		minY = MathUtils.getMin(yVals);
+		maxY = MathUtils.getMax(yVals);
+		for (int x = (int) minX; x <= maxX; x++)
+			for (int y = (int)minY; y <= maxY; y++)
+				if (isPointValid(new TwoDimensionalVector(x, y)))
+					points.add(new TwoDimensionalVector(x, y));
+		return points.toArray(new TwoDimensionalVector[points.size()]);
 	}
 	
 	@Override
