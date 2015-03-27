@@ -19,6 +19,7 @@ apply plugin: 'forge'
 
 ext.buildNumber = System.getenv("BUILD_ID") ?: "dev"
 version = "1.0.0-$buildNumber"
+System.setProperty("CF_VERSION", version)
 group= "com.austinv11.collectiveframework" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "CollectiveFramework"
 

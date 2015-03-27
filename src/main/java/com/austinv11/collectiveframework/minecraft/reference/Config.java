@@ -14,6 +14,6 @@ public class Config {
 	@Description(comment = "This causes threads (which utilizes SimpleRunnable) to be reused; this *may* lead to performance improvements on lower end machines", category = "Misc")
 	public static boolean restrictThreadUsage = true;
 	
-	@Description(comment = "If enabled, (CLIENTSIDE ONLY), you could use essentials color codes", category = "Misc")
+	@Description(comment = "If enabled (ONLY EFFECTS YOUR CLIENT) you could use essentials color codes", category = "Misc")
 	public static boolean applyColorPatch = true;
 }
