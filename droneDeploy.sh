@@ -1,6 +1,5 @@
 #!/bin/bash
-KEY=API_KEY
-VERSION=CF_VERSION
+CF_VERSION=`cat VERSION.txt`
 echo "$CF_VERSION"
 FILENAME="CollectiveFramework-$CF_VERSION-deobf.jar"
 LOCAL_FILENAME="build/libs/$FILENAME"
