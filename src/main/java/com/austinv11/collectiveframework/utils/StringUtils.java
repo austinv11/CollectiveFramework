@@ -31,4 +31,17 @@ public class StringUtils {
 			val = val + String.valueOf(character);
 		return val;
 	}
+	
+	/**
+	 * Gets a string with the provided amount of the provided string
+	 * @param string String to repeat
+	 * @param amount Amount for the character to be repeated
+	 * @return The String
+	 */
+	public static String repeatString(String string, int amount) {
+		String val = "";
+		for (int i = 0; i < amount; i++)
+			val = val + String.valueOf(string);
+		return val;
+	}
 }

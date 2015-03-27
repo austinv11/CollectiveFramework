@@ -54,4 +54,18 @@ public class MathUtils {
 		}
 		return value < max && value > min;
 	}
+	
+	/**
+	 * Checks if the given string represents a number
+	 * @param string The string
+	 * @return True if the string is a number
+	 */
+	public static boolean isStringNumber(String string) {
+		try {
+			Double.parseDouble(string);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 }

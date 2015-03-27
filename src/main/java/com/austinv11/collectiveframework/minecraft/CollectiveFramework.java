@@ -4,10 +4,12 @@ import com.austinv11.collectiveframework.minecraft.books.Book;
 import com.austinv11.collectiveframework.minecraft.books.BookFactory;
 import com.austinv11.collectiveframework.minecraft.books.elements.SimplePage;
 import com.austinv11.collectiveframework.minecraft.client.gui.GuiHandler;
+import com.austinv11.collectiveframework.minecraft.config.ConfigRegistry;
 import com.austinv11.collectiveframework.minecraft.proxy.CommonProxy;
+import com.austinv11.collectiveframework.minecraft.reference.Config;
 import com.austinv11.collectiveframework.minecraft.reference.Reference;
-import com.austinv11.collectiveframework.minecraft.utils.ConfigurationHandler;
 import com.austinv11.collectiveframework.minecraft.utils.MinecraftTranslator;
+import com.austinv11.collectiveframework.multithreading.SimpleRunnable;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -32,7 +34,8 @@ public class CollectiveFramework {
 	
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		ConfigurationHandler.init(event.getSuggestedConfigurationFile());
+		ConfigRegistry.init();
+		SimpleRunnable.RESTRICT_THREAD_USAGE = Config.restrictThreadUsage;
 		NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.NETWORK_NAME);
 		registerEvents();
 	}

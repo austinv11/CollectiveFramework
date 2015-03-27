@@ -22,7 +22,7 @@ public class CollectiveFrameworkModpackManagerPlugin implements IFMLLoadingPlugi
 	
 	@Override
 	public String getSetupClass() {
-		return "com.austinv11.collectiveframework.minecraft.CollectiveFrameworkPlugin";
+		return this.getClass().getName();
 	}
 	
 	@Override

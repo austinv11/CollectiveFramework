@@ -544,4 +544,107 @@ public class ArrayUtils {
 			newArray[i] = objArray[i];
 		return newArray;
 	}
+	
+	/**
+	 * Performs the {@link java.lang.String#trim()} method on all strings in an array
+	 * @param array The array to trim
+	 * @return The trimmed array
+	 */
+	public static String[] trimAll(String[] array) {
+		String[] trimmed = new String[array.length];
+		for (int i = 0; i < array.length; i++) {
+			trimmed[i] = array[i].trim();
+		}
+		return trimmed;
+	}
+	
+	/**
+	 * Converts an object array to the primitive type
+	 * @param array The object array
+	 * @return The primitive array
+	 */
+	public static byte[] convertObjectArrayToByte(Object[] array) {
+		byte[] primitives = new byte[array.length];
+		for (int i = 0; i < array.length; i++)
+			primitives[i] = (byte)(Byte) array[i];
+		return primitives;
+	}
+	
+	/**
+	 * Converts an object array to the primitive type
+	 * @param array The object array
+	 * @return The primitive array
+	 */
+	public static short[] convertObjectArrayToShort(Object[] array) {
+		short[] primitives = new short[array.length];
+		for (int i = 0; i < array.length; i++)
+			primitives[i] = (short)(Short) array[i];
+		return primitives;
+	}
+	/**
+	 * Converts an object array to the primitive type
+	 * @param array The object array
+	 * @return The primitive array
+	 */
+	public static int[] convertObjectArrayToInt(Object[] array) {
+		int[] primitives = new int[array.length];
+		for (int i = 0; i < array.length; i++)
+			primitives[i] = (int)(Integer) array[i];
+		return primitives;
+	}
+	/**
+	 * Converts an object array to the primitive type
+	 * @param array The object array
+	 * @return The primitive array
+	 */
+	public static long[] convertObjectArrayToLong(Object[] array) {
+		long[] primitives = new long[array.length];
+		for (int i = 0; i < array.length; i++)
+			primitives[i] = (long)(Long) array[i];
+		return primitives;
+	}
+	/**
+	 * Converts an object array to the primitive type
+	 * @param array The object array
+	 * @return The primitive array
+	 */
+	public static float[] convertObjectArrayToFloat(Object[] array) {
+		float[] primitives = new float[array.length];
+		for (int i = 0; i < array.length; i++)
+			primitives[i] = (float)(Float) array[i];
+		return primitives;
+	}
+	/**
+	 * Converts an object array to the primitive type
+	 * @param array The object array
+	 * @return The primitive array
+	 */
+	public static double[] convertObjectArrayToDouble(Object[] array) {
+		double[] primitives = new double[array.length];
+		for (int i = 0; i < array.length; i++)
+			primitives[i] = (double)(Double) array[i];
+		return primitives;
+	}
+	/**
+	 * Converts an object array to the primitive type
+	 * @param array The object array
+	 * @return The primitive array
+	 */
+	public static boolean[] convertObjectArrayToBoolean(Object[] array) {
+		boolean[] primitives = new boolean[array.length];
+		for (int i = 0; i < array.length; i++)
+			primitives[i] = (boolean)(Boolean) array[i];
+		return primitives;
+	}
+	/**
+	 * Converts an object array to the primitive type
+	 * @param array The object array
+	 * @return The primitive array
+	 */
+	public static char[] convertObjectArrayToChar(Object[] array) {
+		char[] primitives = new char[array.length];
+		for (int i = 0; i < array.length; i++)
+			primitives[i] = (char)(Character) array[i];
+		return primitives;
+	}
 }
