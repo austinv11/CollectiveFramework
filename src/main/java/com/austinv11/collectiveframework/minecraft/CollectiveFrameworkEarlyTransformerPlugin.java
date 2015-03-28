@@ -1,5 +1,6 @@
 package com.austinv11.collectiveframework.minecraft;
 
+import com.austinv11.collectiveframework.minecraft.asm.EarlyTransformer;
 import com.austinv11.collectiveframework.minecraft.utils.download.ModpackProvider;
 import cpw.mods.fml.relauncher.IFMLCallHook;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
@@ -8,11 +9,11 @@ import java.io.File;
 import java.util.Map;
 
 @IFMLLoadingPlugin.SortingIndex(Integer.MIN_VALUE) //Want mods installed as early as possible
-public class CollectiveFrameworkModpackManagerPlugin implements IFMLLoadingPlugin, IFMLCallHook {
+public class CollectiveFrameworkEarlyTransformerPlugin implements IFMLLoadingPlugin, IFMLCallHook {
 	
 	@Override
 	public String[] getASMTransformerClass() {
-		return new String[0];
+		return new String[]{EarlyTransformer.class.getName()};
 	}
 	
 	@Override

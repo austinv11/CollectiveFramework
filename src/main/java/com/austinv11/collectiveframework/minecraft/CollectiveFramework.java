@@ -1,15 +1,18 @@
 package com.austinv11.collectiveframework.minecraft;
 
+import com.austinv11.collectiveframework.minecraft.asm.EarlyTransformer;
 import com.austinv11.collectiveframework.minecraft.books.Book;
 import com.austinv11.collectiveframework.minecraft.books.BookFactory;
 import com.austinv11.collectiveframework.minecraft.books.elements.SimplePage;
 import com.austinv11.collectiveframework.minecraft.client.gui.GuiHandler;
+import com.austinv11.collectiveframework.minecraft.compat.modules.Modules;
 import com.austinv11.collectiveframework.minecraft.config.ConfigRegistry;
+import com.austinv11.collectiveframework.minecraft.event.EventHandler;
 import com.austinv11.collectiveframework.minecraft.proxy.CommonProxy;
 import com.austinv11.collectiveframework.minecraft.reference.Config;
 import com.austinv11.collectiveframework.minecraft.reference.Reference;
-import com.austinv11.collectiveframework.minecraft.utils.MinecraftTranslator;
 import com.austinv11.collectiveframework.multithreading.SimpleRunnable;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -34,25 +37,42 @@ public class CollectiveFramework {
 	
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+		registerEvents();
+		Modules.init();
 		ConfigRegistry.init();
 		SimpleRunnable.RESTRICT_THREAD_USAGE = Config.restrictThreadUsage;
 		NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.NETWORK_NAME);
-		registerEvents();
+		Modules.propagate(event);
 	}
 	
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
 		new BookFactory().setIcon(new ResourceLocation("null")).setName("null").addElement(0, new SimplePage()).build();
+		Modules.propagate(event);
 	}
 	
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		for (Book book : BookFactory.bookRegistry.keySet()) //TODO: Remove, this is for debugging
 			GameRegistry.registerItem(book, book.getName());
+		Modules.propagate(event);
 	}
 	
 	private void registerEvents() {
-		MinecraftForge.EVENT_BUS.register(new MinecraftTranslator());
+		for (String clazz : EarlyTransformer.eventHandlerClasses) {
+			try {
+				Class<?> handlerClass = Class.forName(clazz);
+				EventHandler handler = handlerClass.getAnnotation(EventHandler.class);
+				Object toRegister = handler.instanceName().isEmpty() ? handlerClass.newInstance() : handlerClass.getDeclaredField(handler.instanceName());
+				if (handler.fmlBus())
+					FMLCommonHandler.instance().bus().register(toRegister);
+				if (handler.forgeBus())
+					MinecraftForge.EVENT_BUS.register(toRegister);
+			} catch (Exception e) {
+				Logger.warn("Problem caught with event handler: "+clazz);
+				e.printStackTrace();
+			}
+		}
 	}
 }

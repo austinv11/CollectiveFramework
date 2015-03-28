@@ -2,6 +2,7 @@ package com.austinv11.collectiveframework.minecraft.utils;
 
 import com.austinv11.collectiveframework.language.TranslationManager;
 import com.austinv11.collectiveframework.language.translation.TranslationException;
+import com.austinv11.collectiveframework.minecraft.event.EventHandler;
 import com.austinv11.collectiveframework.minecraft.reference.Config;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
@@ -18,6 +19,7 @@ import java.util.Locale;
 /**
  * Translation Manager for use in Minecraft
  */
+@EventHandler(fmlBus = false)
 public class MinecraftTranslator {
 	
 	private static Field fallback;
@@ -101,7 +103,7 @@ public class MinecraftTranslator {
 	public void onTooltipEvent(ItemTooltipEvent event) {
 		if (Config.translateItems)
 			try {
-				if (!StatCollector.canTranslate(event.itemStack.getUnlocalizedName()) && getFallback().isKeyTranslated(event.itemStack.getUnlocalizedName()))
+				if (!StatCollector.canTranslate(event.itemStack.getUnlocalizedName()) && getFallback().containsTranslateKey(event.itemStack.getUnlocalizedName()))
 					if (StatCollector.translateToFallback(event.itemStack.getUnlocalizedName()).equals(event.itemStack.getDisplayName())) {
 						String toTranslate = event.itemStack.getDisplayName();
 						event.itemStack.setStackDisplayName(translateToLocal(toTranslate, "en"));
@@ -117,7 +119,7 @@ public class MinecraftTranslator {
 		if (Config.translateChat)
 			if (!event.isCanceled())
 				try {
-					String message = getFallback().isKeyTranslated(event.message.getUnformattedText()) ? StatCollector.translateToFallback(event.message.getUnformattedText()) :event.message.getUnformattedText();
+					String message = getFallback().containsTranslateKey(event.message.getUnformattedText()) ? StatCollector.translateToFallback(event.message.getUnformattedText()) :event.message.getUnformattedText();
 					event.message = new ChatComponentText(translateToLocal(message, "en"));
 				} catch (Exception e) {
 					e.printStackTrace();

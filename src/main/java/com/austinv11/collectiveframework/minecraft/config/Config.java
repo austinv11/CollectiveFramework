@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * When this annotation is present, a config is registered with this class using all found fields
+ * The config is automatically registered unless the class implements {@link com.austinv11.collectiveframework.minecraft.asm.IIgnored}
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

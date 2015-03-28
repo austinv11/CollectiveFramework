@@ -428,4 +428,14 @@ public class ReflectionUtils {
 		sb.append("}");
 		return sb.toString();
 	}
+	
+	/**
+	 * Checks if a class implements another class
+	 * @param classToExamine The class to check
+	 * @param interfaceClass The interface to look for
+	 * @return True if the class implements the provided interface
+	 */
+	public static boolean classImplementsInterface(Class classToExamine, Class interfaceClass) {
+		return interfaceClass.isInterface() && interfaceClass.isAssignableFrom(classToExamine);
+	}
 }

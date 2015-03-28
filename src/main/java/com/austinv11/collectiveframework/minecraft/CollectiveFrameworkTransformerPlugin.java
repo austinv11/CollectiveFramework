@@ -1,6 +1,6 @@
 package com.austinv11.collectiveframework.minecraft;
 
-import com.austinv11.collectiveframework.minecraft.asm.CollectiveFrameworkTransformer;
+import com.austinv11.collectiveframework.minecraft.asm.Transformer;
 import com.austinv11.collectiveframework.minecraft.config.ConfigRegistry;
 import com.austinv11.collectiveframework.minecraft.reference.Config;
 import cpw.mods.fml.relauncher.IFMLCallHook;
@@ -13,7 +13,7 @@ public class CollectiveFrameworkTransformerPlugin implements IFMLLoadingPlugin, 
 	
 	@Override
 	public String[] getASMTransformerClass() {
-		return new String[]{CollectiveFrameworkTransformer.class.getName()};
+		return new String[]{Transformer.class.getName()};
 	}
 	
 	@Override

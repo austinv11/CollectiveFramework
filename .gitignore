@@ -20,3 +20,6 @@
 /*.ipr
 /*.iws
 /atlassian-ide-plugin.xml
+
+## Misc
+VERSION.txt
