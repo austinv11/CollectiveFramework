@@ -1,23 +1,32 @@
-package com.austinv11.collectiveframework.minecraft;
+package com.austinv11.collectiveframework.minecraft.logging;
 
-import com.austinv11.collectiveframework.minecraft.reference.Reference;
 import cpw.mods.fml.common.FMLLog;
 import org.apache.logging.log4j.Level;
 
 /**
- * A simple class for simplified logging
+ * A simple wrapper class for easier logging
  */
 public class Logger {
 	
-	private static void log(Level level, Object object){
-		FMLLog.log(Reference.MOD_NAME, level, String.valueOf(object));
+	private String label;
+	
+	/**
+	 * Constructor for the logger
+	 * @param label The label to use
+	 */
+	public Logger(String label) {
+		this.label = label;
+	}
+	
+	private void log(Level level, Object object){
+		FMLLog.log(label, level, String.valueOf(object));
 	}
 	
 	/**
 	 * Logs a message at the ALL level
 	 * @param object The object to log
 	 */
-	public static void all (Object object){
+	public void all(Object object){
 		log(Level.ALL, object);
 	}
 	
@@ -25,7 +34,7 @@ public class Logger {
 	 * Logs a message at the DEBUG level
 	 * @param object The object to log
 	 */
-	public static void debug(Object object){
+	public void debug(Object object){
 		log(Level.DEBUG, object);
 	}
 	
@@ -33,7 +42,7 @@ public class Logger {
 	 * Logs a message at the ERROR level
 	 * @param object The object to log
 	 */
-	public static void error(Object object){
+	public void error(Object object){
 		log(Level.ERROR, object);
 	}
 	
@@ -41,7 +50,7 @@ public class Logger {
 	 * Logs a message at the FATAL level
 	 * @param object The object to log
 	 */
-	public static void fatal(Object object){
+	public void fatal(Object object){
 		log(Level.FATAL, object);
 	}
 	
@@ -49,7 +58,7 @@ public class Logger {
 	 * Logs a message at the INFO level
 	 * @param object The object to log
 	 */
-	public static void info(Object object){
+	public void info(Object object){
 		log(Level.INFO, object);
 	}
 	
@@ -57,7 +66,7 @@ public class Logger {
 	 * Logs a message at the OFF level
 	 * @param object The object to log
 	 */
-	public static void off(Object object){
+	public void off(Object object){
 		log(Level.OFF, object);
 	}
 	
@@ -65,7 +74,7 @@ public class Logger {
 	 * Logs a message at the TRACE level
 	 * @param object The object to log
 	 */
-	public static void trace(Object object){
+	public void trace(Object object){
 		log(Level.TRACE, object);
 	}
 	
@@ -73,7 +82,7 @@ public class Logger {
 	 * Logs a message at the WARN level
 	 * @param object The object to log
 	 */
-	public static void warn(Object object){
+	public void warn(Object object){
 		log(Level.WARN, object);
 	}
 }

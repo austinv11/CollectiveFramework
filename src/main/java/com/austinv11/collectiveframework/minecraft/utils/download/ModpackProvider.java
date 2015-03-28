@@ -3,7 +3,7 @@ package com.austinv11.collectiveframework.minecraft.utils.download;
 import com.austinv11.collectiveframework.dependencies.download.BinaryProvider;
 import com.austinv11.collectiveframework.dependencies.download.FileType;
 import com.austinv11.collectiveframework.dependencies.download.PlainTextProvider;
-import com.austinv11.collectiveframework.minecraft.Logger;
+import com.austinv11.collectiveframework.minecraft.CollectiveFramework;
 import com.austinv11.collectiveframework.utils.FileUtils;
 import com.austinv11.collectiveframework.utils.StringUtils;
 import com.austinv11.collectiveframework.utils.WebUtils;
@@ -113,7 +113,7 @@ public class ModpackProvider  {
 		
 		//Curse mods
 		NodeList curseNodeList = doc.getElementsByTagName("cursemod");
-		Logger.info(curseNodeList.getLength()+" Curse mod(s) found!");
+		CollectiveFramework.LOGGER.info(curseNodeList.getLength()+" Curse mod(s) found!");
 		for (int i = 0; i < curseNodeList.getLength(); i++) {
 			Node node = curseNodeList.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -130,7 +130,7 @@ public class ModpackProvider  {
 		
 		//Adfly mods
 		NodeList adflyNodeList = doc.getElementsByTagName("adflymod");
-		Logger.info(adflyNodeList.getLength()+" Adfly-type mod(s) found!");
+		CollectiveFramework.LOGGER.info(adflyNodeList.getLength()+" Adfly-type mod(s) found!");
 		for (int i = 0; i < adflyNodeList.getLength(); i++) {
 			Node node = adflyNodeList.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -144,7 +144,7 @@ public class ModpackProvider  {
 		
 		//Other mods
 		NodeList modNodeList = doc.getElementsByTagName("mod");
-		Logger.info(modNodeList.getLength()+" Other mod(s) found!");
+		CollectiveFramework.LOGGER.info(modNodeList.getLength()+" Other mod(s) found!");
 		for (int i = 0; i < modNodeList.getLength(); i++) {
 			Node node = modNodeList.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -158,7 +158,7 @@ public class ModpackProvider  {
 		
 		//Plaintext files
 		NodeList plainNodeList = doc.getElementsByTagName("plainfile");
-		Logger.info(plainNodeList.getLength()+" Other plain file(s) found!");
+		CollectiveFramework.LOGGER.info(plainNodeList.getLength()+" Other plain file(s) found!");
 		for (int i = 0; i < plainNodeList.getLength(); i++) {
 			Node node = plainNodeList.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -172,7 +172,7 @@ public class ModpackProvider  {
 		
 		//Binary files
 		NodeList binaryNodeList = doc.getElementsByTagName("binaryfile");
-		Logger.info(binaryNodeList.getLength()+" Other binary file(s) found!");
+		CollectiveFramework.LOGGER.info(binaryNodeList.getLength()+" Other binary file(s) found!");
 		for (int i = 0; i < binaryNodeList.getLength(); i++) {
 			Node node = binaryNodeList.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -186,7 +186,7 @@ public class ModpackProvider  {
 		
 		//Zip files
 		NodeList zipNodeList = doc.getElementsByTagName("zipfile");
-		Logger.info(zipNodeList.getLength()+" Zip file(s) found!");
+		CollectiveFramework.LOGGER.info(zipNodeList.getLength()+" Zip file(s) found!");
 		for (int i = 0; i < zipNodeList.getLength(); i++) {
 			Node node = zipNodeList.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -207,14 +207,14 @@ public class ModpackProvider  {
 	 */
 	public void installMods(List<IModpackFile> mods, boolean overwrite) throws IOException {
 		for (IModpackFile mod : mods) {
-			Logger.info("Installing "+mod.getType()+" '"+mod.getName()+"'...");
+			CollectiveFramework.LOGGER.info("Installing "+mod.getType()+" '"+mod.getName()+"'...");
 			if (new File(formatPath(mod.getPath())).exists() && !overwrite)
-				Logger.info("Skipping "+mod.getType()+" '"+mod.getName()+"', it already exists!");
+				CollectiveFramework.LOGGER.info("Skipping "+mod.getType()+" '"+mod.getName()+"', it already exists!");
 			boolean didDownload = mod.install();
 			if (didDownload)
-				Logger.info("Installed "+mod.getType()+" '"+mod.getName()+"'!");
+				CollectiveFramework.LOGGER.info("Installed "+mod.getType()+" '"+mod.getName()+"'!");
 			else
-				Logger.warn("Failed to install "+mod.getType()+" '"+mod.getName()+"'!");
+				CollectiveFramework.LOGGER.warn("Failed to install "+mod.getType()+" '"+mod.getName()+"'!");
 		}
 		File changelog = new File("Modpack.log");
 		if (!changelog.exists()) {
@@ -385,7 +385,7 @@ public class ModpackProvider  {
 		
 		@Override
 		public boolean install() {
-			Logger.info("Redirecting you to "+url);
+			CollectiveFramework.LOGGER.info("Redirecting you to "+url);
 			try {
 				Desktop.getDesktop().browse(new URI(url));
 				JFileChooser fileChooser = new JFileChooser();

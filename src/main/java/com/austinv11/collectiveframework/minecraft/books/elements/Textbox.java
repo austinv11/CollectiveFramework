@@ -1,6 +1,6 @@
 package com.austinv11.collectiveframework.minecraft.books.elements;
 
-import com.austinv11.collectiveframework.minecraft.Logger;
+import com.austinv11.collectiveframework.minecraft.CollectiveFramework;
 import com.austinv11.collectiveframework.minecraft.books.client.gui.GuiBook;
 import com.austinv11.collectiveframework.minecraft.books.elements.api.BookEvent;
 import com.austinv11.collectiveframework.minecraft.books.elements.api.ElementType;
@@ -25,7 +25,7 @@ public abstract class Textbox implements IElement {
 	private Alignment alignment;
 	private Variable2DShape box;
 	
-	private FontRenderer renderer = Minecraft.getMinecraft().fontRendererObj;
+	private FontRenderer renderer = Minecraft.getMinecraft().fontRenderer;
 	private List<Word> wordList = new ArrayList<Word>();
 	private String text;
 	
@@ -126,7 +126,7 @@ public abstract class Textbox implements IElement {
 	@BookEvent.SubscribeBookEvent
 	public final void onUpdate(BookEvent.UpdateScreenEvent event) {
 		onUpdate(event.bookScreen);
-		Logger.info("Go");
+		CollectiveFramework.LOGGER.info("Go");
 	}
 	
 	@BookEvent.SubscribeBookEvent

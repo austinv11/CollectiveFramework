@@ -8,6 +8,7 @@ import com.austinv11.collectiveframework.minecraft.client.gui.GuiHandler;
 import com.austinv11.collectiveframework.minecraft.compat.modules.Modules;
 import com.austinv11.collectiveframework.minecraft.config.ConfigRegistry;
 import com.austinv11.collectiveframework.minecraft.event.EventHandler;
+import com.austinv11.collectiveframework.minecraft.logging.Logger;
 import com.austinv11.collectiveframework.minecraft.proxy.CommonProxy;
 import com.austinv11.collectiveframework.minecraft.reference.Config;
 import com.austinv11.collectiveframework.minecraft.reference.Reference;
@@ -28,6 +29,8 @@ import net.minecraftforge.common.MinecraftForge;
 public class CollectiveFramework {
 	
 	public static SimpleNetworkWrapper NETWORK;
+	
+	public static Logger LOGGER = new Logger(Reference.MOD_NAME);
 	
 	@Mod.Instance(Reference.MOD_ID)
 	public static CollectiveFramework instance;
@@ -70,7 +73,7 @@ public class CollectiveFramework {
 				if (handler.forgeBus())
 					MinecraftForge.EVENT_BUS.register(toRegister);
 			} catch (Exception e) {
-				Logger.warn("Problem caught with event handler: "+clazz);
+				LOGGER.warn("Problem caught with event handler: "+clazz);
 				e.printStackTrace();
 			}
 		}

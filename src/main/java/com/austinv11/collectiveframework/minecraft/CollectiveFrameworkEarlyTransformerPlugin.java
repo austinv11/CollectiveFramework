@@ -1,6 +1,7 @@
 package com.austinv11.collectiveframework.minecraft;
 
 import com.austinv11.collectiveframework.minecraft.asm.EarlyTransformer;
+import com.austinv11.collectiveframework.minecraft.logging.Logger;
 import com.austinv11.collectiveframework.minecraft.utils.download.ModpackProvider;
 import cpw.mods.fml.relauncher.IFMLCallHook;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
@@ -41,10 +42,10 @@ public class CollectiveFrameworkEarlyTransformerPlugin implements IFMLLoadingPlu
 		ModpackProvider provider = new ModpackProvider();
 		File xml = new File("modpack.xml");
 		if (xml.exists()) {
-			Logger.info("modpack.xml found! Installing modpack...");
-			Logger.warn("Do NOT stop the client if it hangs!");
+			CollectiveFramework.LOGGER.info("modpack.xml found! Installing modpack...");
+			CollectiveFramework.LOGGER.warn("Do NOT stop the client if it hangs!");
 			provider.installMods(provider.parseModpackXML(xml), provider.doOverwrite(xml));
-			Logger.info("Modpack installed! Restarting Minecraft is recommended (though not required)");
+			CollectiveFramework.LOGGER.info("Modpack installed! Restarting Minecraft is recommended (though not required)");
 		}
 		return null;
 	}

@@ -1,6 +1,6 @@
 package com.austinv11.collectiveframework.minecraft.asm;
 
-import com.austinv11.collectiveframework.minecraft.Logger;
+import com.austinv11.collectiveframework.minecraft.CollectiveFramework;
 import com.austinv11.collectiveframework.minecraft.reference.Config;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
@@ -13,7 +13,7 @@ public class Transformer implements IClassTransformer, Opcodes {
 	@Override
 	public byte[] transform(String className, String newClassName, byte[] byteCode) {
 		if (className.equals("net.minecraft.client.gui.FontRenderer") && Config.applyColorPatch) {
-			Logger.info("Applying color code patch");
+			CollectiveFramework.LOGGER.info("Applying color code patch");
 			return transformFontRenderer(byteCode);
 		}
 		return byteCode;
