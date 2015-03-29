@@ -34,7 +34,7 @@ public class Label implements IElement {
 	 * @param color Color for the string
 	 */
 	public Label(String string, TwoDimensionalVector coords, Color color) {
-		this(string, coords, color, Minecraft.getMinecraft().fontRendererObj);
+		this(string, coords, color, Minecraft.getMinecraft().fontRenderer);
 	}
 	
 	/**
