@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "This is no longer used!"
 CF_VERSION=`cat VERSION.txt`
 FILENAME="CollectiveFramework-$CF_VERSION-deobf.jar"
 LOCAL_FILENAME="build/libs/$FILENAME"

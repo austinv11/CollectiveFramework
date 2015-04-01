@@ -9,13 +9,17 @@ buildscript {
             name = "sonatype"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
+        jcenter()
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.1'
     }
 }
 
 apply plugin: 'forge'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
 
 ext.buildNumber = System.getenv("BUILD_ID") ?: "dev"
 version = "1.0.0-$buildNumber"
@@ -25,7 +29,7 @@ archivesBaseName = "CollectiveFramework"
 minecraft {
     version = "1.7.10-10.13.2.1291"
     runDir = "eclipse"
-    replace("@VERSION@",project.version)
+    replace("@VERSION@", project.version)
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
@@ -33,6 +37,36 @@ minecraft {
     // simply re-run your setup task after changing the mappings to update your workspace.
     //  mappings = "snapshot_nodoc_20150223"
 //    mappings = "stable_12"
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact sourceJar
+            artifact deobfJar
+        }
+    }
+}
+
+bintray {
+    user = 'austinv11'
+    key = System.getenv("API_KEY")
+    dryRun = false
+    publish = true
+    publications = ['mavenJava']
+    pkg {
+        repo = "maven"
+        name = "CollectiveFramework"
+        desc = "A common library between all of austinv11's creations"
+        websiteUrl = "https://github.com/austinv11/CollectiveFramework"
+        issueTrackerUrl = "https://github.com/austinv11/CollectiveFramework/issues"
+        vcsUrl = "https://github.com/austinv11/CollectiveFramework.git"
+        licenses = ["GPL v2"]
+        publicDownloadNumbers = true
+        version {
+            name = project.version
+        }
+    }
 }
 
 dependencies {
@@ -77,6 +111,12 @@ jar {
     }
 }
 
+idea {
+    module {
+        inheritOutputDirs = true
+    }
+}
+
 // add source jar
 task sourceJar(type: Jar) {
     from sourceSets.main.allSource
@@ -87,12 +127,6 @@ task sourceJar(type: Jar) {
 task deobfJar(type: Jar) {
     from sourceSets.main.output
     classifier = 'deobf'
-    def versionFile = new File("VERSION.txt")
-    def versionWriter = new FileWriter(versionFile)
-    versionFile.createNewFile()
-    versionWriter.write("$version")
-    versionWriter.flush()
-    versionWriter.close()
 }
 
 build.dependsOn sourceJar, deobfJar
