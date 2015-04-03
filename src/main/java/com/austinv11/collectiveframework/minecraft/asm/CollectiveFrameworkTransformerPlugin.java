@@ -1,16 +1,24 @@
-package com.austinv11.collectiveframework.minecraft;
+package com.austinv11.collectiveframework.minecraft.asm;
 
-import com.austinv11.collectiveframework.minecraft.asm.DummyContainer;
 import com.austinv11.collectiveframework.minecraft.asm.Transformer;
+import com.austinv11.collectiveframework.minecraft.config.ConfigException;
 import com.austinv11.collectiveframework.minecraft.config.ConfigRegistry;
 import com.austinv11.collectiveframework.minecraft.reference.Config;
-import cpw.mods.fml.relauncher.IFMLCallHook;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
 import java.util.Map;
 
 @IFMLLoadingPlugin.SortingIndex(Integer.MAX_VALUE) //Want asm as late as possible to get srg names
-public class CollectiveFrameworkTransformerPlugin implements IFMLLoadingPlugin, IFMLCallHook {
+public class CollectiveFrameworkTransformerPlugin implements IFMLLoadingPlugin {
+	
+	public CollectiveFrameworkTransformerPlugin() {
+		try {
+			ConfigRegistry.registerConfig(new Config());
+		} catch (ConfigException e) {
+			e.printStackTrace();
+		}
+		ConfigRegistry.earlyInit();
+	}
 	
 	@Override
 	public String[] getASMTransformerClass() {
@@ -19,12 +27,12 @@ public class CollectiveFrameworkTransformerPlugin implements IFMLLoadingPlugin, 
 	
 	@Override
 	public String getModContainerClass() {
-		return DummyContainer.class.getName();
+		return null;
 	}
 	
 	@Override
 	public String getSetupClass() {
-		return this.getClass().getName();
+		return null;
 	}
 	
 	@Override
@@ -34,13 +42,6 @@ public class CollectiveFrameworkTransformerPlugin implements IFMLLoadingPlugin, 
 	
 	@Override
 	public String getAccessTransformerClass() {
-		return null;
-	}
-	
-	@Override
-	public Void call() throws Exception {
-		ConfigRegistry.registerConfig(new Config());
-		ConfigRegistry.earlyInit();
 		return null;
 	}
 }

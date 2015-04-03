@@ -4,7 +4,7 @@
     "modid": "CollectiveFramework",
     "name": "Collective Framework",
     "description": "A common library between all of austinv11's mods",
-    "version": "1.0.0",
+    "version": "@VERSION@",
     "mcversion": "1.7.10",
     "url": "austinv11.com",
     "updateUrl": "",

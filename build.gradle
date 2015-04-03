@@ -108,7 +108,8 @@ processResources
 jar {
     manifest {
         attributes 'FMLAT': 'cf_at.cfg',
-                'FMLCorePlugin': 'com.austinv11.collectiveframework.minecraft.CollectiveFrameworkEarlyTransformerPlugin'
+                'FMLCorePlugin': 'com.austinv11.collectiveframework.minecraft.asm.CollectiveFrameworkEarlyTransformerPlugin',
+                'FMLCorePluginContainsFMLMod': true
     }
 }
 

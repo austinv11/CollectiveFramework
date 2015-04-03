@@ -13,6 +13,7 @@ import com.austinv11.collectiveframework.minecraft.proxy.CommonProxy;
 import com.austinv11.collectiveframework.minecraft.reference.Config;
 import com.austinv11.collectiveframework.minecraft.reference.Reference;
 import com.austinv11.collectiveframework.multithreading.SimpleRunnable;
+import com.austinv11.collectiveframework.utils.TimeProfiler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -40,26 +41,32 @@ public class CollectiveFramework {
 	
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+		TimeProfiler profiler = new TimeProfiler();
 		registerEvents();
 		Modules.init();
 		SimpleRunnable.RESTRICT_THREAD_USAGE = Config.restrictThreadUsage;
 		NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.NETWORK_NAME);
 		Modules.propagate(event);
+		LOGGER.info("Pre-Init took "+profiler.getTime()+"ms");
 	}
 	
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
+		TimeProfiler profiler = new TimeProfiler();
 		ConfigRegistry.init();
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
 		new BookFactory().setIcon(new ResourceLocation("null")).setName("null").addElement(0, new SimplePage()).build();
 		Modules.propagate(event);
+		LOGGER.info("Init took "+profiler.getTime()+"ms");
 	}
 	
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
+		TimeProfiler profiler = new TimeProfiler();
 		for (Book book : BookFactory.bookRegistry.keySet()) //TODO: Remove, this is for debugging
 			GameRegistry.registerItem(book, book.getName());
 		Modules.propagate(event);
+		LOGGER.info("Post-Init took "+profiler.getTime()+"ms");
 	}
 	
 	private void registerEvents() {
