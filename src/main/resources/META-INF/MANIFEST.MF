@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
 FMLAT: "cf_at.cfg"
-FMLCorePluginContainsFMLMod: true
+FMLCorePlugin: 'com.austinv11.collectiveframework.minecraft.CollectiveFrameworkEarlyTransformerPlugin'
