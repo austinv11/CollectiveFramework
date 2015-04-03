@@ -19,6 +19,8 @@ public class HeavyCalculations {
 	
 	private ConcurrentHashMap<ICalculations, Future> futures = new ConcurrentHashMap<ICalculations, Future>();
 	
+	private boolean isKill = false;
+	
 	/**
 	 * Constructor for HeavyCalculations
 	 * @param numberOfThreads The number of threads to delegate calculations to
@@ -94,6 +96,24 @@ public class HeavyCalculations {
 		Future<ICalculations> future = new FutureImpl<ICalculations>(calculations, null);
 		futures.put(calculations, future);
 		return future;
+	}
+	
+	/**
+	 * Stops further calculations from occurring
+	 * <b>You can no longer add calculations after this!</b>
+	 */
+	public void kill() {
+		for (CalculationThread thread : threads)
+			thread.disable(true);
+		isKill = true;
+	}
+	
+	/**
+	 * Use this to check if you could add calculations
+	 * @return True if this is dead
+	 */
+	public boolean isDead() {
+		return isKill;
 	}
 	
 	private class CalculationThread extends SimpleRunnable {
