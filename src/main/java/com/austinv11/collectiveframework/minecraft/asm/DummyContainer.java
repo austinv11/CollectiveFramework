@@ -17,7 +17,7 @@ public class DummyContainer extends DummyModContainer {
 		super(new ModMetadata());
 		ModMetadata meta = getMetadata();
 		meta.modId = Reference.MOD_ID+"Core";
-		meta.name = Reference.MOD_NAME+"Core";
+		meta.name = Reference.MOD_NAME+" Core";
 		meta.version = Reference.VERSION;
 	}
 	
