@@ -111,6 +111,22 @@ public class ReflectionUtils {
 	}
 	
 	/**
+	 * Attempts to find either a declared or normal method (in that order)
+	 * @param methodName The method to get
+	 * @param clazz The class to search
+	 * @return The field, or null if it wasn't found
+	 */
+	public static Method getDeclaredOrNormalMethod(String methodName, Class clazz) {
+		for (Method m : clazz.getDeclaredMethods())
+			if (m.getName().equals(methodName))
+				return m;
+		for (Method m1 : clazz.getMethods())
+			if (m1.getName().equals(methodName))
+				return m1;
+		return null;
+	}
+	
+	/**
 	 * Gets the jvm signature for an object
 	 * @param o The object
 	 * @return The signature
