@@ -108,6 +108,7 @@ processResources
 jar {
     manifest {
         attributes 'FMLAT': 'cf_at.cfg'
+        attributes 'FMLCorePluginContainsFMLMod': true
     }
 }
 
