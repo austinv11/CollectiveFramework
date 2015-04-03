@@ -1,5 +1,6 @@
 package com.austinv11.collectiveframework.minecraft;
 
+import com.austinv11.collectiveframework.minecraft.asm.DummyContainer;
 import com.austinv11.collectiveframework.minecraft.asm.Transformer;
 import com.austinv11.collectiveframework.minecraft.config.ConfigRegistry;
 import com.austinv11.collectiveframework.minecraft.reference.Config;
@@ -18,7 +19,7 @@ public class CollectiveFrameworkTransformerPlugin implements IFMLLoadingPlugin, 
 	
 	@Override
 	public String getModContainerClass() {
-		return null;
+		return DummyContainer.class.getName();
 	}
 	
 	@Override

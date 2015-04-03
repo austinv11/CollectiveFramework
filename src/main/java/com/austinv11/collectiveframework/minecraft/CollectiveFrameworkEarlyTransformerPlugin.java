@@ -1,7 +1,7 @@
 package com.austinv11.collectiveframework.minecraft;
 
+import com.austinv11.collectiveframework.minecraft.asm.DummyContainer;
 import com.austinv11.collectiveframework.minecraft.asm.EarlyTransformer;
-import com.austinv11.collectiveframework.minecraft.logging.Logger;
 import com.austinv11.collectiveframework.minecraft.utils.download.ModpackProvider;
 import cpw.mods.fml.relauncher.IFMLCallHook;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
@@ -19,7 +19,7 @@ public class CollectiveFrameworkEarlyTransformerPlugin implements IFMLLoadingPlu
 	
 	@Override
 	public String getModContainerClass() {
-		return null;
+		return DummyContainer.class.getName();
 	}
 	
 	@Override

@@ -1,8 +1,7 @@
 package com.austinv11.collectiveframework.minecraft.utils;
 
 import com.austinv11.collectiveframework.dependencies.DependencyManager;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModClassLoader;
+import com.austinv11.collectiveframework.minecraft.asm.DummyContainer;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -18,6 +17,6 @@ public class MinecraftDependencyManager extends DependencyManager {
 	 * @throws MalformedURLException
 	 */
 	public static void loadLibrary(File file) throws MalformedURLException {
-		((ModClassLoader) Loader.instance().getModClassLoader()).addFile(file);
+		DummyContainer.loader.addFile(file);
 	}
 }

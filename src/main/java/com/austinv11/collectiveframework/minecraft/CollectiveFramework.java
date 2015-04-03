@@ -42,7 +42,6 @@ public class CollectiveFramework {
 	public void preInit(FMLPreInitializationEvent event) {
 		registerEvents();
 		Modules.init();
-		ConfigRegistry.init();
 		SimpleRunnable.RESTRICT_THREAD_USAGE = Config.restrictThreadUsage;
 		NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.NETWORK_NAME);
 		Modules.propagate(event);
@@ -50,6 +49,7 @@ public class CollectiveFramework {
 	
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
+		ConfigRegistry.init();
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
 		new BookFactory().setIcon(new ResourceLocation("null")).setName("null").addElement(0, new SimplePage()).build();
 		Modules.propagate(event);
