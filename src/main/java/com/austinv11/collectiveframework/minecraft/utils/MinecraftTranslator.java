@@ -2,7 +2,6 @@ package com.austinv11.collectiveframework.minecraft.utils;
 
 import com.austinv11.collectiveframework.language.TranslationManager;
 import com.austinv11.collectiveframework.language.translation.TranslationException;
-import com.austinv11.collectiveframework.minecraft.event.EventHandler;
 import com.austinv11.collectiveframework.minecraft.reference.Config;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
@@ -19,7 +18,6 @@ import java.util.Locale;
 /**
  * Translation Manager for use in Minecraft
  */
-@EventHandler(fmlBus = false)
 public class MinecraftTranslator {
 	
 	private static Field fallback;

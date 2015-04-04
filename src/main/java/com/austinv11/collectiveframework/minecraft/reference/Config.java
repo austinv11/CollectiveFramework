@@ -1,9 +1,7 @@
 package com.austinv11.collectiveframework.minecraft.reference;
 
-import com.austinv11.collectiveframework.minecraft.asm.Ignored;
 import com.austinv11.collectiveframework.minecraft.config.Description;
 
-@Ignored
 @com.austinv11.collectiveframework.minecraft.config.Config(fileName = Reference.MOD_ID+".cfg", earlyInit = true, exclude = {"test_2"})
 public class Config {
 	

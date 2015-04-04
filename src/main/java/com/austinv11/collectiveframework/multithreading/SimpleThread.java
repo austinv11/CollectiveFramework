@@ -7,7 +7,9 @@ import java.lang.reflect.Field;
  */
 public class SimpleThread extends Thread {
 	
-	public boolean isActive = true;
+	public volatile boolean isActive = true;
+	public volatile long delay = -1;
+	public volatile boolean started = false;
 	
 	protected SimpleThread() {
 		super();
@@ -43,8 +45,44 @@ public class SimpleThread extends Thread {
 	
 	@Override
 	public void run() {
-		if (isActive)
-			super.run();
+		while (true) {
+			if (started) {
+				if (delay == -1) {
+					if (isActive) {
+						super.run();
+					}
+				} else {
+					while (true) {
+						if (isActive) {
+							super.run();
+							try {
+								this.wait(delay);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						} else {
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	@Override
+	public synchronized void start() {
+		int status = -1;
+		started = true;
+		try {
+			status = getStatus();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (status != 0) {
+			isActive = true;
+		} else {
+			super.start();
+		}
 	}
 	
 	/**
@@ -54,9 +92,15 @@ public class SimpleThread extends Thread {
 	 * @throws IllegalAccessException
 	 */
 	public void setTarget(Runnable runnable) throws NoSuchFieldException, IllegalAccessException {
-		Field field = Thread.class.getField("target");
+		Field field = Thread.class.getDeclaredField("target");
 		field.setAccessible(true);
 		field.set(this, runnable);
+	}
+	
+	private Integer getStatus() throws NoSuchFieldException, IllegalAccessException {
+		Field field = Thread.class.getDeclaredField("threadStatus");
+		field.setAccessible(true);
+		return (Integer) field.get(this);
 	}
 	
 	@Override

@@ -6,7 +6,7 @@ package com.austinv11.collectiveframework.utils.math;
  */
 public class ThreeDimensionalVector implements Comparable {
 	
-	public double x,y,z;
+	private double x,y,z;
 	
 	/**
 	 * Default constructor
@@ -31,6 +31,7 @@ public class ThreeDimensionalVector implements Comparable {
 		this.y = y;
 		this.z = z;
 	}
+	
 	/**
 	 * Returns the x coord as an int
 	 * @return The rounded x coord
@@ -53,6 +54,30 @@ public class ThreeDimensionalVector implements Comparable {
 	 */
 	public int getRoundedZ() {
 		return (int)z;
+	}
+	
+	/**
+	 * Gets the x coord of the vector
+	 * @return The coord
+	 */
+	public double getX() {
+		return x;
+	}
+	
+	/**
+	 * Gets the y coord of the vector
+	 * @return The coord
+	 */
+	public double getY() {
+		return y;
+	}
+	
+	/**
+	 * Gets the z coord of the vector
+	 * @return The coord
+	 */
+	public double getZ() {
+		return z;
 	}
 	
 	/**

@@ -2,12 +2,12 @@ package com.austinv11.collectiveframework.minecraft.asm;
 
 import com.austinv11.collectiveframework.minecraft.reference.Reference;
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import cpw.mods.fml.common.DummyModContainer;
 import cpw.mods.fml.common.LoadController;
 import cpw.mods.fml.common.ModClassLoader;
 import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.event.FMLConstructionEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class DummyContainer extends DummyModContainer {
 	
@@ -27,8 +27,8 @@ public class DummyContainer extends DummyModContainer {
 		return true;
 	}
 	
-	@SubscribeEvent
-	public void modConstruction(FMLConstructionEvent event){
+	@Subscribe
+	public void modConstruction(FMLConstructionEvent event) {
 		loader = event.getModClassLoader();
 	}
 }

@@ -1,6 +1,5 @@
 package com.austinv11.collectiveframework.minecraft.config;
 
-import com.austinv11.collectiveframework.minecraft.asm.EarlyTransformer;
 import com.austinv11.collectiveframework.utils.ArrayUtils;
 import com.austinv11.collectiveframework.utils.ReflectionUtils;
 
@@ -68,12 +67,6 @@ public class ConfigRegistry {
 	 * Only meant for internal use
 	 */
 	public static void init() {
-		for (String s : EarlyTransformer.configClasses)
-			try {
-				registerConfig(Class.forName(s).newInstance());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		for (ConfigProxy config : standardConfigs)
 			initialize(config);
 		standardConfigs.clear();

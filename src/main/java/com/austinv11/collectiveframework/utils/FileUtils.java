@@ -3,6 +3,8 @@ package com.austinv11.collectiveframework.utils;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -65,5 +67,31 @@ public class FileUtils {
 		}
 		zips.closeEntry();
 		zips.close();
+	}
+	
+	/**
+	 * Gets a list of classes from a jar file
+	 * @param file The jar file
+	 * @return The classes
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	public static List<Class> parseClassesFromJar(File file) throws IOException, ClassNotFoundException {
+		if (!file.exists() || file.isDirectory())
+			return new ArrayList<Class>();
+		List<Class> classes = new ArrayList<Class>();
+		JarInputStream jis = new JarInputStream(new FileInputStream(file));
+		JarEntry entry = jis.getNextJarEntry();
+		while (entry != null) {
+			if (entry.getName().endsWith(".class")) {
+				String tempString = entry.getName().replaceAll("/", "\\.");
+				try {
+					Class clazz = Class.forName(tempString.substring(0, tempString.lastIndexOf(".")));
+					classes.add(clazz);
+				} catch (Exception e) {}
+			}
+			entry = jis.getNextJarEntry();
+		}
+		return classes;
 	}
 }

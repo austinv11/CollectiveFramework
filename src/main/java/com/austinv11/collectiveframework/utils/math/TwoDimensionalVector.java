@@ -5,7 +5,7 @@ package com.austinv11.collectiveframework.utils.math;
  */
 public class TwoDimensionalVector implements Comparable {
 	
-	public double x,y;
+	private double x,y;
 	
 	/**
 	 * Default constructor
@@ -40,6 +40,22 @@ public class TwoDimensionalVector implements Comparable {
 	 */
 	public int getRoundedY() {
 		return (int)y;
+	}
+	
+	/**
+	 * Gets the x coord of the vector
+	 * @return The coord
+	 */
+	public double getX() {
+		return x;
+	}
+	
+	/**
+	 * Gets the y coord of the vector
+	 * @return The coord
+	 */
+	public double getY() {
+		return y;
 	}
 	
 	/**

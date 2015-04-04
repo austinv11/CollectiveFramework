@@ -93,7 +93,7 @@ public class Variable2DShape {
 		for (int i = 0; i < vertices.length; i++) {
 			TwoDimensionalVector vertex1 = ArrayUtils.wrappedRetrieve(vertices, i);
 			TwoDimensionalVector vertex2 = ArrayUtils.wrappedRetrieve(vertices, i+1);
-			area += (vertex1.x * vertex2.y) - (vertex1.y * vertex2.x);
+			area += (vertex1.getX() * vertex2.getY()) - (vertex1.getY() * vertex2.getX());
 		}
 		area = Math.abs(area / 2);
 		return area;
@@ -145,8 +145,8 @@ public class Variable2DShape {
 		double centerX = 0;
 		double centerY = 0;
 		for (TwoDimensionalVector vertex : vertices) {
-			centerX += vertex.x;
-			centerY += vertex.y;
+			centerX += vertex.getX();
+			centerY += vertex.getY();
 		}
 		centerX /= getNumberOfSides();
 		centerY /= getNumberOfSides();
@@ -160,8 +160,8 @@ public class Variable2DShape {
 	 */
 	public Variable2DShape setCentroid(TwoDimensionalVector centroid) {
 		TwoDimensionalVector oldCentroid = getCentroid();
-		double xDiff = centroid.x - oldCentroid.x;
-		double yDiff = centroid.y - oldCentroid.y;
+		double xDiff = centroid.getX() - oldCentroid.getX();
+		double yDiff = centroid.getY() - oldCentroid.getY();
 		TwoDimensionalVector toAdd = new TwoDimensionalVector(xDiff, yDiff);
 		TwoDimensionalVector[] vertices = getVertices();
 		List<TwoDimensionalVector> newVertices = new ArrayList<TwoDimensionalVector>();
@@ -229,15 +229,15 @@ public class Variable2DShape {
 		double[] xVals = new double[vertices.length];
 		double[] yVals = new double[vertices.length];
 		for (int i = 0; i < vertices.length; i++) {
-			xVals[i] = vertices[i].x;
-			yVals[i] = vertices[i].y;
+			xVals[i] = vertices[i].getX();
+			yVals[i] = vertices[i].getY();
 		}
 		double minX, maxX, minY, maxY;
 		minX = MathUtils.getMin(xVals);
 		maxX = MathUtils.getMax(xVals);
 		minY = MathUtils.getMin(yVals);
 		maxY = MathUtils.getMax(yVals);
-		return MathUtils.isBetween(minX, maxX, coord.x, true) && MathUtils.isBetween(minY, maxY, coord.y, true);
+		return MathUtils.isBetween(minX, maxX, coord.getX(), true) && MathUtils.isBetween(minY, maxY, coord.getY(), true);
 	}
 	
 	/**
@@ -252,8 +252,8 @@ public class Variable2DShape {
 		double[] xVals = new double[vertices.length];
 		double[] yVals = new double[vertices.length];
 		for (int i = 0; i < vertices.length; i++) {
-			xVals[i] = vertices[i].x;
-			yVals[i] = vertices[i].y;
+			xVals[i] = vertices[i].getX();
+			yVals[i] = vertices[i].getY();
 		}
 		double minX, maxX, minY, maxY;
 		minX = MathUtils.getMin(xVals);

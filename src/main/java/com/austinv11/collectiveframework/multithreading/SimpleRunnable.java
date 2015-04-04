@@ -15,6 +15,7 @@ public abstract class SimpleRunnable implements Runnable {
 	
 	private volatile boolean isCleaned = false;
 	private volatile int thread = -1;
+	private volatile long delay = -1;
 	
 	static {
 		threadMap.put(true, new CopyOnWriteArrayList<SimpleThread>());
@@ -26,10 +27,12 @@ public abstract class SimpleRunnable implements Runnable {
 	 * @param clean Whether to clean the thread running - This will prevent this runnable from being able to run, only cleans if enabled in the config
 	 * @throws IllegalThreadStateException
 	 */
-	public synchronized final void disable(boolean clean) throws IllegalThreadStateException {
+	public final void disable(boolean clean) throws IllegalThreadStateException {
 		if (isCleaned)
 			throw new IllegalThreadStateException("Thread "+this.getName()+" is cleaned already!");
 		getThread().isActive = false;
+		getThread().delay = -1;
+		getThread().started = false;
 		if (clean && RESTRICT_THREAD_USAGE) {
 			isCleaned = true;
 			threadMap.get(false).add(getThread());
@@ -41,16 +44,18 @@ public abstract class SimpleRunnable implements Runnable {
 	 * Attempts to reenable this thread
 	 * @throws IllegalThreadStateException
 	 */
-	public synchronized final void enable() throws IllegalThreadStateException {
+	public final void enable() throws IllegalThreadStateException {
 		if (isCleaned)
 			throw new IllegalThreadStateException("Thread "+this.getName()+" is cleaned already!");
 		getThread().isActive = true;
+		getThread().delay = delay;
+		getThread().started = true;
 	}
 	
 	/**
 	 * Runs a thread with this runnable
 	 */
-	public synchronized final void start() {
+	public final void start() {
 		getThread().start();
 	}
 	
@@ -70,7 +75,7 @@ public abstract class SimpleRunnable implements Runnable {
 	 * Delays the given thread from running
 	 * @param delay The length of the delay (in milliseconds)
 	 */
-	public synchronized final void delay(int delay) throws InterruptedException {
+	public final void delay(int delay) throws InterruptedException {
 		getThread().wait(delay);
 	}
 	
@@ -78,7 +83,7 @@ public abstract class SimpleRunnable implements Runnable {
 	 * Gets whether is runnable is cleaned
 	 * @return IsCleaned
 	 */
-	public synchronized boolean isCleaned() {
+	public boolean isCleaned() {
 		return isCleaned;
 	}
 	
@@ -86,15 +91,24 @@ public abstract class SimpleRunnable implements Runnable {
 	 * Gets whether the runnable is running
 	 * @return IsEnabled
 	 */
-	public synchronized boolean isEnabled() {
+	public boolean isEnabled() {
 		return getThread().isActive;
+	}
+	
+	/**
+	 * Makes the thread loop every x milliseconds
+	 * @param delay The delay for each loop, in milliseconds
+	 */
+	public void setTicking(long delay) {
+		this.delay = delay;
+		getThread().delay = delay;
 	}
 	
 	/**
 	 * Gets the internal thread running the runnable
 	 * @return The thread {@link com.austinv11.collectiveframework.multithreading.SimpleThread}
 	 */
-	private synchronized final SimpleThread getThread() {
+	private final SimpleThread getThread() {
 		if (this.thread == -1) { //Assign a thread
 			if (threadMap.get(false).size() < 1) {
 				SimpleThread thread = new SimpleThread(this, this.getName());

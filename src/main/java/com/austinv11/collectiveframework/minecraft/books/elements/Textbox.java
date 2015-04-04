@@ -42,7 +42,7 @@ public abstract class Textbox implements IElement {
 		this.endCoords = endCoords;
 		this.alignment = alignment;
 		try {
-			this.box = new Variable2DShape(startCoords, new TwoDimensionalVector(endCoords.x, startCoords.y), endCoords, new TwoDimensionalVector(startCoords.x, endCoords.y));
+			this.box = new Variable2DShape(startCoords, new TwoDimensionalVector(endCoords.getX(), startCoords.getY()), endCoords, new TwoDimensionalVector(startCoords.getX(), endCoords.getY()));
 		} catch (IncompatibleDimensionsException e) {
 			e.printStackTrace();
 		}

@@ -102,7 +102,7 @@ public class Circle {
 	 * @return If the point is on the circumference
 	 */
 	public boolean isPointOnCircumference(TwoDimensionalVector point) {
-		return Math.sqrt(Math.pow((point.x - center.x), 2) + Math.pow((point.y - center.y), 2)) == radius;
+		return Math.sqrt(Math.pow((point.getX() - center.getX()), 2) + Math.pow((point.getY() - center.getY()), 2)) == radius;
 	}
 	
 	/**
