@@ -1,7 +1,5 @@
 package com.austinv11.collectiveframework.minecraft.config;
 
-import com.austinv11.collectiveframework.minecraft.asm.Ignored;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -9,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * When this annotation is present, a config is registered with this class using all found fields
- * The config is automatically registered unless the class implements {@link Ignored}
+ * The config is automatically registered unless the class implements
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
