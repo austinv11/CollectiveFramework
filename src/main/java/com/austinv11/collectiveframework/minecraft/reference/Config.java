@@ -16,4 +16,7 @@ public class Config {
 	
 	@Description(comment = "If enabled (ONLY EFFECTS YOUR CLIENT) you could use essentials color codes", category = "Misc")
 	public static boolean applyColorPatch = true;
+
+	@Description(comment = "When enabled, misc tooltips will be displayed on items. Useful for debugging!", category = "Development")
+	public static boolean debugTooltips = false;
 }

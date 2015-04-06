@@ -15,7 +15,7 @@ public @interface Config {
 	
 	/**
 	 * If preferred, the custom file name
-	 * @return The file name (extension included)
+	 * @return The file name (include the extension)
 	 */
 	String fileName() default "@NULL@";
 	

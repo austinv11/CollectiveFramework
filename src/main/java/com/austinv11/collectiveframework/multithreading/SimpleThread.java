@@ -45,7 +45,7 @@ public class SimpleThread extends Thread {
 	
 	@Override
 	public void run() {
-		while (true) {
+		do {
 			if (started) {
 				if (delay == -1) {
 					if (isActive) {
@@ -66,7 +66,7 @@ public class SimpleThread extends Thread {
 					}
 				}
 			}
-		}
+		} while (SimpleRunnable.RESTRICT_THREAD_USAGE);
 	}
 	
 	@Override
