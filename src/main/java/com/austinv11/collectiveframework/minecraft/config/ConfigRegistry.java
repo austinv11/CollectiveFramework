@@ -227,6 +227,7 @@ public class ConfigRegistry {
 						Field f = ReflectionUtils.getDeclaredOrNormalField(field, config.getClass());
 						if (f != null) {
 							try {
+								f.setAccessible(true);
 								f.set(config, deserialize(key, line));
 							} catch (ConfigException e) {
 								e.printStackTrace();
