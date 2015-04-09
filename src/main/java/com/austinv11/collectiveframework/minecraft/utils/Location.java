@@ -82,4 +82,19 @@ public class Location extends ThreeDimensionalVector {
 	public ChunkCoordinates toChunkCoordinates() {
 		return new ChunkCoordinates(getRoundedX(), getRoundedY(), getRoundedZ());
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof Location) {
+			return ((Location) other).getRoundedX() == getRoundedX() && ((Location) other).getRoundedY() == getRoundedY() 
+					&& ((Location) other).getRoundedZ() == getRoundedZ() 
+					&& ((Location) other).getWorld().provider.dimensionId == getWorld().provider.dimensionId;
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() { //Done to allow for use as keys in HashMaps
+		return 0;
+	}
 }

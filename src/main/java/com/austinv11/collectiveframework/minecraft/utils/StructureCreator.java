@@ -84,7 +84,7 @@ public class StructureCreator {
 			return;
 		for (Location l : blocks.keySet()) {
 			if (errorCheckers.get(l).isBlockValid(blocks.get(l), metas.get(blocks.get(l)), l) || forceOptionalBlocks)
-				l.getWorld().setBlock(l.getRoundedX(), l.getRoundedY(), l.getRoundedZ(), blocks.get(l), 0, 2);
+				l.getWorld().setBlock(l.getRoundedX(), l.getRoundedY(), l.getRoundedZ(), blocks.get(l), metas.get(blocks.get(l)), 2);
 		}
 	}
 	
