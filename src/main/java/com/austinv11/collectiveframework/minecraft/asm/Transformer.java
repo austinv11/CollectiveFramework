@@ -8,6 +8,8 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
+import java.util.Iterator;
+
 public class Transformer implements IClassTransformer, Opcodes {
 	
 	@Override
@@ -15,8 +17,37 @@ public class Transformer implements IClassTransformer, Opcodes {
 		if (className.equals("net.minecraft.client.gui.FontRenderer") && Config.applyColorPatch) {
 			CollectiveFramework.LOGGER.info("Applying color code patch");
 			return transformFontRenderer(byteCode);
+		} else if (className.equals("net.minecraft.client.renderer.entity.RenderEnchantmentTable")) {
+			CollectiveFramework.LOGGER.info("Hooking into RenderEnchantmentTable#renderTileEntityAt(Lnet/minecraft/tileentity/TileEntityEnchantmentTable;DDDF)V");
+			return transformRenderEnchantmentTable(byteCode);
 		}
 		return byteCode;
+	}
+	
+	private byte[] transformRenderEnchantmentTable(byte[] byteCode) {
+		ClassNode classNode = new ClassNode();
+		ClassReader classReader = new ClassReader(byteCode);
+		classReader.accept(classNode, 0);
+		for (MethodNode m : classNode.methods)
+			if (m.name.equals("renderTileEntityAt") || m.name.equals("func_147500_a"))
+				if (m.desc.contains("TileEntityEnchantmentTable")) {
+					Iterator<AbstractInsnNode> nodes = m.instructions.iterator();
+					while (nodes.hasNext()) {
+						AbstractInsnNode node = nodes.next();
+						if (node.getOpcode() == GETSTATIC) {
+							InsnList instructions = new InsnList();
+							instructions.add(new VarInsnNode(ALOAD, 1));
+							instructions.add(new MethodInsnNode(INVOKESTATIC, "com/austinv11/collectiveframework/minecraft/hooks/ClientHooks", "getBookTexture", "(Lnet/minecraft/tileentity/TileEntityEnchantmentTable;)Lnet/minecraft/util/ResourceLocation;", false));
+							instructions.add(new VarInsnNode(ASTORE, 7));
+							instructions.add(new VarInsnNode(ALOAD, 7));
+							m.instructions.insertBefore(node, instructions);
+							m.instructions.remove(node);
+						}
+					}
+				}
+		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+		classNode.accept(writer);
+		return writer.toByteArray();
 	}
 	
 	//Adding a useful feature from the 'Essentials' bukkit plugin, allowing the use of '&' for color codes
@@ -26,7 +57,7 @@ public class Transformer implements IClassTransformer, Opcodes {
 		ClassReader classReader = new ClassReader(byteCode);
 		classReader.accept(classNode, 0);
 		for (MethodNode m : classNode.methods) {
-			if (m.name.equals("renderStringAtPos")) {
+			if (m.name.equals("renderStringAtPos") || m.name.equals("func_78255_a")) {
 				InsnList instructions = new InsnList();
 				instructions.add(new VarInsnNode(ALOAD, 1));
 				instructions.add(new MethodInsnNode(INVOKESTATIC, "com/austinv11/collectiveframework/minecraft/utils/Colors", "replaceAlternateColorChar", "(Ljava/lang/String;)Ljava/lang/String;", false));
