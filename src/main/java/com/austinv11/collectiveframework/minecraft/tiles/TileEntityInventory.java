@@ -11,7 +11,7 @@ import net.minecraftforge.common.util.Constants;
 /**
  * Simple implementation for a Tile Entity to contain an inventory
  */
-public abstract class TileEntityInventory extends TileEntity implements IInventory{
+public abstract class TileEntityInventory extends TileEntity implements IInventory {
 
 	public int size = 1;
 	public ItemStack[] items = new ItemStack[size];

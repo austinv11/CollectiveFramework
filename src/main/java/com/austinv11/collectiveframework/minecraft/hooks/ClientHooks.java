@@ -9,9 +9,12 @@ import net.minecraft.util.ResourceLocation;
 @SideOnly(Side.CLIENT)
 public class ClientHooks {
 	
+	private static ResourceLocation defaultBook =  new ResourceLocation("textures/entity/enchanting_table_book.png");
+	private static ResourceLocation infuserBook = new ResourceLocation("dartcraft2:textures/blocks/enchanting_table_book.png");
+	
 	public static ResourceLocation getBookTexture(TileEntityEnchantmentTable table) {
 		if (Loader.isModLoaded("DartCraft2") && table.blockMetadata == Integer.MIN_VALUE)
-			return new ResourceLocation("dartcraft2:textures/blocks/enchanting_table_book.png");
-		return new ResourceLocation("textures/entity/enchanting_table_book.png");
+			return infuserBook;
+		return defaultBook;
 	}
 }

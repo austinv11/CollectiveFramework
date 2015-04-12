@@ -7,6 +7,7 @@ import com.austinv11.collectiveframework.minecraft.client.gui.GuiHandler;
 import com.austinv11.collectiveframework.minecraft.compat.modules.Modules;
 import com.austinv11.collectiveframework.minecraft.config.ConfigRegistry;
 import com.austinv11.collectiveframework.minecraft.logging.Logger;
+import com.austinv11.collectiveframework.minecraft.network.TileEntityUpdatePacket;
 import com.austinv11.collectiveframework.minecraft.proxy.CommonProxy;
 import com.austinv11.collectiveframework.minecraft.reference.Config;
 import com.austinv11.collectiveframework.minecraft.reference.Reference;
@@ -20,6 +21,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.util.ResourceLocation;
 
 @Mod(modid= Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION/*, guiFactory = Reference.GUI_FACTORY_CLASS*/)
@@ -61,6 +63,7 @@ public class CollectiveFramework {
 		TimeProfiler profiler = new TimeProfiler();
 		for (Book book : BookFactory.bookRegistry.keySet()) //TODO: Remove, this is for debugging
 			GameRegistry.registerItem(book, book.getName());
+		NETWORK.registerMessage(TileEntityUpdatePacket.TileEntityUpdatePacketHandler.class, TileEntityUpdatePacket.class, 0, Side.SERVER);
 		Modules.propagate(event);
 		LOGGER.info("Post-Init took "+profiler.getTime()+"ms");
 	}
