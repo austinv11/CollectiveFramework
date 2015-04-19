@@ -99,7 +99,9 @@ public class WebUtils {
 	 * @param path Path in the repo
 	 * @return The contents
 	 * @throws IOException
+	 * @deprecated See {@link com.austinv11.collectiveframework.services.GithubService}
 	 */
+	@Deprecated
 	public static List<String> readGithub(String repo, String path) throws IOException{
 		return readGithub(repo, "master", path);
 	}
@@ -111,7 +113,9 @@ public class WebUtils {
 	 * @param path Path in the repo
 	 * @return The contents
 	 * @throws IOException
+	 * @deprecated See {@link com.austinv11.collectiveframework.services.GithubService}
 	 */
+	@Deprecated
 	public static List<String> readGithub(String repo, String branch, String path) throws IOException{
 		return readURL("https://raw.github.com/austinv11/"+repo+"/"+branch+"/"+path);
 	}

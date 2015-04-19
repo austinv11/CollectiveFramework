@@ -7,7 +7,8 @@ import com.austinv11.collectiveframework.minecraft.client.gui.GuiHandler;
 import com.austinv11.collectiveframework.minecraft.compat.modules.Modules;
 import com.austinv11.collectiveframework.minecraft.config.ConfigRegistry;
 import com.austinv11.collectiveframework.minecraft.logging.Logger;
-import com.austinv11.collectiveframework.minecraft.network.TileEntityUpdatePacket;
+import com.austinv11.collectiveframework.minecraft.network.TileEntityClientUpdatePacket;
+import com.austinv11.collectiveframework.minecraft.network.TileEntityServerUpdatePacket;
 import com.austinv11.collectiveframework.minecraft.proxy.CommonProxy;
 import com.austinv11.collectiveframework.minecraft.reference.Config;
 import com.austinv11.collectiveframework.minecraft.reference.Reference;
@@ -63,7 +64,8 @@ public class CollectiveFramework {
 		TimeProfiler profiler = new TimeProfiler();
 		for (Book book : BookFactory.bookRegistry.keySet()) //TODO: Remove, this is for debugging
 			GameRegistry.registerItem(book, book.getName());
-		NETWORK.registerMessage(TileEntityUpdatePacket.TileEntityUpdatePacketHandler.class, TileEntityUpdatePacket.class, 0, Side.SERVER);
+		NETWORK.registerMessage(TileEntityServerUpdatePacket.TileEntityServerUpdatePacketHandler.class, TileEntityServerUpdatePacket.class, 0, Side.SERVER);
+		NETWORK.registerMessage(TileEntityClientUpdatePacket.TileEntityClientUpdatePacketHandler.class, TileEntityClientUpdatePacket.class, 1, Side.CLIENT);
 		Modules.propagate(event);
 		LOGGER.info("Post-Init took "+profiler.getTime()+"ms");
 	}

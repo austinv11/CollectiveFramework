@@ -9,17 +9,20 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-public class TileEntityUpdatePacket implements IMessage {
+/**
+ * Use this packet to sync tile entities (client -> server)
+ */
+public class TileEntityServerUpdatePacket implements IMessage {
 	
 	public World world;
 	public int x, y, z;
 	public NBTTagCompound updateData;
 	
-	public TileEntityUpdatePacket() {
+	public TileEntityServerUpdatePacket() {
 		
 	}
 	
-	public TileEntityUpdatePacket(World world, int x, int y, int z, NBTTagCompound updateData) {
+	public TileEntityServerUpdatePacket(World world, int x, int y, int z, NBTTagCompound updateData) {
 		this.world = world;
 		this.x = x;
 		this.y = y;
@@ -48,10 +51,10 @@ public class TileEntityUpdatePacket implements IMessage {
 		ByteBufUtils.writeTag(buf, tag);
 	}
 	
-	public static class TileEntityUpdatePacketHandler implements IMessageHandler<TileEntityUpdatePacket, IMessage> {
+	public static class TileEntityServerUpdatePacketHandler implements IMessageHandler<TileEntityServerUpdatePacket, IMessage> {
 		
 		@Override
-		public IMessage onMessage(TileEntityUpdatePacket message, MessageContext ctx) {
+		public IMessage onMessage(TileEntityServerUpdatePacket message, MessageContext ctx) {
 			message.world.getTileEntity(message.x, message.y, message.z).readFromNBT(message.updateData);
 			return null;
 		}
