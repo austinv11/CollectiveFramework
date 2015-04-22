@@ -19,4 +19,7 @@ public class Config {
 
 	@Description(comment = "When enabled, misc tooltips will be displayed on items. Useful for debugging!", category = "Development")
 	public static boolean debugTooltips = false;
+	
+	@Description(comment = "This causes /say commands to emit ServerChatEvents, disable this if mods are having issues with chat messages", category = "Tweaks")
+	public static boolean commandBoradcastRelay = true;
 }
