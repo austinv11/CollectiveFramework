@@ -15,7 +15,7 @@ public class CommandBroadcastHandler {
 	
 	@SubscribeEvent
 	public void onCommand(CommandEvent event) {
-		if (!event.isCanceled() && Config.commandBoradcastRelay) {
+		if (!event.isCanceled() && Config.commandBroadcastRelay) {
 			if (event.command instanceof CommandBroadcast) {
 				IChatComponent component = CommandBase.func_147176_a(event.sender, event.parameters, 0, true);
 				MinecraftForge.EVENT_BUS.post(new ServerChatEvent(GhostEntityPlayerMP.getPlayerForSender(event.sender), 

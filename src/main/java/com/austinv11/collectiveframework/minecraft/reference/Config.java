@@ -21,5 +21,5 @@ public class Config {
 	public static boolean debugTooltips = false;
 	
 	@Description(comment = "This causes /say commands to emit ServerChatEvents, disable this if mods are having issues with chat messages", category = "Tweaks")
-	public static boolean commandBoradcastRelay = true;
+	public static boolean commandBroadcastRelay = true;
 }
