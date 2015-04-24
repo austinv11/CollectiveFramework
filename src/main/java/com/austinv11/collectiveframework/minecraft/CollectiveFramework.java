@@ -1,5 +1,6 @@
 package com.austinv11.collectiveframework.minecraft;
 
+import com.austinv11.collectiveframework.minecraft.asm.Transformer;
 import com.austinv11.collectiveframework.minecraft.books.Book;
 import com.austinv11.collectiveframework.minecraft.books.BookFactory;
 import com.austinv11.collectiveframework.minecraft.books.elements.SimplePage;
@@ -38,9 +39,16 @@ public class CollectiveFramework {
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
 	public static CommonProxy proxy;
 	
+	/**
+	 * If this is true, the mod is loaded in a development environment
+	 */
+	public static boolean IS_DEV_ENVIRONMENT;
+	private static boolean didCheck = false;
+	
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		TimeProfiler profiler = new TimeProfiler();
+		checkEnvironment();
 		proxy.registerEvents();
 		Modules.init();
 		SimpleRunnable.RESTRICT_THREAD_USAGE = Config.restrictThreadUsage;
@@ -52,6 +60,7 @@ public class CollectiveFramework {
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
 		TimeProfiler profiler = new TimeProfiler();
+		checkEnvironment();
 		ConfigRegistry.init();
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
 		new BookFactory().setIcon(new ResourceLocation("null")).setName("null").addElement(0, new SimplePage()).build();
@@ -62,11 +71,21 @@ public class CollectiveFramework {
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		TimeProfiler profiler = new TimeProfiler();
+		checkEnvironment();
 		for (Book book : BookFactory.bookRegistry.keySet()) //TODO: Remove, this is for debugging
 			GameRegistry.registerItem(book, book.getName());
 		NETWORK.registerMessage(TileEntityServerUpdatePacket.TileEntityServerUpdatePacketHandler.class, TileEntityServerUpdatePacket.class, 0, Side.SERVER);
 		NETWORK.registerMessage(TileEntityClientUpdatePacket.TileEntityClientUpdatePacketHandler.class, TileEntityClientUpdatePacket.class, 1, Side.CLIENT);
 		Modules.propagate(event);
 		LOGGER.info("Post-Init took "+profiler.getTime()+"ms");
+	}
+	
+	private void checkEnvironment() {
+		if (Transformer.didCheck && !didCheck) {
+			IS_DEV_ENVIRONMENT = Transformer.isDev;
+			didCheck = true;
+			if (IS_DEV_ENVIRONMENT)
+				LOGGER.info("This is running in a dev environment!");
+		}
 	}
 }

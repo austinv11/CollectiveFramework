@@ -12,6 +12,9 @@ import java.util.Iterator;
 
 public class Transformer implements IClassTransformer, Opcodes {
 	
+	public static boolean didCheck = false;
+	public static boolean isDev = false;
+	
 	@Override
 	public byte[] transform(String className, String newClassName, byte[] byteCode) {
 		if (className.equals("net.minecraft.client.gui.FontRenderer") && Config.applyColorPatch) {
@@ -29,7 +32,7 @@ public class Transformer implements IClassTransformer, Opcodes {
 		ClassReader classReader = new ClassReader(byteCode);
 		classReader.accept(classNode, 0);
 		for (MethodNode m : classNode.methods)
-			if (m.name.equals("renderTileEntityAt") || m.name.equals("func_147500_a"))
+			if (checkDeobfAndObfNames(m.name, "renderTileEntityAt", "func_147500_a"))
 				if (m.desc.contains("TileEntityEnchantmentTable")) {
 					Iterator<AbstractInsnNode> nodes = m.instructions.iterator();
 					while (nodes.hasNext()) {
@@ -57,7 +60,7 @@ public class Transformer implements IClassTransformer, Opcodes {
 		ClassReader classReader = new ClassReader(byteCode);
 		classReader.accept(classNode, 0);
 		for (MethodNode m : classNode.methods) {
-			if (m.name.equals("renderStringAtPos") || m.name.equals("func_78255_a")) {
+			if (checkDeobfAndObfNames(m.name, "renderStringAtPos", "func_78255_a")) {
 				InsnList instructions = new InsnList();
 				instructions.add(new VarInsnNode(ALOAD, 1));
 				instructions.add(new MethodInsnNode(INVOKESTATIC, "com/austinv11/collectiveframework/minecraft/utils/Colors", "replaceAlternateColorChar", "(Ljava/lang/String;)Ljava/lang/String;", false));
@@ -69,5 +72,17 @@ public class Transformer implements IClassTransformer, Opcodes {
 		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
 		classNode.accept(writer);
 		return writer.toByteArray();
+	}
+	
+	private boolean checkDeobfAndObfNames(String input, String deobf, String obf) {
+		if (!didCheck && (input.equals(deobf) || input.equals(obf))) {
+			didCheck = true;
+			if (input.equals(deobf)) {
+				isDev = true;
+			} else {
+				isDev = false;
+			}
+		}
+		return input.equals(deobf) || input.equals(obf);
 	}
 }
