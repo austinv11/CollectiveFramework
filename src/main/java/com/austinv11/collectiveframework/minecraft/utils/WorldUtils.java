@@ -1,7 +1,9 @@
 package com.austinv11.collectiveframework.minecraft.utils;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -18,10 +20,7 @@ public class WorldUtils {
 	 * @return The player, or null if the player wasn't found
 	 */
 	public static EntityPlayer getPlayerForWorld(String playerName, World world) {
-		for (EntityPlayer player : (List<EntityPlayer>) world.playerEntities)
-			if (player.getCommandSenderName().equals(playerName))
-				return player;
-		return null;
+		return world.getPlayerEntityByName(playerName);
 	}
 	
 	/**
@@ -31,5 +30,37 @@ public class WorldUtils {
 	 */
 	public static World getWorldFromDimensionId(int id) {
 		return MinecraftServer.getServer().worldServerForDimension(id);
+	}
+	
+	/**
+	 * Gets the nearest entity within a range of a location
+	 * @param location The location to search from
+	 * @param maxRange The max range to find entities from
+	 * @return The nearest entity or null if none were found
+	 */
+	public static Entity getNearestEntityToLocation(Location location, double maxRange) {
+		World world = location.getWorld();
+		double x = location.getX(), y = location.getY(), z = location.getZ();
+		Vec3 desired = Vec3.createVectorHelper(x, y, z);
+		double lowestDistance = maxRange;
+		Entity closest = null;
+		for (Entity ent : (List<Entity>) world.loadedEntityList) {
+			Vec3 toCompare = Vec3.createVectorHelper(ent.posX, ent.posY, ent.posZ);
+			double distance = desired.distanceTo(toCompare);
+			if (distance <= maxRange && distance < lowestDistance) {
+				lowestDistance = distance;
+				closest = ent;
+			}
+		}
+		return closest;
+	}
+	
+	/**
+	 * Gets the nearest entity within the recommended max range of a location
+	 * @param location The location to search from
+	 * @return The nearest entity or null if none were found
+	 */
+	public static Entity getNearestEntityToLocation(Location location) {
+		return getNearestEntityToLocation(location, Double.MAX_VALUE);
 	}
 }

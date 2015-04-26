@@ -68,4 +68,13 @@ public class MathUtils {
 			return false;
 		}
 	}
+	
+	/**
+	 * Checks if the given number is even
+	 * @param number The number
+	 * @return True if the number is an even number
+	 */
+	public static boolean isEvenNumber(int number) {
+		return number % 2 == 0;
+	}
 }
