@@ -22,4 +22,7 @@ public class Config {
 	
 	@Description(comment = "This causes /say commands to emit ServerChatEvents, disable this if mods are having issues with chat messages", category = "Tweaks")
 	public static boolean commandBroadcastRelay = true;
+	
+	@Description(comment = "This shows overlay for all recently pressed keys", category = "Development")
+	public static boolean keyOverlay = false;
 }
