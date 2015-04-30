@@ -1,7 +1,7 @@
 package com.austinv11.collectiveframework.multithreading;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Runnable class to ease the management of threads
@@ -11,15 +11,15 @@ public abstract class SimpleRunnable implements Runnable {
 	public volatile static boolean RESTRICT_THREAD_USAGE = true; 
 	
 	//Key of true = the thread is being used, vice versa
-	private volatile static ConcurrentHashMap<Boolean,CopyOnWriteArrayList<SimpleThread>> threadMap = new ConcurrentHashMap<Boolean,CopyOnWriteArrayList<SimpleThread>>();
+	private volatile static ConcurrentHashMap<Boolean, ConcurrentHashMap<Integer, SimpleThread>> threadMap = new ConcurrentHashMap<Boolean, ConcurrentHashMap<Integer, SimpleThread>>();
 	
 	private volatile boolean isCleaned = false;
 	private volatile int thread = -1;
 	private volatile long delay = -1;
 	
 	static {
-		threadMap.put(true, new CopyOnWriteArrayList<SimpleThread>());
-		threadMap.put(false, new CopyOnWriteArrayList<SimpleThread>());
+		threadMap.put(true, new ConcurrentHashMap<Integer, SimpleThread>());
+		threadMap.put(false, new ConcurrentHashMap<Integer, SimpleThread>());
 	}
 	
 	/**
@@ -35,7 +35,7 @@ public abstract class SimpleRunnable implements Runnable {
 		getThread().started = false;
 		if (clean && RESTRICT_THREAD_USAGE) {
 			isCleaned = true;
-			threadMap.get(false).add(getThread());
+			add(threadMap.get(false), getThread());
 			threadMap.get(true).remove(thread);
 		}
 	}
@@ -112,18 +112,17 @@ public abstract class SimpleRunnable implements Runnable {
 		if (this.thread == -1) { //Assign a thread
 			if (threadMap.get(false).size() < 1) {
 				SimpleThread thread = new SimpleThread(this, this.getName());
-				threadMap.get(true).add(thread);
-				this.thread = threadMap.get(true).indexOf(thread);
+				this.thread = add(threadMap.get(true), thread);
 				return getThread();
 			} else {
-				SimpleThread thread = threadMap.get(false).iterator().next();
-				threadMap.get(false).remove(thread);
+				Map.Entry<Integer, SimpleThread> entry = threadMap.get(false).entrySet().iterator().next();
+				SimpleThread thread = entry.getValue();
+				threadMap.get(false).remove(entry.getKey());
 				thread.isActive = true;
 				thread.setName(getName());
 				try {
 					thread.setTarget(this);
-					threadMap.get(true).add(thread);
-					this.thread = threadMap.get(true).indexOf(thread);
+					this.thread = add(threadMap.get(true), thread);
 					return getThread();
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -133,6 +132,14 @@ public abstract class SimpleRunnable implements Runnable {
 			return threadMap.get(true).get(this.thread);
 		}
 		return null; //This should never be reached
+	}
+	
+	private static <T> int add(Map<Integer, T> map, T o) {
+		int i = 0;
+		while (map.containsKey(i))
+			i++;
+		map.put(i, o);
+		return i;
 	}
 	
 	@Override
