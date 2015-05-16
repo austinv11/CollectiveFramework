@@ -6,6 +6,7 @@ import com.austinv11.collectiveframework.minecraft.books.BookFactory;
 import com.austinv11.collectiveframework.minecraft.books.elements.SimplePage;
 import com.austinv11.collectiveframework.minecraft.client.gui.GuiHandler;
 import com.austinv11.collectiveframework.minecraft.compat.modules.Modules;
+import com.austinv11.collectiveframework.minecraft.config.ConfigException;
 import com.austinv11.collectiveframework.minecraft.config.ConfigRegistry;
 import com.austinv11.collectiveframework.minecraft.logging.Logger;
 import com.austinv11.collectiveframework.minecraft.network.ConfigPacket;
@@ -53,6 +54,12 @@ public class CollectiveFramework {
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		TimeProfiler profiler = new TimeProfiler();
+		try {
+			ConfigRegistry.registerConfig(new Config());
+		} catch (ConfigException e) {
+			e.printStackTrace();
+		}
+		ConfigRegistry.init();
 		checkEnvironment();
 		proxy.registerEvents();
 		Modules.init();
@@ -65,8 +72,8 @@ public class CollectiveFramework {
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
 		TimeProfiler profiler = new TimeProfiler();
-		checkEnvironment();
 		ConfigRegistry.init();
+		checkEnvironment();
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
 		new BookFactory().setIcon(new ResourceLocation("null")).setName("null").addElement(0, new SimplePage()).build();
 		Modules.propagate(event);
@@ -76,6 +83,7 @@ public class CollectiveFramework {
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		TimeProfiler profiler = new TimeProfiler();
+		ConfigRegistry.init();
 		checkEnvironment();
 		for (Book book : BookFactory.bookRegistry.keySet()) //TODO: Remove, this is for debugging
 			GameRegistry.registerItem(book, book.getName());

@@ -1,7 +1,6 @@
 package com.austinv11.collectiveframework.minecraft.asm;
 
 import com.austinv11.collectiveframework.minecraft.CollectiveFramework;
-import com.austinv11.collectiveframework.minecraft.reference.Config;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -17,7 +16,7 @@ public class Transformer implements IClassTransformer, Opcodes {
 	
 	@Override
 	public byte[] transform(String className, String newClassName, byte[] byteCode) {
-		if (className.equals("net.minecraft.client.gui.FontRenderer") && Config.applyColorPatch) {
+		if (className.equals("net.minecraft.client.gui.FontRenderer")) {
 			CollectiveFramework.LOGGER.info("Applying color code patch");
 			return transformFontRenderer(byteCode);
 		} else if (className.equals("net.minecraft.client.renderer.entity.RenderEnchantmentTable")) {
@@ -63,7 +62,7 @@ public class Transformer implements IClassTransformer, Opcodes {
 			if (checkDeobfAndObfNames(m.name, "renderStringAtPos", "func_78255_a")) {
 				InsnList instructions = new InsnList();
 				instructions.add(new VarInsnNode(ALOAD, 1));
-				instructions.add(new MethodInsnNode(INVOKESTATIC, "com/austinv11/collectiveframework/minecraft/utils/Colors", "replaceAlternateColorChar", "(Ljava/lang/String;)Ljava/lang/String;", false));
+				instructions.add(new MethodInsnNode(INVOKESTATIC, "com/austinv11/collectiveframework/minecraft/utils/Colors", "replaceAlternateColorCharPatch", "(Ljava/lang/String;)Ljava/lang/String;", false));
 				instructions.add(new VarInsnNode(ASTORE, 1));
 				m.instructions.insert(instructions);
 				break;

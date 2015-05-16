@@ -2,7 +2,7 @@ package com.austinv11.collectiveframework.minecraft.reference;
 
 import com.austinv11.collectiveframework.minecraft.config.Description;
 
-@com.austinv11.collectiveframework.minecraft.config.Config(fileName = Reference.MOD_ID+".cfg", earlyInit = true, exclude = {"test_2"})
+@com.austinv11.collectiveframework.minecraft.config.Config(fileName = Reference.MOD_ID+".cfg")
 public class Config {
 	
 	@Description(comment = "Setting this to true will attempt to translate item names which are not localized", category = "Translation")

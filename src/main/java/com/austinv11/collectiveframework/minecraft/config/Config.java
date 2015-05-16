@@ -6,15 +6,17 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * When this annotation is present, a config is registered with this class using all found fields
- * The config is automatically registered unless the class implements
+ * This annotation allows for a class to act as a config, simplifies config creation.
+ * Both static and declared fields represent config key-value pairs (unless excluded)
+ * Register an instance of the config with {@link ConfigRegistry#registerConfig(Object)}
+ * The config could be initialized at any three init stages–depending on when you register your config
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Config {
 	
 	/**
-	 * If preferred, the custom file name
+	 * If preferred, the custom file name, otherwise it uses the class name
 	 * @return The file name (include the extension)
 	 */
 	String fileName() default "@NULL@";
@@ -30,10 +32,4 @@ public @interface Config {
 	 * @return The class name
 	 */
 	String handler() default "com.austinv11.collectiveframework.minecraft.config.ConfigRegistry$DefaultConfigurationHandler";
-	
-	/**
-	 * Returns whether the config should be loaded early (like as soon as literally possible)
-	 * @return Whether to load the config early
-	 */
-	boolean earlyInit() default false;
 }

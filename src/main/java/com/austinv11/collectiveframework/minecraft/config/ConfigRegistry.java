@@ -3,9 +3,6 @@ package com.austinv11.collectiveframework.minecraft.config;
 import com.austinv11.collectiveframework.minecraft.CollectiveFramework;
 import com.austinv11.collectiveframework.utils.ArrayUtils;
 import com.austinv11.collectiveframework.utils.ReflectionUtils;
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.common.MinecraftForge;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -18,8 +15,7 @@ import java.util.List;
  */
 public class ConfigRegistry {
 	
-	private static List<ConfigProxy> earlyConfigs = new ArrayList<ConfigProxy>();
-	private static List<ConfigProxy> standardConfigs = new ArrayList<ConfigProxy>();
+	private static List<ConfigProxy> toBeInitialized = new ArrayList<ConfigProxy>();
 	
 	public static List<ConfigProxy> configs = new ArrayList<ConfigProxy>();
 	private static List<IConfigProxy> proxies = new ArrayList<IConfigProxy>();
@@ -39,11 +35,7 @@ public class ConfigRegistry {
 		Config configAnnotation = config.getClass().getAnnotation(Config.class);
 		try {
 			ConfigProxy configProxy = new ConfigProxy(configAnnotation, config);
-			
-			if (configAnnotation.earlyInit())
-				earlyConfigs.add(configProxy);
-			else
-				standardConfigs.add(configProxy);
+			toBeInitialized.add(configProxy);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ConfigException(e.getMessage());
@@ -61,19 +53,10 @@ public class ConfigRegistry {
 	/**
 	 * Only meant for internal use
 	 */
-	public static void earlyInit() {
-		for (ConfigProxy config : earlyConfigs)
-			initialize(config);
-		earlyConfigs.clear();
-	}
-	
-	/**
-	 * Only meant for internal use
-	 */
 	public static void init() {
-		for (ConfigProxy config : standardConfigs)
+		for (ConfigProxy config : toBeInitialized)
 			initialize(config);
-		standardConfigs.clear();
+		toBeInitialized.clear();
 	}
 	
 	private static void initialize(ConfigProxy configProxy) {
@@ -331,8 +314,7 @@ public class ConfigRegistry {
 		}
 	}
 	
-	@SubscribeEvent(receiveCanceled = true, priority = EventPriority.LOWEST)
-	public void onConfigReload(ConfigReloadEvent.Pre event) {
+	public static void onConfigReload(ConfigReloadEvent.Pre event) {
 		if (!event.isCanceled()) {
 			if (!event.isRevert) {
 				CollectiveFramework.LOGGER.info("Reloading config '"+event.configName+"'");
@@ -351,15 +333,10 @@ public class ConfigRegistry {
 				}
 				proxy.handler.loadFile(event.config, proxy.config, proxy.fields);
 			}
-			ConfigReloadEvent.Post newEvent = new ConfigReloadEvent.Post();
-			newEvent.configName = event.configName;
-			newEvent.config = event.config;
-			newEvent.isRevert = event.isRevert;
-			MinecraftForge.EVENT_BUS.post(event);
 		}
 	}
 	
-	private ConfigProxy findConfigProxyForConfigFile(List<ConfigProxy> proxies, String filename) {
+	private static ConfigProxy findConfigProxyForConfigFile(List<ConfigProxy> proxies, String filename) {
 		for (ConfigProxy proxy : proxies)
 			if (proxy.fileName.equals(filename))
 				return proxy;
