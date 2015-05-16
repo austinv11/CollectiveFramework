@@ -1,7 +1,11 @@
 package com.austinv11.collectiveframework.minecraft.config;
 
+import com.austinv11.collectiveframework.minecraft.CollectiveFramework;
 import com.austinv11.collectiveframework.utils.ArrayUtils;
 import com.austinv11.collectiveframework.utils.ReflectionUtils;
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -17,7 +21,7 @@ public class ConfigRegistry {
 	private static List<ConfigProxy> earlyConfigs = new ArrayList<ConfigProxy>();
 	private static List<ConfigProxy> standardConfigs = new ArrayList<ConfigProxy>();
 	
-	private static List<ConfigProxy> configs = new ArrayList<ConfigProxy>();
+	public static List<ConfigProxy> configs = new ArrayList<ConfigProxy>();
 	private static List<IConfigProxy> proxies = new ArrayList<IConfigProxy>();
 	
 	static {
@@ -128,6 +132,11 @@ public class ConfigRegistry {
 		
 		@Override
 		public void setValue(String configValue, String category, Object value, Object config) {
+			setValue(configValue, category, value, config, true);
+		}
+		
+		@Override
+		public void setValue(String configValue, String category, Object value, Object config, boolean saveToFile) {
 			HashMap<String, Field> fields = current.containsKey(category) ? current.get(category) : new HashMap<String,Field>();
 			Field field = fields.containsKey(configValue) ? fields.get(configValue) : ReflectionUtils.getDeclaredOrNormalField(configValue, config.getClass());
 			try {
@@ -135,11 +144,12 @@ public class ConfigRegistry {
 			} catch (IllegalAccessException e) {
 				e.printStackTrace(); //This should never be reached
 			}
-			try {
-				writeFile(cachedFile, config);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			if (saveToFile)
+				try {
+					writeFile(cachedFile, config);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			if (!current.containsKey(category) || !fields.containsKey(configValue)) {
 				fields.put(configValue, field);
 				current.put(category, fields);
@@ -176,6 +186,15 @@ public class ConfigRegistry {
 		}
 		
 		@Override
+		public void loadFromString(String string, Object config, HashMap<String, HashMap<String, Field>> hint) {
+			try {
+				readFromReader(new BufferedReader(new StringReader(string)), config);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		@Override
 		public File getConfigFile(String fileName, Object config) {
 			return cachedFile;
 		}
@@ -185,10 +204,21 @@ public class ConfigRegistry {
 			return current.containsKey(category) && current.get(category).containsKey(configValue);
 		}
 		
-		private void writeFile(File file, Object config) throws IOException, IllegalAccessException, ConfigException {
-			PrintStream writer = new PrintStream(file);
+		@Override
+		public String convertToString(Object config) {
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			try {
+				writeToStream(new PrintStream(stream), config);
+				return stream.toString();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+		
+		private void writeToStream(PrintStream writer, Object config) throws IllegalAccessException, ConfigException {
 			for (String category : current.keySet()) {
-				writer.println(category + " {");
+				writer.println(category+" {");
 				for (String field : current.get(category).keySet()) {
 					Field f = current.get(category).get(field);
 					f.setAccessible(true);
@@ -203,8 +233,22 @@ public class ConfigRegistry {
 			writer.close();
 		}
 		
+		private void writeFile(File file, Object config) throws IOException, IllegalAccessException, ConfigException {
+			PrintStream writer = new PrintStream(file);
+			writeToStream(writer, config);
+		}
+		
 		private void readFile(File file, Object config) throws IOException, IllegalAccessException, ClassNotFoundException, InstantiationException {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
+			readFromReader(reader, config);
+			try {
+				writeFile(file, config);
+			} catch (ConfigException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		private void readFromReader(BufferedReader reader, Object config) throws IOException, IllegalAccessException {
 			String line;
 			boolean reachedBracket = false;
 			int lineCount = 0;
@@ -239,15 +283,10 @@ public class ConfigRegistry {
 					}
 				}
 			}
-			try {
-				writeFile(file, config);
-			} catch (ConfigException e) {
-				e.printStackTrace();
-			}
 		}
 	}
 	
-	private static class ConfigProxy {
+	public static class ConfigProxy implements Cloneable {
 		
 		public Object config;
 		public IConfigurationHandler handler;
@@ -290,5 +329,40 @@ public class ConfigRegistry {
 			vals.put(f.getName(), f);
 			fields.put(category, vals);
 		}
+	}
+	
+	@SubscribeEvent(receiveCanceled = true, priority = EventPriority.LOWEST)
+	public void onConfigReload(ConfigReloadEvent.Pre event) {
+		if (!event.isCanceled()) {
+			if (!event.isRevert) {
+				CollectiveFramework.LOGGER.info("Reloading config '"+event.configName+"'");
+				ConfigProxy proxy = findConfigProxyForConfigFile(configs, event.configName);
+				if (proxy == null) {
+					CollectiveFramework.LOGGER.error("There was an error reloading the config!");
+					return;
+				}
+				proxy.handler.loadFromString(event.config, proxy.config, proxy.fields);
+			} else {
+				CollectiveFramework.LOGGER.info("Reverting config '"+event.configName+"'");
+				ConfigProxy proxy = findConfigProxyForConfigFile(configs, event.configName);
+				if (proxy == null) {
+					CollectiveFramework.LOGGER.error("There was an error reverting the config!");
+					return;
+				}
+				proxy.handler.loadFile(event.config, proxy.config, proxy.fields);
+			}
+			ConfigReloadEvent.Post newEvent = new ConfigReloadEvent.Post();
+			newEvent.configName = event.configName;
+			newEvent.config = event.config;
+			newEvent.isRevert = event.isRevert;
+			MinecraftForge.EVENT_BUS.post(event);
+		}
+	}
+	
+	private ConfigProxy findConfigProxyForConfigFile(List<ConfigProxy> proxies, String filename) {
+		for (ConfigProxy proxy : proxies)
+			if (proxy.fileName.equals(filename))
+				return proxy;
+		return null;
 	}
 }

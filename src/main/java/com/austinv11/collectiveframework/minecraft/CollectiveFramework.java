@@ -7,7 +7,9 @@ import com.austinv11.collectiveframework.minecraft.books.elements.SimplePage;
 import com.austinv11.collectiveframework.minecraft.client.gui.GuiHandler;
 import com.austinv11.collectiveframework.minecraft.compat.modules.Modules;
 import com.austinv11.collectiveframework.minecraft.config.ConfigRegistry;
+import com.austinv11.collectiveframework.minecraft.config.ConfigReloadEvent;
 import com.austinv11.collectiveframework.minecraft.logging.Logger;
+import com.austinv11.collectiveframework.minecraft.network.ConfigPacket;
 import com.austinv11.collectiveframework.minecraft.network.TileEntityClientUpdatePacket;
 import com.austinv11.collectiveframework.minecraft.network.TileEntityServerUpdatePacket;
 import com.austinv11.collectiveframework.minecraft.proxy.CommonProxy;
@@ -20,11 +22,15 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 
 @Mod(modid= Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION/*, guiFactory = Reference.GUI_FACTORY_CLASS*/)
 public class CollectiveFramework {
@@ -76,6 +82,7 @@ public class CollectiveFramework {
 			GameRegistry.registerItem(book, book.getName());
 		NETWORK.registerMessage(TileEntityServerUpdatePacket.TileEntityServerUpdatePacketHandler.class, TileEntityServerUpdatePacket.class, 0, Side.SERVER);
 		NETWORK.registerMessage(TileEntityClientUpdatePacket.TileEntityClientUpdatePacketHandler.class, TileEntityClientUpdatePacket.class, 1, Side.CLIENT);
+		NETWORK.registerMessage(ConfigPacket.ConfigPacketHandler.class, ConfigPacket.class, 2, Side.CLIENT);
 		Modules.propagate(event);
 		LOGGER.info("Post-Init took "+profiler.getTime()+"ms");
 	}
@@ -86,6 +93,24 @@ public class CollectiveFramework {
 			didCheck = true;
 			if (IS_DEV_ENVIRONMENT)
 				LOGGER.info("This is running in a dev environment!");
+		}
+	}
+	
+	@SubscribeEvent
+	public void onServerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+		for (ConfigRegistry.ConfigProxy proxy : ConfigRegistry.configs) {
+			NETWORK.sendTo(new ConfigPacket(proxy.fileName, proxy.handler.convertToString(proxy.config)), (EntityPlayerMP) event.player);
+		}
+	}
+	
+	@SubscribeEvent
+	public void onClientDisconnect(PlayerEvent.PlayerLoggedOutEvent event) {
+		for (ConfigRegistry.ConfigProxy proxy : ConfigRegistry.configs) {
+			ConfigReloadEvent.Pre reloadEvent = new ConfigReloadEvent.Pre();
+			reloadEvent.configName = proxy.fileName;
+			reloadEvent.config = proxy.handler.convertToString(proxy.config);
+			reloadEvent.isRevert = true;
+			MinecraftForge.EVENT_BUS.post(reloadEvent);
 		}
 	}
 }
