@@ -13,14 +13,16 @@ public class ConfigPacket implements IMessage {
 	
 	public String configName;
 	public String config;
+	public boolean isRevert;
 	
 	public ConfigPacket()  {
 		
 	}
 	
-	public ConfigPacket(String configName, String config) {
+	public ConfigPacket(String configName, String config, boolean isRevert) {
 		this.configName = configName;
 		this.config = config;
+		this.isRevert = isRevert;
 	}
 	
 	@Override
@@ -28,6 +30,7 @@ public class ConfigPacket implements IMessage {
 		NBTTagCompound tag = ByteBufUtils.readTag(buf);
 		configName = tag.getString("configName");
 		config = tag.getString("config");
+		isRevert = tag.getBoolean("isRevert");
 	}
 	
 	@Override
@@ -35,6 +38,7 @@ public class ConfigPacket implements IMessage {
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setString("configName", configName);
 		tag.setString("config", config);
+		tag.setBoolean("isRevert", isRevert);
 		ByteBufUtils.writeTag(buf, tag);
 	}
 	
@@ -45,7 +49,7 @@ public class ConfigPacket implements IMessage {
 			ConfigReloadEvent.Pre event = new ConfigReloadEvent.Pre();
 			event.configName = message.configName;
 			event.config = message.config;
-			event.isRevert = false;
+			event.isRevert = message.isRevert;
 			MinecraftForge.EVENT_BUS.post(event);
 			return null;
 		}

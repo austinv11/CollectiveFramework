@@ -7,7 +7,6 @@ import com.austinv11.collectiveframework.minecraft.books.elements.SimplePage;
 import com.austinv11.collectiveframework.minecraft.client.gui.GuiHandler;
 import com.austinv11.collectiveframework.minecraft.compat.modules.Modules;
 import com.austinv11.collectiveframework.minecraft.config.ConfigRegistry;
-import com.austinv11.collectiveframework.minecraft.config.ConfigReloadEvent;
 import com.austinv11.collectiveframework.minecraft.logging.Logger;
 import com.austinv11.collectiveframework.minecraft.network.ConfigPacket;
 import com.austinv11.collectiveframework.minecraft.network.TileEntityClientUpdatePacket;
@@ -17,6 +16,7 @@ import com.austinv11.collectiveframework.minecraft.reference.Config;
 import com.austinv11.collectiveframework.minecraft.reference.Reference;
 import com.austinv11.collectiveframework.multithreading.SimpleRunnable;
 import com.austinv11.collectiveframework.utils.TimeProfiler;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -30,7 +30,6 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 
 @Mod(modid= Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION/*, guiFactory = Reference.GUI_FACTORY_CLASS*/)
 public class CollectiveFramework {
@@ -98,19 +97,17 @@ public class CollectiveFramework {
 	
 	@SubscribeEvent
 	public void onServerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-		for (ConfigRegistry.ConfigProxy proxy : ConfigRegistry.configs) {
-			NETWORK.sendTo(new ConfigPacket(proxy.fileName, proxy.handler.convertToString(proxy.config)), (EntityPlayerMP) event.player);
-		}
+		if (FMLCommonHandler.instance().getSide() == Side.SERVER || FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
+			for (ConfigRegistry.ConfigProxy proxy : ConfigRegistry.configs) {
+				NETWORK.sendTo(new ConfigPacket(proxy.fileName, proxy.handler.convertToString(proxy.config), false), (EntityPlayerMP) event.player);
+			}
 	}
 	
 	@SubscribeEvent
 	public void onClientDisconnect(PlayerEvent.PlayerLoggedOutEvent event) {
-		for (ConfigRegistry.ConfigProxy proxy : ConfigRegistry.configs) {
-			ConfigReloadEvent.Pre reloadEvent = new ConfigReloadEvent.Pre();
-			reloadEvent.configName = proxy.fileName;
-			reloadEvent.config = proxy.handler.convertToString(proxy.config);
-			reloadEvent.isRevert = true;
-			MinecraftForge.EVENT_BUS.post(reloadEvent);
-		}
+		if (FMLCommonHandler.instance().getSide() == Side.SERVER || FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
+			for (ConfigRegistry.ConfigProxy proxy : ConfigRegistry.configs) {
+				NETWORK.sendTo(new ConfigPacket(proxy.fileName, proxy.handler.convertToString(proxy.config), true), (EntityPlayerMP) event.player);
+			}
 	}
 }
