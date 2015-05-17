@@ -24,19 +24,32 @@ public class DefaultProxy implements IConfigProxy {
 	@Override
 	public String getKey(Object o) {
 		if (o.getClass().isArray()) {
-			int length = Array.getLength(o);
-			String[] keys = new String[length];
-			for (int i = 0; i < length; i++)
-				keys[i] = ConfigRegistry.getKey(Array.get(o, i));
-			String[] noRepeats = ArrayUtils.removeRepeats(keys);
-			String key = "";
-			for (String s : noRepeats)
-				key = key+s+" ";
-			key = key+"Array";
-			return key;
+			return convertPrimitiveNameToObjectName(o.getClass().getComponentType().getSimpleName())+" Array";
 		} else {
-			return o.getClass().getSimpleName();
+			return convertPrimitiveNameToObjectName(o.getClass().getSimpleName());
 		}
+	}
+	
+	private String convertPrimitiveNameToObjectName(String primitiveName) {
+		if (primitiveName.equalsIgnoreCase("int"))
+			return "Integer";
+		if (primitiveName.equalsIgnoreCase("long"))
+			return "Long";
+		if (primitiveName.equalsIgnoreCase("double"))
+			return "Double";
+		if (primitiveName.equalsIgnoreCase("float"))
+			return "Float";
+		if (primitiveName.equalsIgnoreCase("boolean"))
+			return "Boolean";
+		if (primitiveName.equalsIgnoreCase("char"))
+			return "Character";
+		if (primitiveName.equalsIgnoreCase("byte"))
+			return "Byte";
+		if (primitiveName.equalsIgnoreCase("void"))
+			return "Void";
+		if (primitiveName.equalsIgnoreCase("short"))
+			return "Short";
+		return primitiveName;
 	}
 	
 	@Override
