@@ -25,4 +25,10 @@ public class Config {
 	
 	@Description(comment = "This shows overlay for all recently pressed keys", category = "Development")
 	public static boolean keyOverlay = false;
+	
+	@Description(comment = "This is whether to allow button presses for changing time", category = "Misc")
+	public static boolean enableButtonTimeChanging = false;
+	
+	@Description(comment = "This is the rate at which time changes by when pressing a time button", category = "Misc")
+	public static int timeChangeRate = 10;
 }

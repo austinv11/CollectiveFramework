@@ -48,4 +48,6 @@ public class ModIds {
 	public static final String OpenComputers_Core = "OpenComputers|Core";
 	
 	public static final String EE3 = "EE3";
+	
+	public static final String UtilityHUD = "UtilityHUD";
 }

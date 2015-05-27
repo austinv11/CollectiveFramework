@@ -2,12 +2,18 @@ package com.austinv11.collectiveframework.minecraft.proxy;
 
 import com.austinv11.collectiveframework.minecraft.client.gui.KeyOverlay;
 import com.austinv11.collectiveframework.minecraft.event.KeyHandler;
+import com.austinv11.collectiveframework.minecraft.init.Keybindings;
 import com.austinv11.collectiveframework.minecraft.utils.IconManager;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraftforge.common.MinecraftForge;
 
 public class ClientProxy extends CommonProxy {
+	
+	@Override
+	public void prepareClient() {
+		Keybindings.init();
+	}
 	
 	@Override
 	public void registerEvents() {

@@ -12,6 +12,7 @@ import com.austinv11.collectiveframework.minecraft.logging.Logger;
 import com.austinv11.collectiveframework.minecraft.network.ConfigPacket;
 import com.austinv11.collectiveframework.minecraft.network.TileEntityClientUpdatePacket;
 import com.austinv11.collectiveframework.minecraft.network.TileEntityServerUpdatePacket;
+import com.austinv11.collectiveframework.minecraft.network.TimeUpdatePacket;
 import com.austinv11.collectiveframework.minecraft.proxy.CommonProxy;
 import com.austinv11.collectiveframework.minecraft.reference.Config;
 import com.austinv11.collectiveframework.minecraft.reference.Reference;
@@ -74,6 +75,7 @@ public class CollectiveFramework {
 		TimeProfiler profiler = new TimeProfiler();
 		ConfigRegistry.init();
 		checkEnvironment();
+		proxy.prepareClient();
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
 		new BookFactory().setIcon(new ResourceLocation("null")).setName("null").addElement(0, new SimplePage()).build();
 		Modules.propagate(event);
@@ -90,6 +92,7 @@ public class CollectiveFramework {
 		NETWORK.registerMessage(TileEntityServerUpdatePacket.TileEntityServerUpdatePacketHandler.class, TileEntityServerUpdatePacket.class, 0, Side.SERVER);
 		NETWORK.registerMessage(TileEntityClientUpdatePacket.TileEntityClientUpdatePacketHandler.class, TileEntityClientUpdatePacket.class, 1, Side.CLIENT);
 		NETWORK.registerMessage(ConfigPacket.ConfigPacketHandler.class, ConfigPacket.class, 2, Side.CLIENT);
+		NETWORK.registerMessage(TimeUpdatePacket.TimeUpdatePacketHandler.class, TimeUpdatePacket.class, 3, Side.SERVER);
 		Modules.propagate(event);
 		LOGGER.info("Post-Init took "+profiler.getTime()+"ms");
 	}
