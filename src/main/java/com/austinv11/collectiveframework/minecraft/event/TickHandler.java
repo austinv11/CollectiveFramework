@@ -35,8 +35,8 @@ public class TickHandler {
 				totalTimeChange += difference;
 				Minecraft.getMinecraft().theWorld.setWorldTime(startWorldTime+totalTimeChange);
 				Minecraft.getMinecraft().renderGlobal.cloudTickCounter += difference;
-				
 			}
+			
 			if (wasDown && Minecraft.getMinecraft().theWorld != null && LogicUtils.nor(Keybindings.TIME_BACK.getIsKeyPressed(),
 					Keybindings.TIME_FORWARD.getIsKeyPressed())) {
 				CollectiveFramework.NETWORK.sendToServer(new TimeUpdatePacket(startWorldTime, totalTimeChange));
