@@ -15,6 +15,7 @@ public class TickHandler {
 	
 	private static long startWorldTime = -1;
 	private static int totalTimeChange = 0;
+	private static int startCloudTicks = -1;
 	private static boolean wasDown = false;
 	
 	@SideOnly(Side.CLIENT)
@@ -24,6 +25,8 @@ public class TickHandler {
 			if (Minecraft.getMinecraft().theWorld != null && LogicUtils.xor(Keybindings.TIME_BACK.getIsKeyPressed(), Keybindings.TIME_FORWARD.getIsKeyPressed())) {
 				if (startWorldTime == -1)
 					startWorldTime = Minecraft.getMinecraft().theWorld.getWorldTime();
+				if (startCloudTicks == -1)
+					startCloudTicks = Minecraft.getMinecraft().renderGlobal.cloudTickCounter;
 				boolean isForward;
 				if (Keybindings.TIME_BACK.getIsKeyPressed())
 					isForward = false;
@@ -34,7 +37,7 @@ public class TickHandler {
 				int difference = (isForward ? Config.timeChangeRate : -Config.timeChangeRate);
 				totalTimeChange += difference;
 				Minecraft.getMinecraft().theWorld.setWorldTime(startWorldTime+totalTimeChange);
-				Minecraft.getMinecraft().renderGlobal.cloudTickCounter += difference;
+				Minecraft.getMinecraft().renderGlobal.cloudTickCounter = startCloudTicks+totalTimeChange;
 			}
 			
 			if (wasDown && Minecraft.getMinecraft().theWorld != null && LogicUtils.nor(Keybindings.TIME_BACK.getIsKeyPressed(),
@@ -42,6 +45,7 @@ public class TickHandler {
 				CollectiveFramework.NETWORK.sendToServer(new TimeUpdatePacket(startWorldTime, totalTimeChange));
 				startWorldTime = -1;
 				totalTimeChange = 0;
+				startCloudTicks = -1;
 				wasDown = false;
 			}
 		}
