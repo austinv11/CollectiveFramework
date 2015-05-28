@@ -30,6 +30,7 @@ public class TickHandler {
 							startWorldTime = Minecraft.getMinecraft().theWorld.getWorldTime();
 						if (startCloudTicks == -1)
 							startCloudTicks = Minecraft.getMinecraft().renderGlobal.cloudTickCounter;
+						
 						boolean isForward;
 						if (Keybindings.TIME_BACK.getIsKeyPressed())
 							isForward = false;

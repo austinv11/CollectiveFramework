@@ -32,4 +32,12 @@ public @interface Config {
 	 * @return The class name
 	 */
 	String handler() default "com.austinv11.collectiveframework.minecraft.config.ConfigRegistry$DefaultConfigurationHandler";
+	
+	/**
+	 * Whether configs should be synced between server to client.
+	 * Note: You could configure this by subscribing to the {@link ConfigReloadEvent}, 
+	 * cancelling {@link com.austinv11.collectiveframework.minecraft.config.ConfigReloadEvent.Pre} will prevent syncing 
+	 * @return True to enable syncing
+	 */
+	boolean doesSync() default true;
 }

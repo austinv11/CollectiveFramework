@@ -274,12 +274,14 @@ public class ConfigRegistry {
 		public Object config;
 		public IConfigurationHandler handler;
 		public String fileName;
+		public boolean doesSync;
 		public HashMap<String, HashMap<String, Field>> fields = new HashMap<String, HashMap<String, Field>>();
 		
 		public ConfigProxy(Config annotation, Object config) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
 			this.config = config;
 			this.handler = (IConfigurationHandler) Class.forName(annotation.handler()).newInstance();
 			this.fileName = annotation.fileName().equals("@NULL@") ? config.getClass().getSimpleName()+".cfg" : annotation.fileName();
+			this.doesSync = annotation.doesSync();
 			
 			Field[] declared = config.getClass().getDeclaredFields();
 			for (Field f : declared) {
