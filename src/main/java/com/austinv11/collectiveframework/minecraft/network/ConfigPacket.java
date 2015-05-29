@@ -1,7 +1,7 @@
 package com.austinv11.collectiveframework.minecraft.network;
 
 import com.austinv11.collectiveframework.minecraft.config.ConfigRegistry;
-import com.austinv11.collectiveframework.minecraft.config.ConfigReloadEvent;
+import com.austinv11.collectiveframework.minecraft.config.ConfigLoadEvent;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
@@ -47,13 +47,13 @@ public class ConfigPacket implements IMessage {
 		
 		@Override
 		public IMessage onMessage(ConfigPacket message, MessageContext ctx) {
-			ConfigReloadEvent.Pre event = new ConfigReloadEvent.Pre();
+			ConfigLoadEvent.Pre event = new ConfigLoadEvent.Pre();
 			event.configName = message.configName;
 			event.config = message.config;
 			event.isRevert = message.isRevert;
 			if (!MinecraftForge.EVENT_BUS.post(event)) {
 				ConfigRegistry.onConfigReload(event);
-				ConfigReloadEvent.Post newEvent = new ConfigReloadEvent.Post();
+				ConfigLoadEvent.Post newEvent = new ConfigLoadEvent.Post();
 				newEvent.configName = event.configName;
 				newEvent.config = event.config;
 				newEvent.isRevert = event.isRevert;

@@ -35,8 +35,8 @@ public @interface Config {
 	
 	/**
 	 * Whether configs should be synced between server to client.
-	 * Note: You could configure this by subscribing to the {@link ConfigReloadEvent}, 
-	 * cancelling {@link com.austinv11.collectiveframework.minecraft.config.ConfigReloadEvent.Pre} will prevent syncing 
+	 * Note: You could configure this by subscribing to the {@link ConfigLoadEvent}, 
+	 * cancelling {@link ConfigLoadEvent.Pre} will prevent syncing 
 	 * @return True to enable syncing
 	 */
 	boolean doesSync() default true;

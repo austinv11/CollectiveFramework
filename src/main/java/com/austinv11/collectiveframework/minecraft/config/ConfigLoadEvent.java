@@ -4,11 +4,12 @@ import cpw.mods.fml.common.eventhandler.Cancelable;
 import cpw.mods.fml.common.eventhandler.Event;
 
 /**
- * This is called when CollectiveFramework attempts to reload a config
- * This event is called in two parts, PRE: Before the reload and POST: After the reload
+ * This is called when CollectiveFramework attempts to load a config.
+ * When a config is synced, it is called in two parts, PRE: Before the reload and POST: After the reload.
+ * The Init event is posted BEFORE a config is read (if it currently exists)
  * NOTE: This is called on the MinecraftForge event bus
  */
-public class ConfigReloadEvent extends Event {
+public class ConfigLoadEvent extends Event {
 	
 	/**
 	 * The name of the config file
@@ -24,11 +25,15 @@ public class ConfigReloadEvent extends Event {
 	public boolean isRevert;
 	
 	@Cancelable
-	public static class Pre extends ConfigReloadEvent {
+	public static class Pre extends ConfigLoadEvent {
 		
 	}
 	
-	public static class Post extends ConfigReloadEvent {
+	public static class Post extends ConfigLoadEvent {
+		
+	}
+	
+	public static class Init extends ConfigLoadEvent {
 		
 	}
 }

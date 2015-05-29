@@ -3,6 +3,7 @@ package com.austinv11.collectiveframework.minecraft.config;
 import com.austinv11.collectiveframework.minecraft.CollectiveFramework;
 import com.austinv11.collectiveframework.utils.ArrayUtils;
 import com.austinv11.collectiveframework.utils.ReflectionUtils;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -61,6 +62,11 @@ public class ConfigRegistry {
 	
 	private static void initialize(ConfigProxy configProxy) {
 		IConfigurationHandler handler = configProxy.handler;
+		ConfigLoadEvent.Init event = new ConfigLoadEvent.Init();
+		event.config = handler.convertToString(configProxy.config);
+		event.configName = configProxy.fileName;
+		event.isRevert = false;
+		MinecraftForge.EVENT_BUS.post(event);
 		handler.loadFile(configProxy.fileName, configProxy.config, configProxy.fields);
 		configs.add(configProxy);
 	}
@@ -316,7 +322,7 @@ public class ConfigRegistry {
 		}
 	}
 	
-	public static void onConfigReload(ConfigReloadEvent.Pre event) {
+	public static void onConfigReload(ConfigLoadEvent.Pre event) {
 		if (!event.isCanceled()) {
 			if (!event.isRevert) {
 				CollectiveFramework.LOGGER.info("Reloading config '"+event.configName+"'");
