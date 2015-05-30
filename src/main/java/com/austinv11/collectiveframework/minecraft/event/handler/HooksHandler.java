@@ -10,6 +10,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class HooksHandler {
 	
+	public static volatile boolean kongaTime = false; //:D
+	public static final int START_KONGA_TIME = 20;
+	public static int kongaTick = 0;
+	
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onRenderString(RenderStringEvent event) {
@@ -22,6 +26,10 @@ public class HooksHandler {
 				string = StringUtils.replaceAllPreservingCase(string, "cloud", "butt");
 				event.stringToRender = string;
 			}
+		}
+		if (event.stringToRender.toLowerCase().contains("konga")) {
+			kongaTime = true;
+			kongaTick = START_KONGA_TIME;
 		}
 	}
 }

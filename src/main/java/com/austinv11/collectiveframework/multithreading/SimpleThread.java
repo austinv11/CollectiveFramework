@@ -56,7 +56,8 @@ public class SimpleThread extends Thread {
 						if (isActive) {
 							super.run();
 							try {
-								this.wait(delay);
+								if (isActive && delay >= 0)
+									sleep(delay);
 							} catch (InterruptedException e) {
 								e.printStackTrace();
 							}

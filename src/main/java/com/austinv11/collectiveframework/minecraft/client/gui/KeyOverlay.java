@@ -2,12 +2,15 @@ package com.austinv11.collectiveframework.minecraft.client.gui;
 
 import com.austinv11.collectiveframework.minecraft.reference.Config;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 import java.awt.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
+@SideOnly(Side.CLIENT)
 public class KeyOverlay {
 	
 	public static final ConcurrentLinkedDeque<Object[]> keys = new ConcurrentLinkedDeque<Object[]>();

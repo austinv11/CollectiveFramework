@@ -12,7 +12,7 @@ public class CommonHooks {
 	
 	public static ItemStack getResult(InventoryCrafting craftingInventory, World world) {
 		ItemStack result = null;
-		//Vanilla behavior:
+		//Vanilla behavior, taken from CraftingManager:
 		for (int j = 0; j < CraftingManager.getInstance().recipes.size(); ++j) {
 			IRecipe irecipe = (IRecipe)CraftingManager.getInstance().recipes.get(j);
 			

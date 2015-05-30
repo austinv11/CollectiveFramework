@@ -19,9 +19,22 @@ public class TickHandler {
 	private static int startCloudTicks = -1;
 	private static boolean wasDown = false;
 	
+	private static boolean wasKonga = false;
+	
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onClientTick(TickEvent.ClientTickEvent event) {
+		if (HooksHandler.kongaTime && !wasKonga) {
+			HooksHandler.kongaTick = HooksHandler.START_KONGA_TIME+1;
+			wasKonga = true;
+		} 
+		if (HooksHandler.kongaTick > 0) {
+			HooksHandler.kongaTick--;
+		} else if (HooksHandler.kongaTick == 0 && wasKonga) {
+			HooksHandler.kongaTime = false;
+			wasKonga = false;
+		}
+		
 		if (Config.enableButtonTimeChanging) {
 			if (Minecraft.getMinecraft().theWorld != null) {
 				if (MinecraftServer.getServer().getConfigurationManager().func_152596_g(Minecraft.getMinecraft().thePlayer.getGameProfile())) {
