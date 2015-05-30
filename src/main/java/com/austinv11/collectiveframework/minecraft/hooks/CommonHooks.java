@@ -1,10 +1,12 @@
 package com.austinv11.collectiveframework.minecraft.hooks;
 
+import com.austinv11.collectiveframework.minecraft.event.FindMatchingRecipeEvent;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
 public class CommonHooks {
 	
@@ -20,5 +22,11 @@ public class CommonHooks {
 			}
 		}
 		
+		FindMatchingRecipeEvent event = new FindMatchingRecipeEvent();
+		event.craftingInventory = craftingInventory;
+		event.world = world;
+		event.result = result;
+		MinecraftForge.EVENT_BUS.post(event);
+		return event.result;
 	}
 }
