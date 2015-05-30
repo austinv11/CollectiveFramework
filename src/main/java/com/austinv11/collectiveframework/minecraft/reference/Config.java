@@ -30,5 +30,8 @@ public class Config {
 	public static boolean enableButtonTimeChanging = false;
 	
 	@Description(comment = "This is the rate at which time changes by when pressing a time button", category = "Misc")
-	public static int timeChangeRate = 10;
+	public static int timeChangeRate = 30;
+	
+	@Description(comment = "You know you wanna enable this ;)", category = "Misc")
+	public static boolean enableCloudToButt = false;
 }

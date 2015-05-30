@@ -65,4 +65,78 @@ public class StringUtils {
 		in.close();
 		return read;
 	}
+	
+	/**
+	 * Counts the number of occurrences of a string within another
+	 * @param string The string to look in
+	 * @param toFind The string to look for
+	 * @param ignoreCase Whether to ignore case
+	 * @return The amount of occurrences
+	 */
+	public static int countFor(String string, String toFind, boolean ignoreCase) {
+		String searchString = string;
+		String regex = toFind;
+		if (ignoreCase) {
+			searchString = searchString.toLowerCase();
+			regex = regex.toLowerCase();
+		}
+		int i = 0;
+		while (searchString.contains(regex)) {
+			searchString = searchString.replaceFirst(regex, "");
+			i++;
+		}
+		return i;
+	}
+	
+	/**
+	 * Counts the number of occurrences of a string within another,
+	 * same as {@link #countFor(String,String,boolean)} with ignoreCase as true
+	 * @param string The string to look in
+	 * @param toFind The string to look for
+	 * @return The amount of occurrences
+	 */
+	public static int countFor(String string, String toFind) {
+		return countFor(string, toFind, false);
+	}
+	
+	/**
+	 * Replaces the first instance of a string with another, preserving the case for each character
+	 * @param string The string to replace in
+	 * @param toReplace The portion of the string to replace
+	 * @param toReplaceWith The string to replace with
+	 * @return The new string
+	 */
+	public static String replaceFirstPreservingCase(String string, String toReplace, String toReplaceWith) {
+		String temp = string.toLowerCase();
+		int index = temp.indexOf(toReplace.toLowerCase());
+		if (index == -1)
+			return string;
+		String found = string.substring(index, toReplace.length());
+		char[] casedToReplace = found.toCharArray();
+		char[] toReplaceWithChars = toReplaceWith.toCharArray();
+		for (int i = 0; i < casedToReplace.length; i++) {
+			if (i == toReplaceWithChars.length)
+				break;
+			if (Character.isLowerCase(casedToReplace[i]))
+				toReplaceWithChars[i] = Character.toLowerCase(toReplaceWithChars[i]);
+			else
+				toReplaceWithChars[i] = Character.toUpperCase(toReplaceWithChars[i]);
+		}
+		String newToReplaceWith = String.valueOf(toReplaceWithChars);
+		return string.replaceFirst(found, newToReplaceWith);
+	}
+	
+	/**
+	 * Replaces all instances of a string with another, preserving the case for each character
+	 * @param string The string to replace in
+	 * @param toReplace The portion of the string to replace
+	 * @param toReplaceWith The string to replace with
+	 * @return The new string
+	 */
+	public static String replaceAllPreservingCase(String string, String toReplace, String toReplaceWith) {
+		for (int i = 0; i < countFor(string, toReplace, true); i++) {
+			string = replaceFirstPreservingCase(string, toReplace, toReplaceWith);
+		}
+		return string;
+	}
 }
