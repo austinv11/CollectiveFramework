@@ -1,4 +1,4 @@
-package com.austinv11.collectiveframework.minecraft.event;
+package com.austinv11.collectiveframework.minecraft.event.handler;
 
 import com.austinv11.collectiveframework.minecraft.reference.Config;
 import com.austinv11.collectiveframework.minecraft.utils.Colors;

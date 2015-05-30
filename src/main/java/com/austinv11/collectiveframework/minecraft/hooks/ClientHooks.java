@@ -1,20 +1,22 @@
 package com.austinv11.collectiveframework.minecraft.hooks;
 
-import cpw.mods.fml.common.Loader;
+import com.austinv11.collectiveframework.minecraft.event.RetrieveBookTextureEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.tileentity.TileEntityEnchantmentTable;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 
 @SideOnly(Side.CLIENT)
 public class ClientHooks {
 	
-	private static ResourceLocation defaultBook =  new ResourceLocation("textures/entity/enchanting_table_book.png");
-	private static ResourceLocation infuserBook = new ResourceLocation("dartcraft2:textures/blocks/enchanting_table_book.png");
+	private static final ResourceLocation defaultBook =  new ResourceLocation("textures/entity/enchanting_table_book.png");
 	
 	public static ResourceLocation getBookTexture(TileEntityEnchantmentTable table) {
-		if (Loader.isModLoaded("DartCraft2") && table.blockMetadata == Integer.MIN_VALUE)
-			return infuserBook;
-		return defaultBook;
+		RetrieveBookTextureEvent event = new RetrieveBookTextureEvent();
+		event.bookTexture = defaultBook;
+		event.table = table;
+		MinecraftForge.EVENT_BUS.post(event);
+		return event.bookTexture;
 	}
 }

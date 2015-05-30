@@ -2,9 +2,9 @@ package com.austinv11.collectiveframework.minecraft.proxy;
 
 import com.austinv11.collectiveframework.minecraft.CollectiveFramework;
 import com.austinv11.collectiveframework.minecraft.config.ConfigRegistry;
-import com.austinv11.collectiveframework.minecraft.event.CommandBroadcastHandler;
-import com.austinv11.collectiveframework.minecraft.event.TickHandler;
-import com.austinv11.collectiveframework.minecraft.event.TooltipHandler;
+import com.austinv11.collectiveframework.minecraft.event.handler.CommandBroadcastHandler;
+import com.austinv11.collectiveframework.minecraft.event.handler.TickHandler;
+import com.austinv11.collectiveframework.minecraft.event.handler.TooltipHandler;
 import com.austinv11.collectiveframework.minecraft.utils.MinecraftTranslator;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;

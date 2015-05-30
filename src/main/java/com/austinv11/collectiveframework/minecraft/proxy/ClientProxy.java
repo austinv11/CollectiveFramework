@@ -1,7 +1,7 @@
 package com.austinv11.collectiveframework.minecraft.proxy;
 
 import com.austinv11.collectiveframework.minecraft.client.gui.KeyOverlay;
-import com.austinv11.collectiveframework.minecraft.event.KeyHandler;
+import com.austinv11.collectiveframework.minecraft.event.handler.KeyHandler;
 import com.austinv11.collectiveframework.minecraft.init.Keybindings;
 import com.austinv11.collectiveframework.minecraft.utils.IconManager;
 import cpw.mods.fml.common.FMLCommonHandler;
