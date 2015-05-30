@@ -3,6 +3,7 @@ package com.austinv11.collectiveframework.minecraft.proxy;
 import com.austinv11.collectiveframework.minecraft.CollectiveFramework;
 import com.austinv11.collectiveframework.minecraft.config.ConfigRegistry;
 import com.austinv11.collectiveframework.minecraft.event.handler.CommandBroadcastHandler;
+import com.austinv11.collectiveframework.minecraft.event.handler.HooksHandler;
 import com.austinv11.collectiveframework.minecraft.event.handler.TickHandler;
 import com.austinv11.collectiveframework.minecraft.event.handler.TooltipHandler;
 import com.austinv11.collectiveframework.minecraft.utils.MinecraftTranslator;
@@ -21,6 +22,7 @@ public class CommonProxy {
 		FMLCommonHandler.instance().bus().register(CollectiveFramework.instance);
 		MinecraftForge.EVENT_BUS.register(new ConfigRegistry());
 		FMLCommonHandler.instance().bus().register(new TickHandler());
+		MinecraftForge.EVENT_BUS.register(new HooksHandler());
 	}
 	
 	public Side getSide() {

@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
  * This is fired on the MinecraftForge event bus
  */
 @SideOnly(Side.CLIENT)
-public class RetrieveBookTextureEvent extends Event {
+public class RenderBookTextureEvent extends Event {
 	
 	/**
 	 * The texture to use

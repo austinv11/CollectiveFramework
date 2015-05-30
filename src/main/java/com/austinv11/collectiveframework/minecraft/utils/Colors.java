@@ -1,6 +1,5 @@
 package com.austinv11.collectiveframework.minecraft.utils;
 
-import com.austinv11.collectiveframework.minecraft.reference.Config;
 import com.austinv11.collectiveframework.utils.ArrayUtils;
 
 /**
@@ -73,16 +72,5 @@ public enum Colors {
 	 */
 	public static String replaceAlternateColorChar(String string) {
 		return replaceAlternateColorChar('&', string);
-	}
-	
-	/**
-	 * Called by the color code patch, does not do anything if the patch is disabled
-	 * @param string The string
-	 * @return The modified string
-	 */
-	public static String replaceAlternateColorCharPatch(String string) {
-		if (!Config.applyColorPatch)
-			return string;
-		return replaceAlternateColorChar(string);
 	}
 }

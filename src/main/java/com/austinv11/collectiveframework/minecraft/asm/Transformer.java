@@ -62,7 +62,7 @@ public class Transformer implements IClassTransformer, Opcodes {
 			if (checkDeobfAndObfNames(m.name, "renderStringAtPos", "func_78255_a")) {
 				InsnList instructions = new InsnList();
 				instructions.add(new VarInsnNode(ALOAD, 1));
-				instructions.add(new MethodInsnNode(INVOKESTATIC, "com/austinv11/collectiveframework/minecraft/utils/Colors", "replaceAlternateColorCharPatch", "(Ljava/lang/String;)Ljava/lang/String;", false));
+				instructions.add(new MethodInsnNode(INVOKESTATIC, "com/austinv11/collectiveframework/minecraft/hooks/ClientHooks", "getStringToRender", "(Ljava/lang/String;)Ljava/lang/String;", false));
 				instructions.add(new VarInsnNode(ASTORE, 1));
 				m.instructions.insert(instructions);
 				break;
