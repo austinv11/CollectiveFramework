@@ -89,7 +89,7 @@ public class CollectiveFrameworkEarlyTransformerPlugin implements IFMLLoadingPlu
 	
 	@Override
 	public String getAccessTransformerClass() {
-		return null;
+		return "com.austinv11.collectiveframework.minecraft.asm.CollectiveFrameworkAccessTransformer";
 	}
 	
 	@Override
