@@ -2,7 +2,7 @@ package com.austinv11.collectiveframework.minecraft.config;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * An interface representing a custom config handler, it will get called whenever a config is modified
@@ -45,7 +45,7 @@ public interface IConfigurationHandler {
 	 *             Outer map has the key = the category
 	 *             Inner map has the key = the field name and the value = the actual field 
 	 */
-	public void loadFile(String fileName, Object config, HashMap<String, HashMap<String, Field>> hint);
+	public void loadFile(String fileName, Object config, Map<String, Map<String, Field>> hint);
 	
 	/**
 	 * Called to load/create a config from a string
@@ -55,7 +55,7 @@ public interface IConfigurationHandler {
 	 *             Outer map has the key = the category
 	 *             Inner map has the key = the field name and the value = the actual field 
 	 */
-	public void loadFromString(String string, Object config, HashMap<String, HashMap<String, Field>> hint);
+	public void loadFromString(String string, Object config, Map<String, Map<String, Field>> hint);
 	
 	/**
 	 * Called to get the config file

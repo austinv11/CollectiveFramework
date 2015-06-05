@@ -8,9 +8,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import java.io.*;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * A registry for configs
@@ -116,7 +114,7 @@ public class ConfigRegistry {
 	 */
 	public static class DefaultConfigurationHandler implements IConfigurationHandler {
 		
-		private HashMap<String, HashMap<String, Field>> current = new HashMap<String,HashMap<String, Field>>();
+		private Map<String, Map<String, Field>> current = new HashMap<String, Map<String, Field>>();
 		
 		private File cachedFile;
 		
@@ -127,7 +125,7 @@ public class ConfigRegistry {
 		
 		@Override
 		public void setValue(String configValue, String category, Object value, Object config, boolean saveToFile) {
-			HashMap<String, Field> fields = current.containsKey(category) ? current.get(category) : new HashMap<String,Field>();
+			Map<String, Field> fields = current.containsKey(category) ? current.get(category) : new HashMap<String,Field>();
 			Field field = fields.containsKey(configValue) ? fields.get(configValue) : ReflectionUtils.getDeclaredOrNormalField(configValue, config.getClass());
 			try {
 				field.set(config, value);
@@ -156,7 +154,7 @@ public class ConfigRegistry {
 		}
 		
 		@Override
-		public void loadFile(String fileName, Object config, HashMap<String, HashMap<String, Field>> hint) {
+		public void loadFile(String fileName, Object config, Map<String, Map<String, Field>> hint) {
 			current = hint;
 			cachedFile = new File("./config/"+fileName);
 			if (cachedFile.exists())
@@ -176,7 +174,7 @@ public class ConfigRegistry {
 		}
 		
 		@Override
-		public void loadFromString(String string, Object config, HashMap<String, HashMap<String, Field>> hint) {
+		public void loadFromString(String string, Object config, Map<String, Map<String, Field>> hint) {
 			try {
 				readFromReader(new BufferedReader(new StringReader(string)), config);
 			} catch (Exception e) {
@@ -289,7 +287,7 @@ public class ConfigRegistry {
 		public IConfigurationHandler handler;
 		public String fileName;
 		public boolean doesSync;
-		public HashMap<String, HashMap<String, Field>> fields = new HashMap<String, HashMap<String, Field>>();
+		public TreeMap<String, Map<String, Field>> fields = new TreeMap<String, Map<String, Field>>();
 		
 		public ConfigProxy(Config annotation, Object config) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
 			this.config = config;
@@ -320,11 +318,11 @@ public class ConfigRegistry {
 		}
 		
 		private void addToCategory(String category, Field f) {
-			HashMap<String, Field> vals;
+			Map<String, Field> vals;
 			if (fields.containsKey(category))
 				vals = fields.get(category);
 			else
-				vals = new HashMap<String,Field>();
+				vals = new TreeMap<String, Field>();
 			vals.put(f.getName(), f);
 			fields.put(category, vals);
 		}
