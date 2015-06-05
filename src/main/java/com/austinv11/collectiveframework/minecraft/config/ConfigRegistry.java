@@ -3,6 +3,7 @@ package com.austinv11.collectiveframework.minecraft.config;
 import com.austinv11.collectiveframework.minecraft.CollectiveFramework;
 import com.austinv11.collectiveframework.utils.ArrayUtils;
 import com.austinv11.collectiveframework.utils.ReflectionUtils;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.io.*;
@@ -207,16 +208,23 @@ public class ConfigRegistry {
 		
 		private void writeToStream(PrintStream writer, Object config) throws IllegalAccessException, ConfigException {
 			for (String category : current.keySet()) {
-				writer.println(category+" {");
+				int i = 0;
 				for (String field : current.get(category).keySet()) {
 					Field f = current.get(category).get(field);
 					f.setAccessible(true);
+					if (f.isAnnotationPresent(Description.class) && f.getAnnotation(Description.class).clientSideOnly() && 
+							CollectiveFramework.proxy.getSide() == Side.SERVER)
+						continue;
+					if (i == 0)
+						writer.println(category+" {");
 					String comment = f.isAnnotationPresent(Description.class) ? f.getAnnotation(Description.class).comment() : "None! Tell the mod author to include a comment!";
 					writer.println("\t"+comment);
 					writer.println("\t"+getKey(f.get(config))+":"+field+"="+serialize(f.get(config)));
 					writer.println();
+					i++;
+					if (i == current.get(category).size())
+						writer.println("}");
 				}
-				writer.println("}");
 			}
 			writer.flush();
 			writer.close();

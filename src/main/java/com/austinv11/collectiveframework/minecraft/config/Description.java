@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Used to hold the comment for the config object
+ * Describes a config field
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
@@ -23,4 +23,10 @@ public @interface Description {
 	 * @return The category (capitalization matters!)
 	 */
 	String category() default "General";
+	
+	/**
+	 * Determines whether a config option only effects the client
+	 * @return True for the option to be client side only
+	 */
+	boolean clientSideOnly() default false;
 }
