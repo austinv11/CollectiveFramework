@@ -5,6 +5,7 @@ import com.austinv11.collectiveframework.minecraft.client.gui.KeyOverlay;
 import com.austinv11.collectiveframework.minecraft.client.gui.KongaOverlay;
 import com.austinv11.collectiveframework.minecraft.event.handler.HooksHandler;
 import com.austinv11.collectiveframework.minecraft.event.handler.KeyHandler;
+import com.austinv11.collectiveframework.minecraft.event.handler.ClientTickHandler;
 import com.austinv11.collectiveframework.minecraft.init.Keybindings;
 import com.austinv11.collectiveframework.minecraft.utils.IconManager;
 import com.austinv11.collectiveframework.multithreading.SimpleRunnable;
@@ -83,6 +84,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(new KeyOverlay());
 		FMLCommonHandler.instance().bus().register(new KeyHandler());
 		MinecraftForge.EVENT_BUS.register(new KongaOverlay());
+		FMLCommonHandler.instance().bus().register(new ClientTickHandler());
 	}
 	
 	@Override
