@@ -1,7 +1,9 @@
 package com.austinv11.collectiveframework.minecraft.utils;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -62,5 +64,17 @@ public class WorldUtils {
 	 */
 	public static Entity getNearestEntityToLocation(Location location) {
 		return getNearestEntityToLocation(location, Double.MAX_VALUE);
+	}
+	
+	/**
+	 * Spawns an item in the world at the specified location
+	 * @param location The location for the item to be spawned
+	 * @param stack The item to spawn
+	 * @return The entity representing the item
+	 */
+	public static EntityItem spawnItemInWorld(Location location, ItemStack stack) {
+		EntityItem item = new EntityItem(location.getWorld(), location.getX(), location.getY(), location.getZ(), stack);
+		location.getWorld().spawnEntityInWorld(item);
+		return item;
 	}
 }
