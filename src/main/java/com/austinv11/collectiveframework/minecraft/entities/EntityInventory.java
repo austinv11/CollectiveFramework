@@ -115,7 +115,11 @@ public abstract class EntityInventory extends Entity implements IInventory {
 	public abstract int getInventoryStackLimit();
 
 	@Override
-	public void markDirty() {}
+	public void markDirty() {
+		for (int i = 0; i < items.length; i++)
+			if (items[i] != null && items[i].stackSize < 1)
+				items[i] = null;
+	}
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {

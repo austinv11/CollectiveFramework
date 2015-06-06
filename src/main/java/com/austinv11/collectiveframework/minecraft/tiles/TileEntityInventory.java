@@ -150,4 +150,12 @@ public abstract class TileEntityInventory extends TileEntity implements IInvento
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		return true;
 	}
+	
+	@Override
+	public void markDirty() {
+		for (int i = 0; i < items.length; i++)
+			if (items[i] != null && items[i].stackSize < 1)
+				items[i] = null;
+		super.markDirty();
+	}
 }
