@@ -13,11 +13,16 @@ import net.minecraftforge.common.util.Constants;
  */
 public abstract class TileEntityInventory extends TileEntity implements IInventory {
 
-	public int size = 1;
-	public ItemStack[] items = new ItemStack[size];
+	public ItemStack[] items;
 	public String invName = "null";
 	private int numUsingPlayers = 0;
-
+	
+	public TileEntityInventory() {
+		items = new ItemStack[getSize()];
+	}
+	
+	public abstract int getSize();
+	
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
@@ -27,7 +32,7 @@ public abstract class TileEntityInventory extends TileEntity implements IInvento
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 		NBTTagList nbttaglist = nbttagcompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
-		items = new ItemStack[size];
+		items = new ItemStack[getSize()];
 		for (int i = 0; i < nbttaglist.tagCount(); i++) {
 			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
 			int j = nbttagcompound1.getByte("Slot") & 0xff;
@@ -54,7 +59,7 @@ public abstract class TileEntityInventory extends TileEntity implements IInvento
 
 	@Override
 	public int getSizeInventory() {
-		return size;
+		return getSize();
 	}
 
 	@Override
