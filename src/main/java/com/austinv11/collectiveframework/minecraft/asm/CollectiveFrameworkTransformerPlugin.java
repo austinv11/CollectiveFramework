@@ -4,7 +4,7 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
 import java.util.Map;
 
-@IFMLLoadingPlugin.TransformerExclusions(value = "com.austinv11")
+@IFMLLoadingPlugin.TransformerExclusions(value = "com.austinv11.collectiveframework.minecraft.asm")
 @IFMLLoadingPlugin.SortingIndex(Integer.MAX_VALUE) //Want asm as late as possible to get srg names
 public class CollectiveFrameworkTransformerPlugin implements IFMLLoadingPlugin {
 	
