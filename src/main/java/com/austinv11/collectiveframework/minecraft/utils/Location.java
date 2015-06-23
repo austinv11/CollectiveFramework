@@ -53,6 +53,24 @@ public class Location extends ThreeDimensionalVector {
 	}
 	
 	/**
+	 * Converts ChunkCoordinates to a location
+	 * @param coords The coords
+	 * @param world The world
+	 * @return The location equivalent
+	 */
+	public static Location locationFromChunkCoords(ChunkCoordinates coords, World world) {
+		return new Location(coords.posX, coords.posY, coords.posZ, world);
+	}
+	
+	/**
+	 * Converts the location into ChunkCoordinates
+	 * @return The chunk coordinate equivalent
+	 */
+	public ChunkCoordinates chunkCoordsFromLocation() {
+		return new ChunkCoordinates(getRoundedX(), getRoundedY(), getRoundedZ());
+	}
+	
+	/**
 	 * Gets the world for this object
 	 * @return The world
 	 */

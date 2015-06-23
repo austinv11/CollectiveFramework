@@ -1,5 +1,6 @@
 package com.austinv11.collectiveframework.minecraft.utils;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -76,5 +77,22 @@ public class WorldUtils {
 		EntityItem item = new EntityItem(location.getWorld(), location.getX(), location.getY(), location.getZ(), stack);
 		location.getWorld().spawnEntityInWorld(item);
 		return item;
+	}
+	
+	/**
+	 * Checks if the provided block type exists in the specified location
+	 * @param location The location to check
+	 * @param blockClass The class of the block to look for
+	 * @return True if the block exists, false if otherwise
+	 */
+	public static boolean doesSpecifiedBlockExists(Location location, Class blockClass) {
+		if (!Block.class.isAssignableFrom(blockClass))
+			return false;
+		World world = location.getWorld();
+		int x = location.getRoundedX();
+		int y = location.getRoundedY();
+		int z = location.getRoundedZ();
+		return world.blockExists(x, y, z) && !world.isAirBlock(x, y, z) && 
+				blockClass.isAssignableFrom(world.getBlock(x, y, z).getClass());
 	}
 }
