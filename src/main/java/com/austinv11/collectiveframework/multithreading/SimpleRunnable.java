@@ -69,7 +69,9 @@ public abstract class SimpleRunnable implements Runnable {
 	 * Gets the name of the thread
 	 * @return The name
 	 */
-	public abstract String getName();
+	public String getName() {
+		return this.getClass().getSimpleName();
+	}
 	
 	/**
 	 * Delays the given thread from running

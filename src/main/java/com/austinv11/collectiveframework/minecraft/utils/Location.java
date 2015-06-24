@@ -53,6 +53,14 @@ public class Location extends ThreeDimensionalVector {
 	}
 	
 	/**
+	 * Clones a location object
+	 * @param location The location to clone
+	 */
+	public Location(Location location) {
+		this(location.getX(), location.getY(), location.getZ(), location.getWorld());
+	}
+	
+	/**
 	 * Converts ChunkCoordinates to a location
 	 * @param coords The coords
 	 * @param world The world
