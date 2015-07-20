@@ -1,9 +1,6 @@
 package com.austinv11.collectiveframework.minecraft;
 
 import com.austinv11.collectiveframework.minecraft.asm.Transformer;
-import com.austinv11.collectiveframework.minecraft.books.Book;
-import com.austinv11.collectiveframework.minecraft.books.BookFactory;
-import com.austinv11.collectiveframework.minecraft.books.elements.SimplePage;
 import com.austinv11.collectiveframework.minecraft.client.gui.GuiHandler;
 import com.austinv11.collectiveframework.minecraft.compat.modules.Modules;
 import com.austinv11.collectiveframework.minecraft.config.ConfigException;
@@ -28,10 +25,8 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ResourceLocation;
 
 @Mod(modid= Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, acceptableRemoteVersions = "*"/*, guiFactory = Reference.GUI_FACTORY_CLASS*/)
 public class CollectiveFramework {
@@ -77,7 +72,6 @@ public class CollectiveFramework {
 		checkEnvironment();
 		proxy.prepareClient();
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
-		new BookFactory().setIcon(new ResourceLocation("null")).setName("null").addElement(0, new SimplePage()).build();
 		Modules.propagate(event);
 		LOGGER.info("Init took "+profiler.getTime()+"ms");
 	}
@@ -87,8 +81,6 @@ public class CollectiveFramework {
 		TimeProfiler profiler = new TimeProfiler();
 		ConfigRegistry.init();
 		checkEnvironment();
-		for (Book book : BookFactory.bookRegistry.keySet()) //TODO: Remove, this is for debugging
-			GameRegistry.registerItem(book, book.getName());
 		NETWORK.registerMessage(TileEntityServerUpdatePacket.TileEntityServerUpdatePacketHandler.class, TileEntityServerUpdatePacket.class, 0, Side.SERVER);
 		NETWORK.registerMessage(TileEntityClientUpdatePacket.TileEntityClientUpdatePacketHandler.class, TileEntityClientUpdatePacket.class, 1, Side.CLIENT);
 		NETWORK.registerMessage(ConfigPacket.ConfigPacketHandler.class, ConfigPacket.class, 2, Side.CLIENT);
