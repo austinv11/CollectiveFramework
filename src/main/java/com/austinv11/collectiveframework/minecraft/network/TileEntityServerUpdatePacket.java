@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 /**
- * Use this packet to sync tile entities (client -> server)
+ * Use this packet to sync tile entities (client to server)
  */
 public class TileEntityServerUpdatePacket implements IMessage {
 	

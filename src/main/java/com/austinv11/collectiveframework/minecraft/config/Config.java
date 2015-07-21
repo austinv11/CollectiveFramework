@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * This annotation allows for a class to act as a config, simplifies config creation.
  * Both static and declared fields represent config key-value pairs (unless excluded)
  * Register an instance of the config with {@link ConfigRegistry#registerConfig(Object)}
- * The config could be initialized at any three init stages–depending on when you register your config
+ * The config could be initialized at any three init stages-depending on when you register your config
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

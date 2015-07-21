@@ -33,7 +33,7 @@ public enum Colors {
 	public String code;
 	
 	public static final char[] COLOR_CHARS = new char[]{'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f','k','l','m','n','o','r'};
-	public static final char COLOR_CODE_CHAR = '§';
+	public static final char COLOR_CODE_CHAR = '\u00a7';
 	
 	Colors(String code) {
 		this.code = code;
