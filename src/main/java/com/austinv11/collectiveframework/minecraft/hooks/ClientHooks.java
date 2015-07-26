@@ -2,6 +2,8 @@ package com.austinv11.collectiveframework.minecraft.hooks;
 
 import com.austinv11.collectiveframework.minecraft.event.RenderBookTextureEvent;
 import com.austinv11.collectiveframework.minecraft.event.RenderStringEvent;
+import com.austinv11.collectiveframework.minecraft.reference.Config;
+import com.austinv11.collectiveframework.minecraft.utils.client.GuiUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.tileentity.TileEntityEnchantmentTable;
@@ -12,6 +14,7 @@ import net.minecraftforge.common.MinecraftForge;
 public class ClientHooks {
 	
 	private static final ResourceLocation defaultBook =  new ResourceLocation("textures/entity/enchanting_table_book.png");
+	public static boolean didClick = false;
 	
 	public static ResourceLocation getBookTexture(TileEntityEnchantmentTable table) {
 		RenderBookTextureEvent event = new RenderBookTextureEvent();
@@ -26,5 +29,12 @@ public class ClientHooks {
 		event.stringToRender = input;
 		MinecraftForge.EVENT_BUS.post(event);
 		return event.stringToRender;
+	}
+	
+	public static void click() {
+		if (Config.clickOnMainMenuOpen && !didClick) {
+			GuiUtils.playButtonSound();
+			didClick = true;
+		}
 	}
 }

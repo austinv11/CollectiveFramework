@@ -34,4 +34,7 @@ public class Config {
 	
 	@Description(comment = "You know you wanna enable this ;)", category = "Misc", clientSideOnly = true)
 	public static boolean enableCloudToButt = false;
+	
+	@Description(comment = "Plays a click sound when the main menu opens", category = "Misc", clientSideOnly = true)
+	public static boolean clickOnMainMenuOpen = true;
 }
