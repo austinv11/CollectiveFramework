@@ -129,6 +129,11 @@ task sourceJar(type: Jar) {
 task deobfJar(type: Jar) {
     from sourceSets.main.output
     classifier = 'deobf'
+    manifest {
+        attributes 'FMLAT': 'cf_at.cfg',
+                'FMLCorePlugin': 'com.austinv11.collectiveframework.minecraft.asm.CollectiveFrameworkEarlyTransformerPlugin',
+                'FMLCorePluginContainsFMLMod': true
+    }
 }
 
 build.dependsOn sourceJar, deobfJar
