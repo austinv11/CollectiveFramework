@@ -22,38 +22,11 @@ public class Transformer implements IClassTransformer, Opcodes {
 		} else if (className.equals("net.minecraft.client.renderer.entity.RenderEnchantmentTable")) {
 			CollectiveFramework.LOGGER.info("Hooking into RenderEnchantmentTable#renderTileEntityAt(Lnet/minecraft/tileentity/TileEntityEnchantmentTable;DDDF)V");
 			return transformRenderEnchantmentTable(byteCode);
-		} else if (className.equals("net.minecraft.item.crafting.CraftingManager")) {
-			CollectiveFramework.LOGGER.info("Hooking into CraftingManager#findMatchingRecipe(Lnet/minecraft/inventory/InventoryCrafting;Lnet/minecraft/world/World;)Lnet/minecraft/item/ItemStack;");
-			return transformFindMatchingRecipe(byteCode);
 		} else if (className.equals("net.minecraft.client.gui.GuiMainMenu")) {
 			CollectiveFramework.LOGGER.info("Hooking into GuiMainMenu#initGui()V");
 			return transformGuiMainMenu(byteCode);
 		}
 		return byteCode;
-	}
-	
-	private byte[] transformFindMatchingRecipe(byte[] byteCode) {
-		ClassNode classNode = new ClassNode();
-		ClassReader classReader = new ClassReader(byteCode);
-		classReader.accept(classNode, 0);
-		for (MethodNode m : classNode.methods)
-			if (checkDeobfAndObfNames(m.name, "findMatchingRecipe", "func_82787_a")) {
-				Iterator<AbstractInsnNode> nodes = m.instructions.iterator();
-				while (nodes.hasNext()) {
-					AbstractInsnNode node = nodes.next();
-					if (node.getOpcode() == INVOKEINTERFACE) {
-						InsnList instructions = new InsnList();
-						instructions.add(new VarInsnNode(ALOAD, 1));
-						instructions.add(new VarInsnNode(ALOAD, 2));
-						instructions.add(new MethodInsnNode(INVOKESTATIC, "com/austinv11/collectiveframework/minecraft/hooks/CommonHooks", "getResult", "(Lnet/minecraft/inventory/InventoryCrafting;Lnet/minecraft/world/World;)Lnet/minecraft/item/ItemStack;", false));
-						instructions.add(new InsnNode(ARETURN));
-						m.instructions.insertBefore(node, instructions);
-					}
-				}
-			}
-		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
-		classNode.accept(writer);
-		return writer.toByteArray();
 	}
 	
 	private byte[] transformRenderEnchantmentTable(byte[] byteCode) {
