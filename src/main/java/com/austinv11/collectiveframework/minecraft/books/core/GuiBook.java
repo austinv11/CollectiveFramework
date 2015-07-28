@@ -25,6 +25,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -104,7 +105,21 @@ public class GuiBook extends GuiScreen {
 			GL11.glRotatef(entry.getPitch(), 1, 0, 0);
 			GL11.glRotatef(entry.getYaw(), 0, 1, 0);
 			GL11.glRotatef(entry.getRotation(), 0, 0, 1);
+			if (entry.drawDebugLines)
+				drawRect(entry.getCoords().getRoundedX(), entry.getCoords().getRoundedY(), 
+						entry.getCoords().getRoundedX()+entry.width, entry.getCoords().getRoundedY()+entry.height, 
+						Color.LIGHT_GRAY.getRGB());
 			entry.onRender((int) profiler.getTime());
+			if (entry.drawDebugLines) {
+				drawHorizontalLine(entry.getCoords().getRoundedX(), entry.getCoords().getRoundedX()+entry.width, 
+						entry.getCoords().getRoundedY(), Color.BLACK.getRGB());
+				drawHorizontalLine(entry.getCoords().getRoundedX(), entry.getCoords().getRoundedX()+entry.width,
+						entry.getCoords().getRoundedY()+entry.height, Color.BLACK.getRGB());
+				drawVerticalLine(entry.getCoords().getRoundedX(), entry.getCoords().getRoundedY(),
+						entry.getCoords().getRoundedY()+entry.height, Color.BLACK.getRGB());
+				drawVerticalLine(entry.getCoords().getRoundedX()+entry.width, entry.getCoords().getRoundedY(), 
+						entry.getCoords().getRoundedY()+entry.height, Color.BLACK.getRGB());
+			}
 			GL11.glPopMatrix();
 		}
 	}
@@ -146,6 +161,22 @@ public class GuiBook extends GuiScreen {
 				e.printStackTrace();
 			}
 		book.onRender((int) profiler.getTime());
+		if (book.drawDebugLines) {
+			for (int x = 0; x < resolution.getScaledWidth(); x++) {
+				if (x % 2 == 0 && x % 4 != 0) {
+					drawVerticalLine(x, 0, resolution.getScaledHeight(), Color.LIGHT_GRAY.getRGB());
+				} else if (x % 4 == 0) {
+					drawHorizontalLine(x, 0, resolution.getScaledHeight(), Color.GRAY.getRGB());
+				}
+			}
+			for (int y = 0; y < resolution.getScaledHeight(); y++) {
+				if (y % 2 == 0 && y % 4 != 0) {
+					drawHorizontalLine(0, resolution.getScaledWidth(), y, Color.LIGHT_GRAY.getRGB());
+				} else if (y % 4 == 0) {
+					drawHorizontalLine(0, resolution.getScaledWidth(), y, Color.GRAY.getRGB());
+				}
+			}
+		}
 	}
 	
 	@SubscribeEvent

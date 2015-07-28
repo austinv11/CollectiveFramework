@@ -16,6 +16,10 @@ public abstract class Entry extends GuiScreen {
 	 * This determines whether the placement is relative to the book when false or absolute when true
 	 */
 	public boolean useAbsoluteCoords = false;
+	/**
+	 * If this is true, debug lines will be drawn atop the entry
+	 */
+	public boolean drawDebugLines = false;
 	private TwoDimensionalVector coords;
 	public int width, height;
 	private float pitch = 0.0F, yaw = 0.0F, rotation = 0.0F; //Yup, this api supports complete rotation, albeit somewhat buggy

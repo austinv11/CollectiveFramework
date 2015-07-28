@@ -24,6 +24,10 @@ import java.io.IOException;
  */
 public abstract class Book {
 	
+	/**
+	 * If this is true, a debug grid will be drawn atop the book
+	 */
+	public boolean drawDebugLines = false;
 	private static final String GLOBAL_DIR = "./CFBookData/";
 	private static volatile NBTTagCompound globalData; //A buffer for file I/O
 	private int currentPage = 0;
