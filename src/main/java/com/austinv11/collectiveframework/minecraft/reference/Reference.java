@@ -10,4 +10,8 @@ public class Reference {
 	public static final String GUI_FACTORY_CLASS = "com.austinv11.collectiveframework.minecraft.client.gui.GUIFactory";
 	
 	public static final String NETWORK_NAME = "austinv11CF";
+	
+	public static enum Guis {
+		BOOK
+	}
 }

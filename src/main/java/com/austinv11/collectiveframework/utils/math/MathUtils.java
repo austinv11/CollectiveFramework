@@ -6,6 +6,11 @@ package com.austinv11.collectiveframework.utils.math;
 public class MathUtils {
 	
 	/**
+	 * The maximum number of passes for heavy calculations this can do
+	 */
+	public static int MAX_PASSES = 1024;
+	
+	/**
 	 * Checks if the specified number is a whole number
 	 * @param number Number to check
 	 * @return If the number is a whole number
@@ -76,5 +81,21 @@ public class MathUtils {
 	 */
 	public static boolean isEvenNumber(int number) {
 		return number % 2 == 0;
+	}
+	
+	/**
+	 * Finds the lowest common (integer, despite return value) denominator
+	 * @param values The values to find the LCD for
+	 * @return The LCD or {@link Double#NaN} if none exist within {@link MathUtils#MAX_PASSES} number of passes
+	 */
+	public static double findLowestCommonDenominator(double... values) {
+		outer: for (int i = 2; i < MAX_PASSES+2; i++) {
+			for (double value : values) {
+				if (value % i != 0)
+					continue outer;
+			}
+			return i;
+		}
+		return Double.NaN;
 	}
 }

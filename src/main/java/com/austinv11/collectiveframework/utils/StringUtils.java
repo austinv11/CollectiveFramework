@@ -25,6 +25,18 @@ public class StringUtils {
 	}
 	
 	/**
+	 * Converts (any) array into a string, useful with the {@link WebUtils#readURL(String)} method
+	 * @param array The list
+	 * @return The String
+	 */
+	public static <T> String stringFromArray(T[] array) {
+		String val = "";
+		for (T o : array)
+			val = val + String.valueOf(o) + "\n";
+		return val;
+	}
+	
+	/**
 	 * Gets a string with the provided amount of the provided character
 	 * @param character Character for the string
 	 * @param amount Amount for the character to be repeated
