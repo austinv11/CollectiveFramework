@@ -13,6 +13,7 @@ public class Transformer implements IClassTransformer, Opcodes {
 	
 	public static boolean didCheck = false;
 	public static boolean isDev = false;
+	private static int procreationHookCounter = 1;
 	
 	@Override
 	public byte[] transform(String className, String newClassName, byte[] byteCode) {
@@ -25,6 +26,11 @@ public class Transformer implements IClassTransformer, Opcodes {
 		} else if (className.equals("net.minecraft.client.gui.GuiMainMenu")) {
 			CollectiveFramework.LOGGER.info("Hooking into GuiMainMenu#initGui()V");
 			return transformGuiMainMenu(byteCode);
+		} else if (className.equals("net.minecraft.entity.passive.EntityAnimal") || //Why the hell is this handled in two separate places?
+				className.equals("net.minecraft.entity.ai.EntityAIMate")) {
+			CollectiveFramework.LOGGER.info("Adding hooks procreation hooks ("+procreationHookCounter+"/2)");
+			procreationHookCounter++;
+			return transformProcreation(byteCode);
 		}
 		return byteCode;
 	}
@@ -85,6 +91,75 @@ public class Transformer implements IClassTransformer, Opcodes {
 				InsnList instructions = new InsnList();
 				instructions.add(new MethodInsnNode(INVOKESTATIC, "com/austinv11/collectiveframework/minecraft/hooks/ClientHooks", "click", "()V", false));
 				m.instructions.insert(instructions);
+				break;
+			}
+		}
+		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+		classNode.accept(writer);
+		return writer.toByteArray();
+	}
+	
+	private byte[] transformProcreation(byte[] byteCode) {
+		ClassNode classNode = new ClassNode();
+		ClassReader classReader = new ClassReader(byteCode);
+		classReader.accept(classNode, 0);
+		int invokeVirtualCounter = 0;
+		for (MethodNode m : classNode.methods) {
+			if (checkDeobfAndObfNames(m.name, "procreate", "func_70876_c")) {
+				Iterator<AbstractInsnNode> nodes = m.instructions.iterator();
+				while (nodes.hasNext()) {
+					AbstractInsnNode node = nodes.next();
+					if (node.getOpcode() == ASTORE) {
+						InsnList instructions = new InsnList();
+						instructions.add(new VarInsnNode(ALOAD, 2));
+						instructions.add(new VarInsnNode(ALOAD, 0));
+						instructions.add(new VarInsnNode(ALOAD, 1));
+						instructions.add(new MethodInsnNode(INVOKESTATIC, "com/austinv11/collectiveframework/minecraft/hooks/CommonHooks", "procreatePre", "(Lnet/minecraft/entity/EntityAgeable;Lnet/minecraft/entity/passive/EntityAnimal;Lnet/minecraft/entity/passive/EntityAnimal;)Lnet/minecraft/entity/EntityAgeable;", false));
+						instructions.add(new VarInsnNode(ASTORE, 2));
+						m.instructions.insert(node, instructions);
+					} else if (node.getOpcode() == INVOKEVIRTUAL) {
+						if (invokeVirtualCounter != 9) {
+							invokeVirtualCounter++;
+						} else {
+							InsnList instructions = new InsnList();
+							instructions.add(new VarInsnNode(ALOAD, 2));
+							instructions.add(new VarInsnNode(ALOAD, 0));
+							instructions.add(new VarInsnNode(ALOAD, 1));
+							instructions.add(new MethodInsnNode(INVOKESTATIC, "com/austinv11/collectiveframework/minecraft/hooks/CommonHooks", "procreatePost", "(Lnet/minecraft/entity/EntityAgeable;Lnet/minecraft/entity/passive/EntityAnimal;Lnet/minecraft/entity/passive/EntityAnimal;)V", false));
+							m.instructions.insert(node, instructions);
+						}
+					}
+				}
+				break;
+			} else if (checkDeobfAndObfNames(m.name, "spawnBaby", "func_75388_i")) {
+				Iterator<AbstractInsnNode> nodes = m.instructions.iterator();
+				while (nodes.hasNext()) {
+					AbstractInsnNode node = nodes.next();
+					if (node.getOpcode() == ASTORE) {
+						InsnList instructions = new InsnList();
+						instructions.add(new VarInsnNode(ALOAD, 1));
+						instructions.add(new VarInsnNode(ALOAD, 0));
+						instructions.add(new FieldInsnNode(GETFIELD, "net/minecraft/entity/ai/EntityAIMate", "targetMate", "Lnet/minecraft/entity/passive/EntityAnimal;"));
+						instructions.add(new VarInsnNode(ALOAD, 0));
+						instructions.add(new FieldInsnNode(GETFIELD, "net/minecraft/entity/ai/EntityAIMate", "targetMate", "Lnet/minecraft/entity/passive/EntityAnimal;"));
+						instructions.add(new MethodInsnNode(INVOKESTATIC, "com/austinv11/collectiveframework/minecraft/hooks/CommonHooks", "procreatePre", "(Lnet/minecraft/entity/EntityAgeable;Lnet/minecraft/entity/passive/EntityAnimal;Lnet/minecraft/entity/passive/EntityAnimal;)Lnet/minecraft/entity/EntityAgeable;", false));
+						instructions.add(new VarInsnNode(ASTORE, 1));
+						m.instructions.insert(node, instructions);
+					} else if (node.getOpcode() == INVOKEVIRTUAL) {
+						if (invokeVirtualCounter != 9) {
+							invokeVirtualCounter++;
+						} else {
+							InsnList instructions = new InsnList();
+							instructions.add(new VarInsnNode(ALOAD, 1));
+							instructions.add(new VarInsnNode(ALOAD, 0));
+							instructions.add(new FieldInsnNode(GETFIELD, "net/minecraft/entity/ai/EntityAIMate", "targetMate", "Lnet/minecraft/entity/passive/EntityAnimal;"));
+							instructions.add(new VarInsnNode(ALOAD, 0));
+							instructions.add(new FieldInsnNode(GETFIELD, "net/minecraft/entity/ai/EntityAIMate", "targetMate", "Lnet/minecraft/entity/passive/EntityAnimal;"));
+							instructions.add(new MethodInsnNode(INVOKESTATIC, "com/austinv11/collectiveframework/minecraft/hooks/CommonHooks", "procreatePost", "(Lnet/minecraft/entity/EntityAgeable;Lnet/minecraft/entity/passive/EntityAnimal;Lnet/minecraft/entity/passive/EntityAnimal;)V", false));
+							m.instructions.insert(node, instructions);
+						}
+					}
+				}
 				break;
 			}
 		}

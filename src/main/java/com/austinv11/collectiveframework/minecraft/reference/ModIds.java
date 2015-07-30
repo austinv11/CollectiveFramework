@@ -49,8 +49,6 @@ public class ModIds {
 	
 	public static final String EE3 = "EE3";
 	
-	public static final String UtilityHUD = "UtilityHUD";
-	
 	public static final String Railcraft = "Railcraft";
 	
 	public static final String DimensionalAnchors = "DimensionalAnchors";
@@ -58,4 +56,6 @@ public class ModIds {
 	public static final String ImmibisCore = "ImmibisCore";
 	
 	public static final String ChickenChunks = "ChickenChunks";
+	
+	public static final String Husbandry = "Husbandry";
 }
