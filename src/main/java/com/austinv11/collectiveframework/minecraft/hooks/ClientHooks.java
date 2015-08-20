@@ -25,10 +25,13 @@ public class ClientHooks {
 	}
 	
 	public static String getStringToRender(String input) {
-		RenderStringEvent event = new RenderStringEvent();
-		event.stringToRender = input;
-		MinecraftForge.EVENT_BUS.post(event);
-		return event.stringToRender;
+		if (!Config.disableRenderTextEvents) {
+			RenderStringEvent event = new RenderStringEvent();
+			event.stringToRender = input;
+			MinecraftForge.EVENT_BUS.post(event);
+			return event.stringToRender;
+		} else
+			return input;
 	}
 	
 	public static void click() {

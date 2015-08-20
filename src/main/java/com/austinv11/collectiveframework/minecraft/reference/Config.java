@@ -37,4 +37,7 @@ public class Config {
 	
 	@Description(comment = "Plays a click sound when the main menu opens", category = "Misc", clientSideOnly = true)
 	public static boolean clickOnMainMenuOpen = true;
+	
+	@Description(comment = "This can reduce the amount of RAM and permgen needed to run mc, but this disables various text related features", category = "Misc", clientSideOnly = true)
+	public static boolean disableRenderTextEvents = false;
 }
