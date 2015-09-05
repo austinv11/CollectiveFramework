@@ -261,7 +261,7 @@ public class ConfigRegistry {
 						lineCount++;
 					} else if (lineCount == 1) {
 						String field = line.substring(line.indexOf(":")+1, line.indexOf("="));
-						String key = line.substring(0, line.indexOf(":")).replace("\t", "");
+						String key = line.substring(0, line.indexOf(":")).replace("\t", "").trim();
 						line = line.substring(line.indexOf("=")+1);
 						Field f = ReflectionUtils.getDeclaredOrNormalField(field, config.getClass());
 						if (f != null) {
