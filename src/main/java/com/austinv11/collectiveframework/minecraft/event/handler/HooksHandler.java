@@ -4,9 +4,9 @@ import com.austinv11.collectiveframework.minecraft.event.RenderStringEvent;
 import com.austinv11.collectiveframework.minecraft.reference.Config;
 import com.austinv11.collectiveframework.minecraft.utils.Colors;
 import com.austinv11.collectiveframework.utils.StringUtils;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class HooksHandler {
 	

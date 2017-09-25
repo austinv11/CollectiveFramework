@@ -1,8 +1,8 @@
 package com.austinv11.collectiveframework.minecraft.books.api;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This is the base class for any rendered pages in a book

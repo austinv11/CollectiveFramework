@@ -4,7 +4,7 @@ import com.austinv11.collectiveframework.utils.math.ThreeDimensionalVector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
@@ -41,7 +41,7 @@ public class Location extends ThreeDimensionalVector {
 	 * @param entity The entity
 	 */
 	public Location(Entity entity) {
-		this(entity.posX, entity.posY, entity.posZ, entity.worldObj);
+		this(entity.posX, entity.posY, entity.posZ, entity.getEntityWorld());
 	}
 	
 	/**
@@ -49,7 +49,7 @@ public class Location extends ThreeDimensionalVector {
 	 * @param tileEntity The tile entity
 	 */
 	public Location(TileEntity tileEntity) {
-		this(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, tileEntity.getWorldObj());
+		this(tileEntity.getPos().getX(), tileEntity.getPos().getY(), tileEntity.getPos().getZ(), tileEntity.getWorld());
 	}
 	
 	/**
@@ -66,16 +66,16 @@ public class Location extends ThreeDimensionalVector {
 	 * @param world The world
 	 * @return The location equivalent
 	 */
-	public static Location locationFromChunkCoords(ChunkCoordinates coords, World world) {
-		return new Location(coords.posX, coords.posY, coords.posZ, world);
+	public static Location locationFromChunkCoords(BlockPos coords, World world) {
+		return new Location(coords.getX(), coords.getY(), coords.getZ(), world);
 	}
 	
 	/**
 	 * Converts the location into ChunkCoordinates
 	 * @return The chunk coordinate equivalent
 	 */
-	public ChunkCoordinates chunkCoordsFromLocation() {
-		return new ChunkCoordinates(getRoundedX(), getRoundedY(), getRoundedZ());
+	public BlockPos chunkCoordsFromLocation() {
+		return new BlockPos(getRoundedX(), getRoundedY(), getRoundedZ());
 	}
 	
 	/**
@@ -93,20 +93,20 @@ public class Location extends ThreeDimensionalVector {
 	 */
 	public HashMap<String, Double> getPlayers(double range) {
 		HashMap<String, Double> map = new HashMap<String,Double>();
-		for (EntityPlayer player : (Iterable<EntityPlayer>) world.playerEntities) {
+		for (EntityPlayer player : world.playerEntities) {
 			if (new Location(player).distanceTo(this) <= range) {
-				map.put(player.getDisplayName(), new Location(player).distanceTo(this));
+				map.put(player.getDisplayNameString(), new Location(player).distanceTo(this));
 			}
 		}
 		return map;
 	}
-	
+
 	/**
 	 * Converts this into a chunk coordinats object
 	 * @return The chunk coordinates
 	 */
-	public ChunkCoordinates toChunkCoordinates() {
-		return new ChunkCoordinates(getRoundedX(), getRoundedY(), getRoundedZ());
+	public BlockPos toChunkCoordinates() {
+		return new BlockPos(getRoundedX(), getRoundedY(), getRoundedZ());
 	}
 	
 	@Override
@@ -114,7 +114,7 @@ public class Location extends ThreeDimensionalVector {
 		if (other instanceof Location) {
 			return ((Location) other).getRoundedX() == getRoundedX() && ((Location) other).getRoundedY() == getRoundedY() 
 					&& ((Location) other).getRoundedZ() == getRoundedZ() 
-					&& ((Location) other).getWorld().provider.dimensionId == getWorld().provider.dimensionId;
+					&& ((Location) other).getWorld().provider.getDimension() == getWorld().provider.getDimension();
 		}
 		return false;
 	}

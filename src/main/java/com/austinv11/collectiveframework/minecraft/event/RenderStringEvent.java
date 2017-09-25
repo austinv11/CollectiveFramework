@@ -1,8 +1,8 @@
 package com.austinv11.collectiveframework.minecraft.event;
 
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This event is posted when the Minecraft FontRenderer is attempting to render a String

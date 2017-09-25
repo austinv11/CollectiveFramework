@@ -6,6 +6,9 @@ import com.austinv11.collectiveframework.minecraft.items.ItemBase;
 import com.austinv11.collectiveframework.minecraft.reference.Reference;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 /**
@@ -22,13 +25,13 @@ public abstract class ItemBook extends ItemBase {
 	 * @return The book class
 	 */
 	public abstract Class<? extends Book> getBook();
-	
+
 	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		openBook(player);
-		return stack;
+		return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 	}
-	
+
 	/**
 	 * Opens the book gui, they MUST be holding this book
 	 * @param player The player to open the gui for

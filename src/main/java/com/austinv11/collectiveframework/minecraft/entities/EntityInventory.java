@@ -1,11 +1,14 @@
 package com.austinv11.collectiveframework.minecraft.entities;
 
+import com.austinv11.collectiveframework.minecraft.tiles.TileEntityInventory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
@@ -14,11 +17,11 @@ import net.minecraftforge.common.util.Constants;
  */
 public abstract class EntityInventory extends Entity implements IInventory {
 
-	public ItemStack[] items;
+	public NonNullList<ItemStack> items;
 
 	public EntityInventory(World world) {
 		super(world);
-		items = new ItemStack[getSizeInventory()];
+		items = NonNullList.withSize(getSizeInventory(), ItemStack.EMPTY);
 	}
 
 	@Override
@@ -26,29 +29,23 @@ public abstract class EntityInventory extends Entity implements IInventory {
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tag) {
-		NBTTagList nbttaglist = tag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
-		items = new ItemStack[getSizeInventory()];
-		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-			int j = nbttagcompound1.getByte("Slot") & 0xff;
-			if (j >= 0 && j < items.length) {
-				items[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
-			}
+		NBTTagList itemsNbt = tag.getTagList("items", Constants.NBT.TAG_COMPOUND);
+		items = NonNullList.withSize(getSizeInventory(), ItemStack.EMPTY);
+		for (int itemIndex = 0; itemIndex < items.size(); itemIndex++) {
+			NBTTagCompound itemNbt = itemsNbt.getCompoundTagAt(itemIndex);
+			items.set(itemIndex, new ItemStack(itemNbt));
 		}
 	}
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound tag) {
-		NBTTagList nbttaglist = new NBTTagList();
-		for (int i = 0; i < items.length; i++) {
-			if (items[i] != null) {
-				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-				nbttagcompound1.setByte("Slot", (byte) i);
-				items[i].writeToNBT(nbttagcompound1);
-				nbttaglist.appendTag(nbttagcompound1);
-			}
+		NBTTagList itemsNbt = new NBTTagList();
+		for (ItemStack item : items) {
+			NBTTagCompound itemNbt = new NBTTagCompound();
+			item.writeToNBT(itemNbt);
+			itemsNbt.appendTag(itemNbt);
 		}
-		tag.setTag("Items", nbttaglist);
+		tag.setTag("items", itemsNbt);
 	}
 
 	@Override
@@ -56,58 +53,29 @@ public abstract class EntityInventory extends Entity implements IInventory {
 
 	@Override
 	public ItemStack getStackInSlot(int slot) {
-		return items != null ? items[slot] : null;
+		return items.get(slot);
 	}
 
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
-		if (items.length > slot) {
-			if (items[slot] != null) {
-				if (items[slot].stackSize <= amount) {
-					ItemStack item = items[slot];
-					items[slot] = null;
-					markDirty();
-					return item;
-				}
-				ItemStack item = items[slot].splitStack(amount);
-				if (items[slot].stackSize == 0) {
-					items[slot] = null;
-				}
-				markDirty();
-				return item;
-			}
-		}
-		return null;
+		return TileEntityInventory.decrStackSizeStatic(this, items, slot, amount);
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		if (items.length > slot) {
-			if (this.items[slot] != null) {
-				ItemStack item = this.items[slot];
-				this.items[slot] = null;
-				return item;
-			}
-		}
-		return null;
+	public ItemStack removeStackFromSlot(int slot) {
+		return TileEntityInventory.removeStackFromSlotStatic(items, slot);
 	}
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
-		if (items.length > slot) {
-			items[slot] = stack;
-			if (stack != null && stack.stackSize > getInventoryStackLimit()) {
-				stack.stackSize = getInventoryStackLimit();
-			}
-			markDirty();
-		}
+		TileEntityInventory.setInventorySlotContentsStatic(this, items, slot, stack);
 	}
 
 	@Override
-	public abstract String getInventoryName();
+	public abstract String getName();
 
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return false;
 	}
 
@@ -116,25 +84,53 @@ public abstract class EntityInventory extends Entity implements IInventory {
 
 	@Override
 	public void markDirty() {
-		for (int i = 0; i < items.length; i++)
-			if (items[i] != null && items[i].stackSize < 1)
-				items[i] = null;
+		for (int i = 0; i < items.size(); i++)
+			if (!items.get(i).isEmpty() && items.get(i).getCount() < 1)
+				items.set(i, ItemStack.EMPTY);
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
 		return true;
 	}
 
 	@Override
-	public void openInventory() {}
+	public void openInventory(EntityPlayer player) {}
 
 	@Override
-	public void closeInventory() {}
+	public void closeInventory(EntityPlayer player) {}
 
 	@Override
 	public abstract boolean isItemValidForSlot(int slot, ItemStack stack);
 
 	@Override
-	public abstract boolean interactFirst(EntityPlayer player);
+	public abstract boolean processInitialInteract(EntityPlayer player, EnumHand hand);
+
+	@Override
+	public boolean isEmpty() {
+		for (ItemStack itemStack : items)
+			if (!itemStack.isEmpty())
+				return false;
+		return true;
+	}
+
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+		items.clear();
+	}
 }

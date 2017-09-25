@@ -5,11 +5,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-
-import java.util.List;
+import net.minecraftforge.common.DimensionManager;
 
 /**
  * A class for aiding in manipulating worlds
@@ -32,7 +31,7 @@ public class WorldUtils {
 	 * @return The world
 	 */
 	public static World getWorldFromDimensionId(int id) {
-		return MinecraftServer.getServer().worldServerForDimension(id);
+		return DimensionManager.getWorld(id);
 	}
 	
 	/**
@@ -44,11 +43,11 @@ public class WorldUtils {
 	public static Entity getNearestEntityToLocation(Location location, double maxRange) {
 		World world = location.getWorld();
 		double x = location.getX(), y = location.getY(), z = location.getZ();
-		Vec3 desired = Vec3.createVectorHelper(x, y, z);
+		Vec3d desired = new Vec3d(x, y, z);
 		double lowestDistance = maxRange;
 		Entity closest = null;
-		for (Entity ent : (List<Entity>) world.loadedEntityList) {
-			Vec3 toCompare = Vec3.createVectorHelper(ent.posX, ent.posY, ent.posZ);
+		for (Entity ent : world.loadedEntityList) {
+			Vec3d toCompare = new Vec3d(ent.posX, ent.posY, ent.posZ);
 			double distance = desired.distanceTo(toCompare);
 			if (distance <= maxRange && distance < lowestDistance) {
 				lowestDistance = distance;
@@ -75,7 +74,7 @@ public class WorldUtils {
 	 */
 	public static EntityItem spawnItemInWorld(Location location, ItemStack stack) {
 		EntityItem item = new EntityItem(location.getWorld(), location.getX(), location.getY(), location.getZ(), stack);
-		location.getWorld().spawnEntityInWorld(item);
+		location.getWorld().spawnEntity(item);
 		return item;
 	}
 	
@@ -92,7 +91,7 @@ public class WorldUtils {
 		int x = location.getRoundedX();
 		int y = location.getRoundedY();
 		int z = location.getRoundedZ();
-		return world.blockExists(x, y, z) && !world.isAirBlock(x, y, z) && 
-				blockClass.isAssignableFrom(world.getBlock(x, y, z).getClass());
+		return !world.isAirBlock(new BlockPos(x, y, z)) &&
+				blockClass.isAssignableFrom(world.getBlockState(new BlockPos(x, y, z)).getBlock().getClass());
 	}
 }

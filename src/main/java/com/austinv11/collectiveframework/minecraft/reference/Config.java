@@ -2,8 +2,9 @@ package com.austinv11.collectiveframework.minecraft.reference;
 
 import com.austinv11.collectiveframework.minecraft.config.Description;
 
-@com.austinv11.collectiveframework.minecraft.config.Config(fileName = Reference.MOD_ID+".cfg")
+@com.austinv11.collectiveframework.minecraft.config.Config(fileName = Reference.MOD_ID+".cfg", exclude = {"INSTANCE"})
 public class Config {
+	public static final Config INSTANCE = new Config();
 	
 	@Description(comment = "Setting this to true will attempt to translate item names which are not localized", category = "Translation", clientSideOnly = true)
 	public static boolean translateItems = false;
@@ -40,4 +41,7 @@ public class Config {
 	
 	@Description(comment = "This can reduce the amount of RAM and permgen needed to run mc, but this disables various text related features", category = "Misc", clientSideOnly = true)
 	public static boolean disableRenderTextEvents = false;
+
+	@Description(comment = "Valid API key used for Yandex translations", category = "Translation", clientSideOnly = true)
+	public static String yandexApiKey = "";
 }

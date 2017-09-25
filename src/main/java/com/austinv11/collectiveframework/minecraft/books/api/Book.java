@@ -6,8 +6,6 @@ import com.austinv11.collectiveframework.minecraft.books.core.LocalBookData;
 import com.austinv11.collectiveframework.minecraft.utils.NBTHelper;
 import com.austinv11.collectiveframework.minecraft.utils.client.GuiUtils;
 import com.austinv11.collectiveframework.multithreading.SimpleRunnable;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -15,6 +13,8 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.File;
 import java.io.IOException;

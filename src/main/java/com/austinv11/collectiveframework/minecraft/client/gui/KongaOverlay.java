@@ -1,12 +1,12 @@
 package com.austinv11.collectiveframework.minecraft.client.gui;
 
 import com.austinv11.collectiveframework.minecraft.event.handler.HooksHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.Gui;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -20,11 +20,11 @@ public class KongaOverlay extends Gui {
 	@SubscribeEvent
 	public void renderOverlay(RenderGameOverlayEvent.Post event) {
 		if (HooksHandler.kongaTime) {
-			if (/*event.isCanceled() || */event.type != RenderGameOverlayEvent.ElementType.HOTBAR)
+			if (/*event.isCanceled() || */event.getType() != RenderGameOverlayEvent.ElementType.HOTBAR)
 				return;
 			GL11.glPushMatrix();
 			GL11.glEnable(GL11.GL_BLEND);
-			drawRect(0, 0, event.resolution.getScaledWidth(), event.resolution.getScaledHeight(), getColor());
+			drawRect(0, 0, event.getResolution().getScaledWidth(), event.getResolution().getScaledHeight(), getColor());
 			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glPopMatrix();
 		}
@@ -35,7 +35,7 @@ public class KongaOverlay extends Gui {
 		if (HooksHandler.kongaTime) {
 			GL11.glPushMatrix();
 			GL11.glEnable(GL11.GL_BLEND);
-			drawRect(0, 0, event.gui.width,  event.gui.height, getColor());
+			drawRect(0, 0, event.getGui().width,  event.getGui().height, getColor());
 			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glPopMatrix();
 		}

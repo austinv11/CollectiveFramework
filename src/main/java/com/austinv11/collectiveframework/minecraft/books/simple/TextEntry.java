@@ -2,10 +2,10 @@ package com.austinv11.collectiveframework.minecraft.books.simple;
 
 import com.austinv11.collectiveframework.minecraft.books.api.Entry;
 import com.austinv11.collectiveframework.utils.math.TwoDimensionalVector;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.awt.*;
 import java.util.ArrayList;

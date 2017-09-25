@@ -1,13 +1,15 @@
 package com.austinv11.collectiveframework.minecraft.network;
 
 import com.austinv11.collectiveframework.minecraft.utils.WorldUtils;
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 /**
  * Use this packet to sync tile entities (server to client)
@@ -43,7 +45,7 @@ public class TileEntityClientUpdatePacket implements IMessage {
 	@Override
 	public void toBytes(ByteBuf buf) {
 		NBTTagCompound tag = new NBTTagCompound();
-		tag.setInteger("dim", world.provider.dimensionId);
+		tag.setInteger("dim", world.provider.getDimension());
 		tag.setInteger("x", x);
 		tag.setInteger("y", y);
 		tag.setInteger("z", z);
@@ -55,7 +57,9 @@ public class TileEntityClientUpdatePacket implements IMessage {
 		
 		@Override
 		public IMessage onMessage(TileEntityClientUpdatePacket message, MessageContext ctx) {
-			message.world.getTileEntity(message.x, message.y, message.z).readFromNBT(message.updateData);
+			TileEntity tileEntity = message.world.getTileEntity(new BlockPos(message.x, message.y, message.z));
+			if (tileEntity != null)
+				tileEntity.readFromNBT(message.updateData);
 			return null;
 		}
 	}

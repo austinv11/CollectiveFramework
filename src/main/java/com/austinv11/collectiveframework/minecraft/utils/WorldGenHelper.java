@@ -2,7 +2,8 @@ package com.austinv11.collectiveframework.minecraft.utils;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -21,7 +22,7 @@ public class WorldGenHelper {
 	 */
 	public static boolean spawnOreBlock(World world, int x, int y, int z, Block block) {
 		if (isLocationSuitableForOre(world, x, y, z)) {
-			world.setBlock(x, y, z, block, 0, 2);
+			world.setBlockState(new BlockPos(x, y, z), block.getDefaultState());
 			return true;
 		}
 		return false;
@@ -36,10 +37,11 @@ public class WorldGenHelper {
 	 * @return True if the block can be spawned
 	 */
 	public static boolean isLocationSuitableForOre(World world, int x, int y, int z) {
-		if (!world.isAirBlock(x, y, z)) {
-			if (!world.isAnyLiquid(AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1))) {
-				if (world.getBlock(x, y, z).equals(Blocks.stone) || world.getBlock(x, y, z).equals(Blocks.netherrack) ||
-						world.getBlock(x, y, z).equals(Blocks.end_stone))
+		if (!world.isAirBlock(new BlockPos(x, y, z))) {
+			if (!world.containsAnyLiquid(new AxisAlignedBB(x, y, z, x+1, y+1, z+1))) {
+				if (world.getBlockState(new BlockPos(x, y, z)).getBlock().equals(Blocks.STONE) ||
+						world.getBlockState(new BlockPos(x, y, z)).getBlock().equals(Blocks.NETHERRACK) ||
+						world.getBlockState(new BlockPos(x, y, z)).getBlock().equals(Blocks.END_STONE))
 					return true;
 			}
 		}

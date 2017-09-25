@@ -3,13 +3,14 @@ package com.austinv11.collectiveframework.minecraft.utils;
 import com.austinv11.collectiveframework.language.TranslationManager;
 import com.austinv11.collectiveframework.language.translation.TranslationException;
 import com.austinv11.collectiveframework.minecraft.reference.Config;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.StatCollector;
-import net.minecraft.util.StringTranslate;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraft.util.text.translation.LanguageMap;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -31,10 +32,10 @@ public class MinecraftTranslator {
 	 * @throws IOException
 	 */
 	public static String translate(String text, String toLang) throws IOException, TranslationException {
-		if (StatCollector.canTranslate(text)) {
-			return StatCollector.translateToLocal(text);
+		if (I18n.canTranslate(text)) {
+			return I18n.translateToLocal(text);
 		}
-		String toTranslate = StatCollector.translateToFallback(text);
+		String toTranslate = I18n.translateToFallback(text);
 		return TranslationManager.translate(toTranslate, toLang);
 	}
 	
@@ -48,10 +49,10 @@ public class MinecraftTranslator {
 	 * @throws IOException
 	 */
 	public static String translate(String text, String fromLang, String toLang) throws TranslationException, IOException {
-		if (StatCollector.canTranslate(text)) {
-			return StatCollector.translateToLocal(text);
+		if (I18n.canTranslate(text)) {
+			return I18n.translateToLocal(text);
 		}
-		String toTranslate = StatCollector.translateToFallback(text);
+		String toTranslate = I18n.translateToFallback(text);
 		return TranslationManager.translate(toTranslate, fromLang, toLang);
 	}
 	
@@ -101,14 +102,12 @@ public class MinecraftTranslator {
 	public void onTooltipEvent(ItemTooltipEvent event) {
 		if (Config.translateItems)
 			try {
-				if (!StatCollector.canTranslate(event.itemStack.getUnlocalizedName()) && getFallback().containsTranslateKey(event.itemStack.getUnlocalizedName()))
-					if (StatCollector.translateToFallback(event.itemStack.getUnlocalizedName()).equals(event.itemStack.getDisplayName())) {
-						String toTranslate = event.itemStack.getDisplayName();
-						event.itemStack.setStackDisplayName(translateToLocal(toTranslate, "en"));
+				if (!I18n.canTranslate(event.getItemStack().getUnlocalizedName()) && getFallback().isKeyTranslated(event.getItemStack().getUnlocalizedName()))
+					if (I18n.translateToFallback(event.getItemStack().getUnlocalizedName()).equals(event.getItemStack().getDisplayName())) {
+						String toTranslate = event.getItemStack().getDisplayName();
+						event.getItemStack().setStackDisplayName(translateToLocal(toTranslate, "en"));
 					}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			} catch (Exception ignore) {}
 		
 	}
 	
@@ -117,18 +116,19 @@ public class MinecraftTranslator {
 		if (Config.translateChat)
 			if (!event.isCanceled())
 				try {
-					String message = getFallback().containsTranslateKey(event.message.getUnformattedText()) ? StatCollector.translateToFallback(event.message.getUnformattedText()) :event.message.getUnformattedText();
-					event.message = new ChatComponentText(translateToLocal(message, "en"));
+					String message = getFallback().isKeyTranslated(event.getMessage().getUnformattedText()) ?
+							I18n.translateToFallback(event.getMessage().getUnformattedText()) :
+							event.getMessage().getUnformattedText();
+					event.setMessage(new TextComponentString(translateToLocal(message, "en")));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 	}
 	
-	private static StringTranslate getFallback() throws IllegalAccessException, NoSuchFieldException {
-		if (fallback == null) {
-			fallback = StatCollector.class.getDeclaredField("fallbackTranslator");
-			fallback.setAccessible(true);
-		}
-		return (StringTranslate) fallback.get(null);
+	private static LanguageMap getFallback() throws IllegalAccessException, NoSuchFieldException {
+		if (fallback == null)
+			fallback = ReflectionHelper.getPrivateValue(I18n.class, null, "fallbackTranslator",
+					"field_150828_b");
+		return (LanguageMap) fallback.get(null);
 	}
 }

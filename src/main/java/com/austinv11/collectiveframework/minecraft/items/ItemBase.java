@@ -1,11 +1,10 @@
 package com.austinv11.collectiveframework.minecraft.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Simple implementation of an item
@@ -39,12 +38,6 @@ public abstract class ItemBase extends Item {
 	@Override
 	public String getUnlocalizedName(ItemStack item){//Formats the name
 		return String.format("item.%s%s", getModId().toLowerCase()+":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister iconRegister){//Sets the icon
-		itemIcon = iconRegister.registerIcon(String.format("%s", getUnwrappedUnlocalizedName(this.getUnlocalizedName())));
 	}
 	
 	protected String getUnwrappedUnlocalizedName(String unlocalizedName){//Removes the "item." from the item name

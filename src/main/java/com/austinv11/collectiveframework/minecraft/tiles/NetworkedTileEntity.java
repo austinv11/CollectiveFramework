@@ -1,12 +1,13 @@
 package com.austinv11.collectiveframework.minecraft.tiles;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 /**
  * Simple Tile Entity implementation which is networked
@@ -17,17 +18,17 @@ public abstract class NetworkedTileEntity extends TileEntity {
 		super();
 	}
 
+	@Nullable
 	@Override
-	public Packet getDescriptionPacket() {
+	public SPacketUpdateTileEntity getUpdatePacket() {
 		NBTTagCompound tag = new NBTTagCompound();
 		writeToNBT(tag);
-		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 3, tag);
+		return new SPacketUpdateTileEntity(getPos(), 3, tag);
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-		readFromNBT(pkt.func_148857_g());
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		readFromNBT(pkt.getNbtCompound());
 	}
-
 }
