@@ -1,10 +1,10 @@
 package com.austinv11.collectiveframework.minecraft.init;
 
 import com.austinv11.collectiveframework.minecraft.reference.Config;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
 /**

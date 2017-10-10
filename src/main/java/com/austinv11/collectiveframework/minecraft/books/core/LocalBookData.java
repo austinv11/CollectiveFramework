@@ -3,8 +3,8 @@ package com.austinv11.collectiveframework.minecraft.books.core;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.WorldSavedData;
+import net.minecraft.world.storage.WorldSavedData;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.HashMap;
@@ -31,23 +31,24 @@ public class LocalBookData extends WorldSavedData {
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound tag) {
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
 		NBTTagList list = new NBTTagList();
 		for (String key : data.keySet()) {
 			list.appendTag(new NBTTagString(key));
 			tag.setTag(key, data.get(key));
 		}
 		tag.setTag("data", list);
+		return tag;
 	}
 	
 	private static LocalBookData loadData() {
 		if (!hasLoaded)
 			createData();
-		return (LocalBookData) MinecraftServer.getServer().worldServerForDimension(0).loadItemData(LocalBookData.class, IDENTIFIER);
+		return (LocalBookData) DimensionManager.getWorld(0).loadData(LocalBookData.class, IDENTIFIER);
 	}
 	
 	private static void createData() {
-		MinecraftServer.getServer().worldServerForDimension(0).setItemData(IDENTIFIER, new LocalBookData());
+		DimensionManager.getWorld(0).setData(IDENTIFIER, new LocalBookData());
 		hasLoaded = true;
 	}
 	

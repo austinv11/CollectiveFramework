@@ -1,8 +1,8 @@
 package com.austinv11.collectiveframework.minecraft.utils;
 
 import com.austinv11.collectiveframework.dependencies.DependencyManager;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModClassLoader;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModClassLoader;
 
 import java.io.File;
 import java.net.MalformedURLException;

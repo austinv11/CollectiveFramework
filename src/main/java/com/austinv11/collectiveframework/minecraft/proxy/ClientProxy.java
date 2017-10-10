@@ -6,12 +6,15 @@ import com.austinv11.collectiveframework.minecraft.client.gui.KongaOverlay;
 import com.austinv11.collectiveframework.minecraft.event.handler.HooksHandler;
 import com.austinv11.collectiveframework.minecraft.event.handler.KeyHandler;
 import com.austinv11.collectiveframework.minecraft.event.handler.ClientTickHandler;
+import com.austinv11.collectiveframework.minecraft.event.handler.TooltipHandler;
 import com.austinv11.collectiveframework.minecraft.init.Keybindings;
-import com.austinv11.collectiveframework.minecraft.utils.IconManager;
+import com.austinv11.collectiveframework.minecraft.utils.ModelManager;
+import com.austinv11.collectiveframework.minecraft.utils.TextureManager;
+import com.austinv11.collectiveframework.minecraft.utils.MinecraftTranslator;
 import com.austinv11.collectiveframework.multithreading.SimpleRunnable;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 import rehost.javazoom.jl.player.Player;
 
 import java.io.BufferedInputStream;
@@ -80,11 +83,14 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void registerEvents() {
 		super.registerEvents();
-		MinecraftForge.EVENT_BUS.register(new IconManager());
+		MinecraftForge.EVENT_BUS.register(new TextureManager());
+		MinecraftForge.EVENT_BUS.register(new ModelManager());
 		MinecraftForge.EVENT_BUS.register(new KeyOverlay());
 		FMLCommonHandler.instance().bus().register(new KeyHandler());
 		MinecraftForge.EVENT_BUS.register(new KongaOverlay());
 		FMLCommonHandler.instance().bus().register(new ClientTickHandler());
+		MinecraftForge.EVENT_BUS.register(new MinecraftTranslator());
+		MinecraftForge.EVENT_BUS.register(new TooltipHandler());
 	}
 	
 	@Override

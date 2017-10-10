@@ -20,6 +20,7 @@
 /*.ipr
 /*.iws
 /atlassian-ide-plugin.xml
+/classes
 
 ## Misc
 VERSION.txt

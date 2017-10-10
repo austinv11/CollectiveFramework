@@ -134,7 +134,7 @@ public class ThreeDimensionalVector implements Comparable {
 	}
 	
 	private double squareDistanceTo(ThreeDimensionalVector other) {
-		return Math.pow(x-other.x, 2) + Math.pow(y-other.y, 2);
+		return Math.pow(x-other.x, 2) + Math.pow(y-other.y, 2) + Math.pow(z-other.z, 2);
 	}
 	
 	/**

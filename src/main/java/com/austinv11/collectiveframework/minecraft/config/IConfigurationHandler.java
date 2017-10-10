@@ -1,7 +1,12 @@
 package com.austinv11.collectiveframework.minecraft.config;
 
+import net.minecraftforge.fml.client.config.GuiConfigEntries;
+import net.minecraftforge.fml.client.config.IConfigElement;
+
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -78,4 +83,14 @@ public interface IConfigurationHandler {
 	 * @return The config
 	 */
 	public String convertToString(Object config);
+
+	/**
+	 * @see ConfigRegistry#getCategories(Object, String)
+	 */
+	ArrayList<IConfigElement> getCategories(Object configObject, String modid) throws IllegalAccessException, ConfigException;
+
+	/**
+	 * @see ConfigRegistry#onGuiClosed(Object, List)
+	 */
+	void onGuiClosed(Object configObject, List<GuiConfigEntries.IConfigEntry> entries) throws ConfigException;
 }

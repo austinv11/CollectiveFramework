@@ -5,57 +5,59 @@ package com.austinv11.collectiveframework.minecraft.reference;
  */
 public class ModIds {
 	
-	public static final String PeripheralsPlusPlus = "PeripheralsPlusPlus";
+	public static final String PERIPHERALS_PLUS_PLUS = "peripheralsplusplus";
 	
-	public static final String ComputerCraft = "ComputerCraft";
+	public static final String COMPUTERCRAFT = "computercraft";
 	
-	public static final String Forestry = "Forestry";
+	public static final String FORESTRY = "forestry";
 	
-	public static final String AppliedEnergistics2 = "appliedenergistics2";
+	public static final String APPLIED_ENGERGISTICS = "appliedenergistics2";
 	
-	public static final String Factorization = "factorization";
+	public static final String FACTORIZATION = "factorization";
 	
-	public static final String JABBA = "JABBA";
+	public static final String JABBA = "jabba";
+
+	public static final String PROJECT_RED_EXPLORATION = "projred|exploration";
 	
-	public static final String ProjectRed_Exploration = "ProjRed|Exploration";
+	public static final String BLUE_POWER = "bluepower";
 	
-	public static final String BluePower = "bluepower";
+	public static final String THERMAL_EXPANSION = "thermalexpansion";
+
+	public static final String THERMAL_FOUNDATION = "thermalfoundation";
 	
-	public static final String ThermalExpansion = "ThermalExpansion";
+	public static final String BUILDCRAFT_CORE = "buildcraft|core";
 	
-	public static final String BuildCraft_Core = "BuildCraft|Core";
+	public static final String INDUSTRIALCRAFT_2 = "ic2";
 	
-	public static final String IndustrialCraft2 = "IC2";
+	public static final String FORGE_MULTIPART = "forgemultipart";
 	
-	public static final String ForgeMultipart = "ForgeMultipart";
+	public static final String WAILA = "waila";
 	
-	public static final String WAILA = "Waila";
+	public static final String NOT_ENOUGH_ITEMS = "notenoughitems";
 	
-	public static final String NotEnoughItems = "NotEnoughItems";
+	public static final String CHISEL = "chisel";
 	
-	public static final String Chisel = "chisel";
+	public static final String MINEFACTORY_RELOADED = "minefactoryreloaded";
 	
-	public static final String MineFactoryReloaded = "MineFactoryReloaded";
+	public static final String THAUMCRAFT = "thaumcraft";
 	
-	public static final String Thaumcraft = "Thaumcraft";
+	public static final String BLOOD_MAGIC = "awwayoftime";
 	
-	public static final String BloodMagic = "AWWayofTime";
+	public static final String OPEN_BLOCKS = "openblocks";
 	
-	public static final String OpenBlocks = "OpenBlocks";
+	public static final String COFH_CORE = "cofhcore";
 	
-	public static final String CofhCore = "CoFHCore";
+	public static final String OPEN_COMPUTERS_CORE = "opencomputers|core";
 	
-	public static final String OpenComputers_Core = "OpenComputers|Core";
+	public static final String EE3 = "ee3";
 	
-	public static final String EE3 = "EE3";
+	public static final String RAILCRAFT = "railcraft";
 	
-	public static final String Railcraft = "Railcraft";
+	public static final String DIMENSIONAL_ANCHORS = "dimensionalanchors";
 	
-	public static final String DimensionalAnchors = "DimensionalAnchors";
+	public static final String IMMIBIS_CORE = "immibisCore";
 	
-	public static final String ImmibisCore = "ImmibisCore";
+	public static final String CHICKEN_CHUNKS = "chickenchunks";
 	
-	public static final String ChickenChunks = "ChickenChunks";
-	
-	public static final String Husbandry = "Husbandry";
+	public static final String HUSBANDRY = "husbandry";
 }

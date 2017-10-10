@@ -3,11 +3,11 @@ package com.austinv11.collectiveframework.minecraft.asm;
 import com.austinv11.collectiveframework.minecraft.reference.Reference;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-import cpw.mods.fml.common.DummyModContainer;
-import cpw.mods.fml.common.LoadController;
-import cpw.mods.fml.common.ModClassLoader;
-import cpw.mods.fml.common.ModMetadata;
-import cpw.mods.fml.common.event.FMLConstructionEvent;
+import net.minecraftforge.fml.common.DummyModContainer;
+import net.minecraftforge.fml.common.LoadController;
+import net.minecraftforge.fml.common.ModClassLoader;
+import net.minecraftforge.fml.common.ModMetadata;
+import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 
 public class DummyContainer extends DummyModContainer {
 	

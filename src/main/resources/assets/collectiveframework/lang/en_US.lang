@@ -3,3 +3,29 @@
 collectiveframework.keybindings.category=Collective Framework
 collectiveframework.keybindings.timeBack=Time Backwards
 collectiveframework.keybindings.timeForward=Time Forwards
+
+#Config Lang
+collectiveframework.lang.config.Development=Development
+collectiveframework.lang.config.Development.tooltip=Development Features
+collectiveframework.lang.config.Development.debugTooltips=Debug Tooltips
+collectiveframework.lang.config.Development.keyOverlay=Key Overlay
+
+collectiveframework.lang.config.Misc=Misc
+collectiveframework.lang.config.Misc.tooltip=Miscellaneous Features
+collectiveframework.lang.config.Misc.applyColorPatch=Color Patch
+collectiveframework.lang.config.Misc.clickOnMainMenuOpen=Main Menu Click Sound
+collectiveframework.lang.config.Misc.disableRenderTextEvents=Disable Render Text Events
+collectiveframework.lang.config.Misc.enableButtonTimeChanging=Change Time Buttons
+collectiveframework.lang.config.Misc.enableCloudToButt=Cloud To Butt
+collectiveframework.lang.config.Misc.restrictThreadUsage=Restrict Threads
+collectiveframework.lang.config.Misc.timeChangeRate=Time Change Rate
+
+collectiveframework.lang.config.Translation=Translation
+collectiveframework.lang.config.Translation.tooltip=Translation Options
+collectiveframework.lang.config.Translation.translateChat=Translate Chat
+collectiveframework.lang.config.Translation.translateItems=Translate Items
+collectiveframework.lang.config.Translation.yandexApiKey=Yandex API Key
+
+collectiveframework.lang.config.Tweaks=Tweaks
+collectiveframework.lang.config.Tweaks.tooltip=Various Tweaks
+collectiveframework.lang.config.Tweaks.commandBroadcastRelay=Command Broadcast Relay

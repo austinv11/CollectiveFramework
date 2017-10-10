@@ -8,11 +8,11 @@ import com.austinv11.collectiveframework.utils.FileUtils;
 import com.austinv11.collectiveframework.utils.StringUtils;
 import com.austinv11.collectiveframework.utils.WebUtils;
 import com.google.gson.Gson;
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.relauncher.CoreModManager;
-import cpw.mods.fml.relauncher.IFMLCallHook;
-import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.relauncher.CoreModManager;
+import net.minecraftforge.fml.relauncher.IFMLCallHook;
+import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.apache.logging.log4j.Level;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -48,17 +48,17 @@ public class CollectiveFrameworkEarlyTransformerPlugin implements IFMLLoadingPlu
 	public CollectiveFrameworkEarlyTransformerPlugin() {
 		if (!didInject) {
 			try {
-				FMLLog.log("CollectiveFramework Early-Init", Level.INFO, "Injecting transformer...");
+				FMLLog.log.debug("CollectiveFramework Early-Init", Level.INFO, "Injecting transformer...");
 				injectNewTransformer();
 			} catch (Exception e) {
-				FMLLog.log("CollectiveFramework Early-Init", Level.FATAL, "There was a problem injecting the CollectiveFramework ASM Transformer!");
+				FMLLog.log.debug("CollectiveFramework Early-Init", Level.FATAL, "There was a problem injecting the CollectiveFramework ASM Transformer!");
 				e.printStackTrace();
 			}
 		}
 	}
 	
 	private void injectNewTransformer() throws ClassNotFoundException, NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException, InstantiationException {
-		Class e = Class.forName("cpw.mods.fml.relauncher.CoreModManager$FMLPluginWrapper");
+		Class e = Class.forName("net.minecraftforge.fml.relauncher.CoreModManager$FMLPluginWrapper");
 		Constructor wrapperConstructor = e.getConstructor(new Class[]{String.class, IFMLLoadingPlugin.class, File.class, Integer.TYPE, String[].class});
 		Field loadPlugins = CoreModManager.class.getDeclaredField("loadPlugins");
 		wrapperConstructor.setAccessible(true);

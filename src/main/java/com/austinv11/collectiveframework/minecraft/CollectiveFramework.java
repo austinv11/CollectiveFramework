@@ -5,7 +5,6 @@ import com.austinv11.collectiveframework.minecraft.client.gui.GuiHandler;
 import com.austinv11.collectiveframework.minecraft.compat.modules.Modules;
 import com.austinv11.collectiveframework.minecraft.config.ConfigException;
 import com.austinv11.collectiveframework.minecraft.config.ConfigRegistry;
-import com.austinv11.collectiveframework.minecraft.logging.Logger;
 import com.austinv11.collectiveframework.minecraft.network.ConfigPacket;
 import com.austinv11.collectiveframework.minecraft.network.TileEntityClientUpdatePacket;
 import com.austinv11.collectiveframework.minecraft.network.TileEntityServerUpdatePacket;
@@ -15,25 +14,28 @@ import com.austinv11.collectiveframework.minecraft.reference.Config;
 import com.austinv11.collectiveframework.minecraft.reference.Reference;
 import com.austinv11.collectiveframework.multithreading.SimpleRunnable;
 import com.austinv11.collectiveframework.utils.TimeProfiler;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.Side;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-@Mod(modid= Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, acceptableRemoteVersions = "*"/*, guiFactory = Reference.GUI_FACTORY_CLASS*/)
+@Mod(modid= Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, acceptableRemoteVersions = "*",
+		guiFactory = Reference.GUI_FACTORY_CLASS)
 public class CollectiveFramework {
 	
 	public static SimpleNetworkWrapper NETWORK;
 	
-	public static Logger LOGGER = new Logger(Reference.MOD_NAME);
+	public static Logger LOGGER = LogManager.getLogger(Reference.MOD_ID);
 	
 	@Mod.Instance(Reference.MOD_ID)
 	public static CollectiveFramework instance;
@@ -46,12 +48,13 @@ public class CollectiveFramework {
 	 */
 	public static boolean IS_DEV_ENVIRONMENT;
 	private static boolean didCheck = false;
-	
+
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+		LOGGER = event.getModLog();
 		TimeProfiler profiler = new TimeProfiler();
 		try {
-			ConfigRegistry.registerConfig(new Config());
+			ConfigRegistry.registerConfig(Config.INSTANCE);
 		} catch (ConfigException e) {
 			e.printStackTrace();
 		}

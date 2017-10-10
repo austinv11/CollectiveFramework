@@ -1,6 +1,7 @@
 package com.austinv11.collectiveframework.minecraft.utils;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.HashMap;
 
@@ -84,7 +85,8 @@ public class StructureCreator {
 			return;
 		for (Location l : blocks.keySet()) {
 			if (errorCheckers.get(l).isBlockValid(blocks.get(l), metas.get(blocks.get(l)), l) || forceOptionalBlocks)
-				l.getWorld().setBlock(l.getRoundedX(), l.getRoundedY(), l.getRoundedZ(), blocks.get(l), metas.get(blocks.get(l)), 2);
+				l.getWorld().setBlockState(new BlockPos(l.getRoundedX(), l.getRoundedY(), l.getRoundedZ()),
+						blocks.get(l).getDefaultState(), 2);
 		}
 	}
 	
@@ -92,8 +94,11 @@ public class StructureCreator {
 		
 		@Override
 		public boolean isBlockValid(Block block, int meta, Location location) {
-			return location.getWorld().isAirBlock(location.getRoundedX(), location.getRoundedY(), location.getRoundedZ()) 
-					|| location.getWorld().getBlock(location.getRoundedX(), location.getRoundedY(), location.getRoundedZ()).getMaterial().isReplaceable();
+			return location.getWorld().isAirBlock(
+					new BlockPos(location.getRoundedX(), location.getRoundedY(), location.getRoundedZ()))
+					|| location.getWorld().getBlockState(
+							new BlockPos(location.getRoundedX(), location.getRoundedY(), location.getRoundedZ()))
+					.getMaterial().isReplaceable();
 		}
 		
 		@Override

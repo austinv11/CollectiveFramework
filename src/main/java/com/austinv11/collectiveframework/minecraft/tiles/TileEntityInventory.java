@@ -6,19 +6,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.util.Constants;
 
 /**
  * Simple implementation for a Tile Entity to contain an inventory
  */
-public abstract class TileEntityInventory extends TileEntity implements IInventory {
+public abstract class TileEntityInventory extends TileEntity implements IInventory, ITickable {
 
-	public ItemStack[] items;
+	public NonNullList<ItemStack> items;
 	public String invName = "null";
 	private int numUsingPlayers = 0;
 	
 	public TileEntityInventory() {
-		items = new ItemStack[getSize()];
+		items = NonNullList.withSize(getSize(), ItemStack.EMPTY);
 	}
 	
 	/**
@@ -28,37 +30,32 @@ public abstract class TileEntityInventory extends TileEntity implements IInvento
 	public abstract int getSize();
 	
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
-		NBTTagList nbttaglist = nbttagcompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
-		items = new ItemStack[getSize()];
-		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-			int j = nbttagcompound1.getByte("Slot") & 0xff;
-			if (j >= 0 && j < items.length) {
-				items[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
-			}
+		NBTTagList itemsNbt = nbttagcompound.getTagList("items", Constants.NBT.TAG_COMPOUND);
+		items = NonNullList.withSize(getSize(), ItemStack.EMPTY);
+		for (int itemIndex = 0; itemIndex < items.size(); itemIndex++) {
+			NBTTagCompound itemNbt = itemsNbt.getCompoundTagAt(itemIndex);
+			items.set(itemIndex, new ItemStack(itemNbt));
 		}
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
-		NBTTagList nbttaglist = new NBTTagList();
-		for (int i = 0; i < items.length; i++) {
-			if (items[i] != null) {
-				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-				nbttagcompound1.setByte("Slot", (byte) i);
-				items[i].writeToNBT(nbttagcompound1);
-				nbttaglist.appendTag(nbttagcompound1);
-			}
+		NBTTagList itemsNbt = new NBTTagList();
+		for (ItemStack item : items) {
+			NBTTagCompound itemNbt = new NBTTagCompound();
+			item.writeToNBT(itemNbt);
+			itemsNbt.appendTag(itemNbt);
 		}
-		nbttagcompound.setTag("Items", nbttaglist);
+		nbttagcompound.setTag("items", itemsNbt);
+		return nbttagcompound;
 	}
 
 	@Override
@@ -68,62 +65,76 @@ public abstract class TileEntityInventory extends TileEntity implements IInvento
 
 	@Override
 	public ItemStack getStackInSlot(int slot) {
-		if (items.length > slot)
-			return items[slot];
-		return null;
+		if (items.size() > slot)
+			return items.get(slot);
+		return ItemStack.EMPTY;
 	}
 
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
-		if (items.length > slot) {
-			if (items[slot] != null) {
-				if (items[slot].stackSize <= amount) {
-					ItemStack item = items[slot];
-					items[slot] = null;
-					markDirty();
+		return decrStackSizeStatic(this, items, slot, amount);
+	}
+
+	public static ItemStack decrStackSizeStatic(IInventory inventory, NonNullList<ItemStack> items, int slot,
+												int amount) {
+		if (items.size() > slot) {
+			if (!items.get(slot).isEmpty()) {
+				if (items.get(slot).getCount() <= amount) {
+					ItemStack item = items.get(slot);
+					items.set(slot, ItemStack.EMPTY);
+					inventory.markDirty();
 					return item;
 				}
-				ItemStack item = items[slot].splitStack(amount);
-				if (items[slot].stackSize == 0) {
-					items[slot] = null;
+				ItemStack item = items.get(slot).splitStack(amount);
+				if (items.get(slot).getCount() == 0) {
+					items.set(slot, ItemStack.EMPTY);
 				}
-				markDirty();
+				inventory.markDirty();
 				return item;
 			}
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		if (items.length > slot) {
-			if (this.items[slot] != null) {
-				ItemStack item = this.items[slot];
-				this.items[slot] = null;
+	public ItemStack removeStackFromSlot(int slot) {
+		return removeStackFromSlotStatic(items, slot);
+	}
+
+	public static ItemStack removeStackFromSlotStatic(NonNullList<ItemStack> items, int slot) {
+		if (items.size() > slot) {
+			if (!items.get(slot).isEmpty()) {
+				ItemStack item = items.get(slot);
+				items.set(slot, ItemStack.EMPTY);
 				return item;
 			}
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
-		if (items.length > slot) {
-			items[slot] = stack;
-			if (stack != null && stack.stackSize > getInventoryStackLimit()) {
-				stack.stackSize = getInventoryStackLimit();
+		setInventorySlotContentsStatic(this, items, slot, stack);
+	}
+
+	public static void setInventorySlotContentsStatic(IInventory inventory, NonNullList<ItemStack> items, int slot,
+													  ItemStack stack) {
+		if (items.size() > slot) {
+			items.set(slot, stack);
+			if (!stack.isEmpty() && stack.getCount() > inventory.getInventoryStackLimit()) {
+				stack.setCount(inventory.getInventoryStackLimit());
 			}
-			markDirty();
+			inventory.markDirty();
 		}
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return invName;
 	}
 
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return false;
 	}
 
@@ -133,26 +144,27 @@ public abstract class TileEntityInventory extends TileEntity implements IInvento
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		if (worldObj == null) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
+		if (world == null) {
 			return true;
 		}
-		if (worldObj.getTileEntity(xCoord, yCoord, zCoord) != this) {
+		if (world.getTileEntity(getPos()) != this) {
 			return false;
 		}
-		return player.getDistanceSq((double) xCoord + 0.5D, (double) yCoord + 0.5D, (double) zCoord + 0.5D) <= 64D;
+		return player.getDistanceSq((double) getPos().getX() + 0.5D, (double) getPos().getY() + 0.5D,
+				(double) getPos().getZ() + 0.5D) <= 64D;
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer player) {
 		numUsingPlayers++;
-		worldObj.addBlockEvent(xCoord, yCoord, zCoord, this.getBlockType(), 1, numUsingPlayers);
+		world.addBlockEvent(getPos(), this.getBlockType(), 1, numUsingPlayers);
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer player) {
 		numUsingPlayers--;
-		worldObj.addBlockEvent(xCoord, yCoord, zCoord, this.getBlockType(), 1, numUsingPlayers);
+		world.addBlockEvent(getPos(), this.getBlockType(), 1, numUsingPlayers);
 	}
 
 	@Override
@@ -162,9 +174,37 @@ public abstract class TileEntityInventory extends TileEntity implements IInvento
 	
 	@Override
 	public void markDirty() {
-		for (int i = 0; i < items.length; i++)
-			if (items[i] != null && items[i].stackSize < 1)
-				items[i] = null;
+		for (int i = 0; i < items.size(); i++)
+			if (!items.get(i).isEmpty() && items.get(i).getCount() < 1)
+				items.set(i, ItemStack.EMPTY);
 		super.markDirty();
+	}
+
+	@Override
+	public boolean isEmpty() {
+		for (ItemStack itemStack : items)
+			if (!itemStack.isEmpty())
+				return false;
+		return true;
+	}
+
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+		items.clear();
 	}
 }

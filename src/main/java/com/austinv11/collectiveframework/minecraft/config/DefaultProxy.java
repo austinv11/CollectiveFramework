@@ -2,9 +2,11 @@ package com.austinv11.collectiveframework.minecraft.config;
 
 import com.austinv11.collectiveframework.utils.ArrayUtils;
 import com.austinv11.collectiveframework.utils.ReflectionUtils;
+import net.minecraftforge.common.config.Property;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Locale;
 
 /**
  * A default config proxy for primitive (also includes strings) and array types
@@ -13,7 +15,8 @@ public class DefaultProxy implements IConfigProxy {
 	
 	@Override
 	public boolean canSerializeObject(Object o) {
-		return o.getClass().isArray() || ReflectionUtils.isPrimitiveObject(o) || o instanceof String;
+		return o.getClass().isArray() || ReflectionUtils.isPrimitiveObject(o) || o instanceof String ||
+				o instanceof Property.Type;
 	}
 	
 	@Override
@@ -23,13 +26,18 @@ public class DefaultProxy implements IConfigProxy {
 	
 	@Override
 	public String getKey(Object o) {
-		if (o.getClass().isArray()) {
+		if (o instanceof Property.Type)
+			return convertForgeConfigPropertyTypeToFrameworkName((Property.Type)o);
+		else if (o.getClass().isArray())
 			return convertPrimitiveNameToObjectName(o.getClass().getComponentType().getSimpleName())+" Array";
-		} else {
+		else
 			return convertPrimitiveNameToObjectName(o.getClass().getSimpleName());
-		}
 	}
-	
+
+	private String convertForgeConfigPropertyTypeToFrameworkName(Property.Type type) {
+		return type.name().substring(0, 1) + type.name().toLowerCase(Locale.US).substring(1);
+	}
+
 	private String convertPrimitiveNameToObjectName(String primitiveName) {
 		if (primitiveName.equalsIgnoreCase("int"))
 			return "Integer";
@@ -73,11 +81,21 @@ public class DefaultProxy implements IConfigProxy {
 	
 	@Override
 	public Object deserialize(String key, String s) throws ConfigException {
+		try {
+			return deserializeUnSafe(key, s);
+		}
+		catch (ClassCastException | IllegalArgumentException e) {
+			return s;
+		}
+	}
+
+	public Object deserializeUnSafe(String key, String s) throws ConfigException {
 		if (!isKeyUsable(key))
 			throw new ConfigException("String "+s+" is invalid for this proxy");
 		if (key.contains("Array")) {
 			s = s.replaceFirst("\\[", "");
-			s = s.substring(0, s.lastIndexOf("]"));
+			if (s.lastIndexOf("]") > -1)
+				s = s.substring(0, s.lastIndexOf("]"));
 			String[] toSerialize = s.split(",");
 			String[] trimmedToSerialize = ArrayUtils.trimAll(toSerialize);
 			Object[] deserialized = new Object[trimmedToSerialize.length];

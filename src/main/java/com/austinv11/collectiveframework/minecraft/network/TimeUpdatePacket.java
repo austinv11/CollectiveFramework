@@ -2,14 +2,15 @@ package com.austinv11.collectiveframework.minecraft.network;
 
 import com.austinv11.collectiveframework.minecraft.reference.Config;
 import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import java.util.UUID;
 
@@ -49,9 +50,16 @@ public class TimeUpdatePacket implements IMessage {
 		
 		@Override
 		public IMessage onMessage(TimeUpdatePacket message, MessageContext ctx) {
-			if (Config.enableButtonTimeChanging &&
-					MinecraftServer.getServer().getConfigurationManager().func_152596_g(message.profile)) {
-				for (WorldServer world : MinecraftServer.getServer().worldServers)
+			boolean playerCanSendCommands = false;
+			for (WorldServer world : DimensionManager.getWorlds()) {
+				MinecraftServer server = world.getMinecraftServer();
+				if (server != null && server.getPlayerList().canSendCommands(message.profile)) {
+					playerCanSendCommands = true;
+					break;
+				}
+			}
+			if (Config.enableButtonTimeChanging && playerCanSendCommands) {
+				for (WorldServer world : DimensionManager.getWorlds())
 					world.setWorldTime(message.startTime+message.time);
 			}
 			return null;

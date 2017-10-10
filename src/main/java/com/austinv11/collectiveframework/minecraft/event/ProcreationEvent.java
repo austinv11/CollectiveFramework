@@ -1,9 +1,9 @@
 package com.austinv11.collectiveframework.minecraft.event;
 
-import cpw.mods.fml.common.eventhandler.Cancelable;
-import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraftforge.fml.common.eventhandler.Cancelable;
+import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**
  * This represents a procreation event, the event is fired in two stages, {@link com.austinv11.collectiveframework.minecraft.event.ProcreationEvent.Pre}

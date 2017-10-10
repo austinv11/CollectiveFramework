@@ -4,11 +4,11 @@ import com.austinv11.collectiveframework.minecraft.event.RenderBookTextureEvent;
 import com.austinv11.collectiveframework.minecraft.event.RenderStringEvent;
 import com.austinv11.collectiveframework.minecraft.reference.Config;
 import com.austinv11.collectiveframework.minecraft.utils.client.GuiUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.tileentity.TileEntityEnchantmentTable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ClientHooks {

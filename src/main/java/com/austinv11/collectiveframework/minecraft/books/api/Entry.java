@@ -1,11 +1,11 @@
 package com.austinv11.collectiveframework.minecraft.books.api;
 
 import com.austinv11.collectiveframework.utils.math.TwoDimensionalVector;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This is the base class for any entry. Think of these like Microsoft Word text boxes.
@@ -36,7 +36,7 @@ public abstract class Entry extends GuiScreen {
 		this.width = width;
 		this.height = height;
 		this.mc = Minecraft.getMinecraft();
-		this.fontRendererObj = Minecraft.getMinecraft().fontRenderer;
+		this.fontRenderer = Minecraft.getMinecraft().fontRenderer;
 	}
 	
 	/**
@@ -100,7 +100,7 @@ public abstract class Entry extends GuiScreen {
 	 * @param rotation The rotation
 	 */
 	public void setRotation(float rotation) {
-		this.rotation = MathHelper.clamp_float(rotation, 0, 360);
+		this.rotation = MathHelper.clamp(rotation, 0, 360);
 	}
 	
 	/**

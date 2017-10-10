@@ -8,19 +8,20 @@ import com.austinv11.collectiveframework.minecraft.books.api.Page;
 import com.austinv11.collectiveframework.minecraft.utils.client.GuiUtils;
 import com.austinv11.collectiveframework.utils.TimeProfiler;
 import com.austinv11.collectiveframework.utils.math.TwoDimensionalVector;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -41,8 +42,8 @@ public class GuiBook extends GuiScreen {
 	public GuiBook(EntityPlayer player) {
 		FMLCommonHandler.instance().bus().register(this);
 		MinecraftForge.EVENT_BUS.register(this);
-		ItemStack heldItem = player.getHeldItem();
-		if (heldItem == null || !(heldItem.getItem() instanceof ItemBook)) {
+		ItemStack heldItem = player.getHeldItem(EnumHand.MAIN_HAND);
+		if (heldItem.isEmpty() || !(heldItem.getItem() instanceof ItemBook)) {
 			GuiUtils.closeCurrentGui();
 			return;
 		}
@@ -209,9 +210,9 @@ public class GuiBook extends GuiScreen {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-				if (event.x >= startCoords.getRoundedX() && event.x <= startCoords.getRoundedX()+entry.width 
-						&& event.y >= startCoords.getRoundedY() && event.y <= entry.height)
-					((InteractiveEntry) entry).onMouseEvent(event.x-offsetX, event.y-offsetY, event.dx, event.dy, event.button, event.dwheel, event.buttonstate);
+				if (event.getX() >= startCoords.getRoundedX() && event.getX() <= startCoords.getRoundedX()+entry.width
+						&& event.getY() >= startCoords.getRoundedY() && event.getY() <= entry.height)
+					((InteractiveEntry) entry).onMouseEvent(event.getX()-offsetX, event.getY()-offsetY, event.getDx(), event.getDy(), event.getButton(), event.getDwheel(), event.isButtonstate());
 			}
 	}
 	

@@ -2,8 +2,8 @@ package com.austinv11.collectiveframework.minecraft.event.handler;
 
 import com.austinv11.collectiveframework.minecraft.client.gui.KeyOverlay;
 import com.austinv11.collectiveframework.minecraft.reference.Config;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 

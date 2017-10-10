@@ -123,15 +123,16 @@ public class StringUtils {
 		int index = temp.indexOf(toReplace.toLowerCase());
 		if (index == -1)
 			return string;
-		String found = string.substring(index, toReplace.length());
+		String found = string.substring(index, index + toReplace.length());
 		char[] casedToReplace = found.toCharArray();
 		char[] toReplaceWithChars = toReplaceWith.toCharArray();
+		// FIXME The sizes do not match after replacement. capitilization will be off
 		for (int i = 0; i < casedToReplace.length; i++) {
 			if (i == toReplaceWithChars.length)
 				break;
 			if (Character.isLowerCase(casedToReplace[i]))
 				toReplaceWithChars[i] = Character.toLowerCase(toReplaceWithChars[i]);
-			else
+			else if (!Character.isSpaceChar(casedToReplace[i]))
 				toReplaceWithChars[i] = Character.toUpperCase(toReplaceWithChars[i]);
 		}
 		String newToReplaceWith = String.valueOf(toReplaceWithChars);
