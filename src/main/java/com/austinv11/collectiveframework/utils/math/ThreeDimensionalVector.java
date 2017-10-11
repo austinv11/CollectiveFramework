@@ -104,7 +104,7 @@ public class ThreeDimensionalVector implements Comparable {
 	 */
 	public ThreeDimensionalVector normalize() {
 		double distance = Math.sqrt(dotProduct());
-		return distance < 1.0E-4D ? new ThreeDimensionalVector(0, 0, 0) : new ThreeDimensionalVector(x/distance, y/distance, y/distance);
+		return distance < 1.0E-4D ? new ThreeDimensionalVector(0, 0, 0) : new ThreeDimensionalVector(x/distance, y/distance, z/distance);
 	}
 	
 	/**
@@ -134,7 +134,7 @@ public class ThreeDimensionalVector implements Comparable {
 	}
 	
 	private double squareDistanceTo(ThreeDimensionalVector other) {
-		return Math.pow(x-other.x, 2) + Math.pow(y-other.y, 2);
+		return Math.pow(x-other.x, 2) + Math.pow(y-other.y, 2) + Math.pow(z-other.z,2);
 	}
 	
 	/**
